@@ -19,12 +19,22 @@ namespace Chess
     {
         public int x;
         public int y;
+        public Point(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     struct Vector
     {
         public Point p1;
         public Point p2;
+        public Vector(Point p1, Point p2)
+        {
+            this.p1 = p1;
+            this.p2 = p2;
+        }
     }
 
     public partial class MainWindow : Window

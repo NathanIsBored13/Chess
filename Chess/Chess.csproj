@@ -55,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bishop.cs" />
+    <Compile Include="Knight.cs" />
+    <Compile Include="Queen.cs" />
+    <Compile Include="Rook.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,12 +70,15 @@
     <Compile Include="Board.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="King.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pawn.cs" />
+    <Compile Include="Piece.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
