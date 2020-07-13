@@ -17,7 +17,7 @@ namespace Chess
             {
                 for (int x = 0; x < 8; x++)
                 {
-                    board[x, y] = new Cell(new Point { x = x, y = y }, template[x, y], onClick);
+                    board[x, y] = new Cell(new Point(x, y), template[x, y], onClick);
                     DrawTargert.Children.Add(board[x, y]);
                 }
             }
