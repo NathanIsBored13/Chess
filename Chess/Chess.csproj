@@ -56,7 +56,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bishop.cs" />
+    <Compile Include="HumanPlayer.cs" />
     <Compile Include="Knight.cs" />
+    <Compile Include="Mouse.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="PlayerQueue.cs" />
     <Compile Include="Queen.cs" />
     <Compile Include="Rook.cs" />
     <Page Include="MainWindow.xaml">

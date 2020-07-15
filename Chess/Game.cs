@@ -11,8 +11,9 @@ namespace Chess
 {
     class Game
     {
-        Board board;
-        public delegate void OnClickDel(Point position);
+        private Board board;
+        private PlayerQueue playerQueue;
+        private Mouse mouse;
 
         private Piece[,] template = new Piece[,]
         {
@@ -28,12 +29,18 @@ namespace Chess
 
         public Game(UniformGrid DrawTarget)
         {
+            mouse = new Mouse();
             board = new Board(DrawTarget, template, OnClick);
+            playerQueue = new PlayerQueue(new HumanPlayer(true, board, mouse), new HumanPlayer(false, board, mouse));
         }
 
         public void OnClick(Point position)
         {
-
+            mouse.SetLastClicked(position);
+            if (playerQueue.PeekPlayer().Move() != null)
+            {
+                playerQueue.Next();
+            }
         }
     };
 }
