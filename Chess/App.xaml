@@ -2,26 +2,55 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Chess"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <SolidColorBrush x:Key="WindowBackground" Color="DimGray"/>     
+        <SolidColorBrush x:Key="WindowBackground" Color="DimGray"/>
         <SolidColorBrush x:Key="BoarderBackground" Color="Gray"/>
         <SolidColorBrush x:Key="CheckeredBrush1" Color="White"/>
         <SolidColorBrush x:Key="CheckeredBrush2" Color="Black"/>
         <SolidColorBrush x:Key="FontColour" Color="Black"/>
+        <SolidColorBrush x:Key="HiglightColour" Color="LightBlue"/>
+
+        <SolidColorBrush x:Key="CellSelectedColour" Color="Green" Opacity="0.5"/>
+        <SolidColorBrush x:Key="MovePossibleColour" Color="Blue" Opacity="0.5"/>
+        <SolidColorBrush x:Key="AttackMovePossibleColour" Color="Red" Opacity="0.5"/>
+
+        <ControlTemplate x:Key="CellTemplate" TargetType="local:Cell">
+            <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="{TemplateBinding Margin}" Background="{TemplateBinding Background}">
+                <Grid>
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Ellipse Margin="10" IsHitTestVisible="False" Stroke="Transparent" Fill="{TemplateBinding Foreground}" Opacity="{TemplateBinding Opacity}"/>
+                </Grid>
+            </Border>
+        </ControlTemplate>
 
         <Style TargetType="Window" x:Key="Parent_Style">
             <Style.Resources>
                 <Style TargetType="local:Cell">
-                    <Setter Property="Margin" Value="1"/>
+                    <Setter Property="Template" Value="{StaticResource CellTemplate}"/>
                     <Setter Property="Width" Value="60"/>
                     <Setter Property="Height" Value="60"/>
+                    <Setter Property="Margin" Value="1"/>
+                    <Setter Property="Foreground" Value="Transparent"/>
                     <Style.Triggers>
                         <Trigger Property="Checkered" Value="True">
                             <Setter Property="Background" Value="{DynamicResource CheckeredBrush1}"/>
                         </Trigger>
                         <Trigger Property="Checkered" Value="False">
                             <Setter Property="Background" Value="{DynamicResource CheckeredBrush2}"/>
+                        </Trigger>
+                        <Trigger Property="Highlighted" Value="CellSelected">
+                            <Setter Property="Foreground" Value="{DynamicResource CellSelectedColour}"/>
+                        </Trigger>
+                        <Trigger Property="Highlighted" Value="MovePossible">
+                            <Setter Property="Foreground" Value="{DynamicResource MovePossibleColour}"/>
+                        </Trigger>
+                        <Trigger Property="Highlighted" Value="AttackMovePossible">
+                            <Setter Property="Foreground" Value="{DynamicResource AttackMovePossibleColour}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource HiglightColour}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>

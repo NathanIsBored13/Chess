@@ -9,7 +9,7 @@ namespace Chess
 {
     abstract class Player
     {
-        bool colour;
+        readonly bool colour;
         Board board;
         public Player(bool colour, Board board)
         {
