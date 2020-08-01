@@ -17,7 +17,7 @@ namespace Chess
             this.board = board;
         }
 
-        public abstract Vector? Move();
+        public abstract Vector Move();
 
         public bool GetColour() => colour;
 

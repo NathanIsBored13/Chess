@@ -15,10 +15,9 @@ namespace Chess
             this.mouse = mouse;
         }
 
-        public override Vector? Move()
+        public override Vector Move()
         {
-            Console.WriteLine($"[{mouse.GetLastClicked().x}, {mouse.GetLastClicked().y}]");
-            return null;
+            return new Vector(mouse.WaitForInput(), mouse.WaitForInput());
         }
     }
 }

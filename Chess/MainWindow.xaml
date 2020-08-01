@@ -8,7 +8,8 @@
         Style="{StaticResource Parent_Style}"
         Title="MainWindow"
         SizeToContent="WidthAndHeight"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize"
+        Closing="Window_Closing">
     <StackPanel Orientation="Horizontal">
         <Border Margin="10" Padding="1">
             <UniformGrid x:Name="DrawTarget" Rows="8" Columns="8"/>

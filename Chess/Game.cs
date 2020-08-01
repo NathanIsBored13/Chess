@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -30,17 +31,14 @@ namespace Chess
         public Game(UniformGrid DrawTarget)
         {
             mouse = new Mouse();
-            board = new Board(DrawTarget, template, OnClick);
+            board = new Board(DrawTarget, template, mouse);
             playerQueue = new PlayerQueue(new HumanPlayer(true, board, mouse), new HumanPlayer(false, board, mouse));
         }
 
-        public void OnClick(Point position)
+        public void Begin()
         {
-            mouse.SetLastClicked(position);
-            if (playerQueue.PeekPlayer().Move() != null)
-            {
-                playerQueue.Next();
-            }
+            Vector vec = playerQueue.PeekPlayer().Move();
+            Console.WriteLine($"[{vec.p1.x}, {vec.p1.y}] -> [{vec.p2.x}, {vec.p2.y}]");
         }
     };
 }

@@ -11,13 +11,13 @@ namespace Chess
     {
         Cell[,] board = new Cell[8, 8];
 
-        public Board(UniformGrid DrawTargert, Piece[,] template, Action<Point> onClick)
+        public Board(UniformGrid DrawTargert, Piece[,] template, Mouse mouse)
         {
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
                 {
-                    board[x, y] = new Cell(new Point(x, y), template[x, y], onClick);
+                    board[x, y] = new Cell(new Point(x, y), template[x, y], mouse);
                     DrawTargert.Children.Add(board[x, y]);
                 }
             }

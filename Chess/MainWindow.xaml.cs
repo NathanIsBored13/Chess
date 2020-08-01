@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,10 +41,19 @@ namespace Chess
     public partial class MainWindow : Window
     {
         Game game;
+        Thread thread;
         public MainWindow()
         {
             InitializeComponent();
             game = new Game(DrawTarget);
+            thread = new Thread(new ThreadStart(game.Begin));
+            thread.Start();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            thread.Abort();
+            thread.Join();
         }
     }
 }
