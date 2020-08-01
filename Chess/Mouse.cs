@@ -7,28 +7,23 @@ using System.Threading;
 
 namespace Chess
 {
-    class Mouse
+    static class Mouse
     {
-        private readonly AutoResetEvent wait = new AutoResetEvent(false);
-        Point lastClicked;
+        private static readonly AutoResetEvent wait = new AutoResetEvent(false);
+        private static Point lastClicked;
 
-        public Mouse()
-        {
- 
-        }
-
-        public void SetLastClicked(Point position)
+        public static void SetLastClicked(Point position)
         {
             lastClicked = position;
             wait.Set();
         }
 
-        public Point WaitForInput()
+        public static Point WaitForInput()
         {
             wait.WaitOne();
             return lastClicked;
         }
 
-        public Point GetLastClicked() => lastClicked;
+        public static Point GetLastClicked() => lastClicked;
     }
 }

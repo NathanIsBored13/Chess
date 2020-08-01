@@ -8,16 +8,14 @@ namespace Chess
 {
     class HumanPlayer : Player
     {
-        private Mouse mouse;
-
-        public HumanPlayer(bool colour, Board board, Mouse mouse) : base(colour, board)
+        public HumanPlayer(bool colour, Board board) : base(colour, board)
         {
-            this.mouse = mouse;
+
         }
 
         public override Vector Move()
         {
-            return new Vector(mouse.WaitForInput(), mouse.WaitForInput());
+            return new Vector(Mouse.WaitForInput(), Mouse.WaitForInput());
         }
     }
 }

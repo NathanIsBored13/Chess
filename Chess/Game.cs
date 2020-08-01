@@ -14,7 +14,6 @@ namespace Chess
     {
         private Board board;
         private PlayerQueue playerQueue;
-        private Mouse mouse;
 
         private Piece[,] template = new Piece[,]
         {
@@ -30,9 +29,8 @@ namespace Chess
 
         public Game(UniformGrid DrawTarget)
         {
-            mouse = new Mouse();
-            board = new Board(DrawTarget, template, mouse);
-            playerQueue = new PlayerQueue(new HumanPlayer(true, board, mouse), new HumanPlayer(false, board, mouse));
+            board = new Board(DrawTarget, template);
+            playerQueue = new PlayerQueue(new HumanPlayer(true, board), new HumanPlayer(false, board));
         }
 
         public void Begin()
