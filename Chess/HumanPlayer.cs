@@ -8,12 +8,12 @@ namespace Chess
 {
     class HumanPlayer : Player
     {
-        public HumanPlayer(bool colour, Board board) : base(colour, board)
+        public HumanPlayer(bool colour) : base(colour)
         {
 
         }
 
-        public override Vector Move()
+        public override Vector Move(Board board)
         {
             return new Vector(Mouse.WaitForInput(), Mouse.WaitForInput());
         }

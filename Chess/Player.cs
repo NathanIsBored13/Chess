@@ -7,20 +7,32 @@ using System.Windows.Documents;
 
 namespace Chess
 {
+    enum PlayerType
+    {
+        HumanPlayer
+    }
     abstract class Player
     {
         readonly bool colour;
-        Board board;
-        public Player(bool colour, Board board)
+        public Player(bool colour)
         {
             this.colour = colour;
-            this.board = board;
         }
 
-        public abstract Vector Move();
+        public abstract Vector Move(Board board);
 
         public bool GetColour() => colour;
 
-        public Board GetBoard() => board;
+        public static Player MakePlayer(PlayerType type, bool colour)
+        {
+            Player ret = null;
+            switch (type)
+            {
+                case PlayerType.HumanPlayer:
+                    ret = new HumanPlayer(colour);
+                break;
+            }
+            return ret;
+        }
     }
 }

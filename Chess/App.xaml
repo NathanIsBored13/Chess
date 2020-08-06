@@ -7,6 +7,7 @@
     <Application.Resources>
         <SolidColorBrush x:Key="WindowBackground" Color="DimGray"/>
         <SolidColorBrush x:Key="BoarderBackground" Color="Gray"/>
+        <SolidColorBrush x:Key="ButtonBackground" Color="LightGray"/>
         <SolidColorBrush x:Key="CheckeredBrush1" Color="White"/>
         <SolidColorBrush x:Key="CheckeredBrush2" Color="Black"/>
         <SolidColorBrush x:Key="FontColour" Color="Black"/>
@@ -20,7 +21,7 @@
             <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="{TemplateBinding Margin}" Background="{TemplateBinding Background}">
                 <Grid>
                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    <Ellipse Margin="10" IsHitTestVisible="False" Stroke="Transparent" Fill="{TemplateBinding Foreground}" Opacity="{TemplateBinding Opacity}"/>
+                    <Ellipse Margin="10" IsHitTestVisible="False" Stroke="Transparent" Fill="{TemplateBinding Foreground}"/>
                 </Grid>
             </Border>
         </ControlTemplate>
@@ -54,11 +55,22 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
+                <Style TargetType="Button">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Background" Value="{DynamicResource ButtonBackground}"/>
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                            <Setter Property="Padding" Value="5"/>
+                        </Style>
+                    </Style.Resources>
+                </Style>
                 <Style TargetType="Border">
                     <Setter Property="Background" Value="{DynamicResource BoarderBackground}"/>
                 </Style>
                 <Style TargetType="Label">
                     <Setter Property="Foreground" Value="{DynamicResource FontColour}"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
                 </Style>
             </Style.Resources>
             <Setter Property="Background" Value="{DynamicResource WindowBackground}"/>

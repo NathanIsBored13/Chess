@@ -40,20 +40,30 @@ namespace Chess
 
     public partial class MainWindow : Window
     {
+        readonly Board board;
         Game game;
-        Thread thread;
+        Thread thread = null;
+
         public MainWindow()
         {
             InitializeComponent();
-            game = new Game(DrawTarget);
+            board = new Board(DrawTarget);
+        }
+
+        private void MakeGame_Click(object sender, RoutedEventArgs e)
+        {
+            game = new Game(board, PlayerType.HumanPlayer, PlayerType.HumanPlayer);
             thread = new Thread(new ThreadStart(game.Begin));
             thread.Start();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            thread.Abort();
-            thread.Join();
+            if (thread != null)
+            {
+                thread.Abort();
+                thread.Join();
+            }
         }
     }
 }

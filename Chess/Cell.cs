@@ -44,14 +44,20 @@ namespace Chess
             Stretch = Stretch.UniformToFill
         };
 
-        public Cell(Point position, Piece piece) : base()
+        public Cell(Point position) : base()
         {
             this.position = position;
-            this.piece = piece;
             Checkered = (((position.y % 2) + position.x) % 2) == 0;
             Click += Cell_Click;
             Content = image;
         }
+
+        public void SetPiece(Piece piece)
+        {
+            this.piece = piece;
+        }
+
+        public Piece GetPiece() => piece;
 
         private void Cell_Click(object sender, RoutedEventArgs e)
         {

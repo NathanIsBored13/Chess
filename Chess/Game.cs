@@ -27,15 +27,16 @@ namespace Chess
             {new Rook(false),   new Pawn(false), null, null, null, null, new Pawn(true), new Rook(true)     }
         };
 
-        public Game(UniformGrid DrawTarget)
+        public Game(Board board, PlayerType white, PlayerType black)
         {
-            board = new Board(DrawTarget, template);
-            playerQueue = new PlayerQueue(new HumanPlayer(true, board), new HumanPlayer(false, board));
+            this.board = board;
+            board.SetupBoard(template);
+            playerQueue = new PlayerQueue(Player.MakePlayer(white, true), Player.MakePlayer(black, false));
         }
 
         public void Begin()
         {
-            Vector vec = playerQueue.PeekPlayer().Move();
+            Vector vec = playerQueue.PeekPlayer().Move(board);
             Console.WriteLine($"[{vec.p1.x}, {vec.p1.y}] -> [{vec.p2.x}, {vec.p2.y}]");
         }
     };
