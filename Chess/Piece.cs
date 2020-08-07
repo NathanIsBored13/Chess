@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Chess
 {
@@ -18,13 +19,17 @@ namespace Chess
 
     abstract class Piece
     {
-        private bool colour;
+        private readonly bool colour;
 
         public Piece(bool colour)
         {
             this.colour = colour;
         }
 
+        public bool GetColour() => colour;
+
         public abstract new Type GetType();
+
+        public abstract BitmapImage GetImage();
     }
 }

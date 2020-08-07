@@ -47,6 +47,7 @@ namespace Chess
         public MainWindow()
         {
             InitializeComponent();
+            Icons.LoadImages("Set1");
             board = new Board(DrawTarget);
         }
 

@@ -5,11 +5,11 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <SolidColorBrush x:Key="WindowBackground" Color="DimGray"/>
-        <SolidColorBrush x:Key="BoarderBackground" Color="Gray"/>
+        <SolidColorBrush x:Key="WindowBackground" Color="Gray"/>
+        <SolidColorBrush x:Key="BoarderBackground" Color="Silver"/>
         <SolidColorBrush x:Key="ButtonBackground" Color="LightGray"/>
-        <SolidColorBrush x:Key="CheckeredBrush1" Color="White"/>
-        <SolidColorBrush x:Key="CheckeredBrush2" Color="Black"/>
+        <SolidColorBrush x:Key="CheckeredBrush1" Color="GhostWhite"/>
+        <SolidColorBrush x:Key="CheckeredBrush2" Color="DimGray"/>
         <SolidColorBrush x:Key="FontColour" Color="Black"/>
         <SolidColorBrush x:Key="HiglightColour" Color="LightBlue"/>
 

@@ -50,11 +50,13 @@ namespace Chess
             Checkered = (((position.y % 2) + position.x) % 2) == 0;
             Click += Cell_Click;
             Content = image;
+            Icons.RegisterListener(RefreshImage);
         }
 
         public void SetPiece(Piece piece)
         {
             this.piece = piece;
+            RefreshImage();
         }
 
         public Piece GetPiece() => piece;
@@ -62,6 +64,11 @@ namespace Chess
         private void Cell_Click(object sender, RoutedEventArgs e)
         {
             Mouse.SetLastClicked(position);
+        }
+
+        private void RefreshImage()
+        {
+            image.Source = piece?.GetImage();
         }
     }
 }

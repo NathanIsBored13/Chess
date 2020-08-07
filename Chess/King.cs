@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Chess
 {
@@ -17,5 +18,7 @@ namespace Chess
         {
             return Type.King;
         }
+
+        public override BitmapImage GetImage() => GetColour() ? Icons.GetImagePool().WKing : Icons.GetImagePool().BKing;
     }
 }
