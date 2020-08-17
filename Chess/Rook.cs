@@ -18,7 +18,5 @@ namespace Chess
         {
             return Type.Rook;
         }
-
-        public override BitmapImage GetImage() => GetColour() ? Icons.GetImagePool().WRook : Icons.GetImagePool().BRook;
     }
 }

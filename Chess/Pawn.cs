@@ -19,7 +19,5 @@ namespace Chess
         {
             return Type.Pawn;
         }
-
-        public override BitmapImage GetImage() => GetColour() ? Icons.GetImagePool().WPawn : Icons.GetImagePool().BPawn;
     }
 }

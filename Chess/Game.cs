@@ -13,6 +13,7 @@ namespace Chess
     class Game
     {
         private Board board;
+        private ChessRenderer renderer;
         private PlayerQueue playerQueue;
 
         private Piece[,] template = new Piece[,]
@@ -27,17 +28,20 @@ namespace Chess
             {new Rook(false),   new Pawn(false), null, null, null, null, new Pawn(true), new Rook(true)     }
         };
 
-        public Game(Board board, PlayerType white, PlayerType black)
+        public Game(Board board, ChessRenderer renderer, PlayerType white, PlayerType black)
         {
             this.board = board;
-            board.SetupBoard(template);
+            this.renderer = renderer;
+            board.SetBoard(template);
             playerQueue = new PlayerQueue(Player.MakePlayer(white, true), Player.MakePlayer(black, false));
+            renderer.Render();
         }
 
         public void Begin()
         {
             Vector vec = playerQueue.PeekPlayer().Move(board);
             Console.WriteLine($"[{vec.p1.x}, {vec.p1.y}] -> [{vec.p2.x}, {vec.p2.y}]");
+            renderer.Render();
         }
     };
 }

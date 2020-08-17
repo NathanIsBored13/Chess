@@ -18,7 +18,5 @@ namespace Chess
         {
             return Type.Bishop;
         }
-
-        public override BitmapImage GetImage() => GetColour() ? Icons.GetImagePool().WBishop : Icons.GetImagePool().BBishop;
     }
 }

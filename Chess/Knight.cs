@@ -18,7 +18,5 @@ namespace Chess
         {
             return Type.Knight;
         }
-
-        public override BitmapImage GetImage() => GetColour() ? Icons.GetImagePool().WKnight : Icons.GetImagePool().BKnight;
     }
 }

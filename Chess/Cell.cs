@@ -38,7 +38,6 @@ namespace Chess
         public static readonly DependencyProperty HighlightedProperty = DependencyProperty.Register("Highlighted", typeof(Highlight), typeof(Cell));
 
         private readonly Point position;
-        private Piece piece;
         private Image image = new Image()
         {
             Stretch = Stretch.UniformToFill
@@ -46,29 +45,23 @@ namespace Chess
 
         public Cell(Point position) : base()
         {
+            Grid.SetColumn(this, position.x);
+            Grid.SetRow(this, position.y);
             this.position = position;
             Checkered = (((position.y % 2) + position.x) % 2) == 0;
             Click += Cell_Click;
             Content = image;
-            Icons.RegisterListener(RefreshImage);
         }
-
-        public void SetPiece(Piece piece)
-        {
-            this.piece = piece;
-            RefreshImage();
-        }
-
-        public Piece GetPiece() => piece;
 
         private void Cell_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine($"{position.x}, {position.y}");
             Mouse.SetLastClicked(position);
         }
 
-        private void RefreshImage()
+        public void SetImage(BitmapImage image)
         {
-            image.Source = piece?.GetImage();
+            Dispatcher.Invoke(() => this.image.Source = image);
         }
     }
 }

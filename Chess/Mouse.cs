@@ -20,6 +20,7 @@ namespace Chess
 
         public static Point WaitForInput()
         {
+            wait.Reset();
             wait.WaitOne();
             return lastClicked;
         }
