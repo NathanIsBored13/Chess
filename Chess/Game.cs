@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace Chess
@@ -28,20 +29,23 @@ namespace Chess
             {new Rook(false),   new Pawn(false), null, null, null, null, new Pawn(true), new Rook(true)     }
         };
 
-        public Game(Board board, ChessRenderer renderer, PlayerType white, PlayerType black)
+        public Game(Grid target)
         {
-            this.board = board;
-            this.renderer = renderer;
+            board = new Board();
+            renderer = new ChessRenderer(target, board);
             board.SetBoard(template);
-            playerQueue = new PlayerQueue(Player.MakePlayer(white, true), Player.MakePlayer(black, false));
             renderer.Render();
         }
 
-        public void Begin()
+        public void Begin(PlayerType white, PlayerType black)
         {
-            Vector vec = playerQueue.PeekPlayer().Move(board);
-            Console.WriteLine($"[{vec.p1.x}, {vec.p1.y}] -> [{vec.p2.x}, {vec.p2.y}]");
-            renderer.Render();
+            playerQueue = new PlayerQueue(Player.MakePlayer(white, true), Player.MakePlayer(black, false));
+            while (true)
+            {
+                Vector vec = playerQueue.PeekPlayer().Move(board);
+                board.Move(vec);
+                renderer.Render();
+            }
         }
     };
 }

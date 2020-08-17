@@ -55,7 +55,6 @@ namespace Chess
 
         private void Cell_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine($"{position.x}, {position.y}");
             Mouse.SetLastClicked(position);
         }
 

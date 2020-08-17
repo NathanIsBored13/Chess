@@ -28,5 +28,11 @@ namespace Chess
         }
 
         public Piece GetPiece(int x, int y) => board[x, y];
+
+        public void Move(Vector vector)
+        {
+            board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p2.y];
+            board[vector.p1.x, vector.p1.y] = null;
+        }
     }
 }

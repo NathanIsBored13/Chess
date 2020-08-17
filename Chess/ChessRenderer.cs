@@ -18,8 +18,8 @@ namespace Chess
             this.source = source;
             for (int i = 0; i < 8; i++)
             {
-                grid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Auto });
+                grid.RowDefinitions.Add(new RowDefinition());
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
             for (int y = 0; y < 8; y++)
@@ -30,7 +30,7 @@ namespace Chess
                     grid.Children.Add(cells[x, y]);
                 }
             }
-
+            Icons.RegisterListener(Render);
             Render();
         }
 

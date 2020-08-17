@@ -40,8 +40,6 @@ namespace Chess
 
     public partial class MainWindow : Window
     {
-        readonly ChessRenderer renderer;
-        readonly Board board;
         Game game;
         Thread thread = null;
 
@@ -49,14 +47,12 @@ namespace Chess
         {
             InitializeComponent();
             Icons.LoadImages("Set1");
-            board = new Board();
-            renderer = new ChessRenderer(DrawTarget, board);
+            game = new Game(DrawTarget);
         }
 
         private void MakeGame_Click(object sender, RoutedEventArgs e)
         {
-            game = new Game(board, renderer, PlayerType.HumanPlayer, PlayerType.HumanPlayer);
-            thread = new Thread(new ThreadStart(game.Begin));
+            thread = new Thread(() => game.Begin(PlayerType.HumanPlayer, PlayerType.HumanPlayer));
             thread.Start();
         }
 
