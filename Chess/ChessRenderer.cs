@@ -44,6 +44,10 @@ namespace Chess
                     {
                         cells[x, y].SetImage(Icons.GetImage(piece.GetType(), piece.GetColour()));
                     }
+                    else
+                    {
+                        cells[x, y].SetImage(null);
+                    }
                 }
             }
         }
