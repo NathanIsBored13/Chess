@@ -13,11 +13,11 @@ namespace Chess
 {
     class Game
     {
-        private Board board;
-        private ChessRenderer renderer;
+        private readonly Board board;
+        private readonly ChessRenderer renderer;
         private PlayerQueue playerQueue;
 
-        private Piece[,] template = new Piece[,]
+        private readonly Piece[,] template = new Piece[,]
         {
             {new Rook(false),   new Pawn(false), null, null, null, null, new Pawn(true), new Rook(true)     },
             {new Knight(false), new Pawn(false), null, null, null, null, new Pawn(true), new Knight(true)   },
@@ -31,9 +31,8 @@ namespace Chess
 
         public Game(Grid target)
         {
-            board = new Board();
+            board = new Board(template);
             renderer = new ChessRenderer(target, board);
-            board.SetBoard(template);
             renderer.Render();
         }
 

@@ -9,15 +9,12 @@ namespace Chess
 {
     class Board
     {
-        Piece[,] board = new Piece[8, 8];
+        readonly Piece[,] board = new Piece[8, 8];
+        readonly List<Vector> history;
 
-        public Board()
+        public Board(Piece[,] template)
         {
-
-        }
-
-        public void SetBoard(Piece[,] template)
-        {
+            history = new List<Vector>();
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
@@ -31,9 +28,12 @@ namespace Chess
 
         public void Move(Vector vector)
         {
+            history.Add(vector);
             Console.WriteLine($"[{vector.p1.x}, {vector.p1.y}] => [{vector.p2.x}, {vector.p2.y}]");
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
             board[vector.p1.x, vector.p1.y] = null;
         }
+
+        public List<Vector> GetHistory() => history;
     }
 }
