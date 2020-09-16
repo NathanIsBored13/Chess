@@ -10,11 +10,12 @@ namespace Chess
     class Board
     {
         readonly Piece[,] board = new Piece[8, 8];
-        readonly List<Vector> history;
+        readonly List<Vector> history = new List<Vector>();
 
-        public Board(Piece[,] template)
+        public Board() { }
+
+        public void SetState(Piece[,] template)
         {
-            history = new List<Vector>();
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)

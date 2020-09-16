@@ -13,7 +13,7 @@ namespace Chess
 {
     class Game
     {
-        private readonly Board board;
+        private readonly Board board = new Board();
         private readonly ChessRenderer renderer;
         private PlayerQueue playerQueue;
 
@@ -31,13 +31,14 @@ namespace Chess
 
         public Game(Grid target)
         {
-            board = new Board(template);
             renderer = new ChessRenderer(target, board);
             renderer.Render();
         }
 
         public void Begin(PlayerType white, PlayerType black)
         {
+            board.SetState(template);
+            renderer.Render();
             playerQueue = new PlayerQueue(Player.MakePlayer(white, true), Player.MakePlayer(black, false));
             while (true)
             {
