@@ -56,7 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Bishop.cs" />
-    <Compile Include="ChessRenderer.cs" />
+    <Compile Include="Renderer.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Icons.cs" />
     <Compile Include="Knight.cs" />

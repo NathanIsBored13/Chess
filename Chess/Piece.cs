@@ -18,6 +18,17 @@ namespace Chess
         Pawn
     }
 
+    struct PieceMovesMask
+    {
+        public Vector[] attacks;
+        public Vector[] moves;
+        public PieceMovesMask(Vector[] attacks, Vector[] moves)
+        {
+            this.attacks = attacks;
+            this.moves = moves;
+        }
+    }
+
     abstract class Piece
     {
         private readonly bool colour;
@@ -30,5 +41,7 @@ namespace Chess
         public bool GetColour() => colour;
 
         public abstract new Type GetType();
+
+        public abstract PieceMovesMask GetMovesMask(Board board, Point point);
     }
 }

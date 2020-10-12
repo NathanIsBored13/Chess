@@ -26,14 +26,14 @@ namespace Chess
         public bool Checkered
         {
             get { return (bool)GetValue(CheckeredProperty); }
-            set { SetValue(CheckeredProperty, value); }
+            set { Dispatcher.Invoke(() => SetValue(CheckeredProperty, value)); }
         }
         public static readonly DependencyProperty CheckeredProperty = DependencyProperty.Register("Checkered", typeof(bool), typeof(Cell));
 
         public Highlight Highlighted
         {
             get { return (Highlight)GetValue(HighlightedProperty); }
-            set { SetValue(HighlightedProperty, value); }
+            set { Dispatcher.Invoke(() => SetValue(HighlightedProperty, value)); }
         }
         public static readonly DependencyProperty HighlightedProperty = DependencyProperty.Register("Highlighted", typeof(Highlight), typeof(Cell));
 

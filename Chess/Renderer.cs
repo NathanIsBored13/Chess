@@ -8,12 +8,12 @@ using System.Windows.Controls;
 
 namespace Chess
 {
-    class ChessRenderer
+    class Renderer
     {
         Cell[,] cells = new Cell[8, 8];
         Board source;
 
-        public ChessRenderer(Grid grid, Board source)
+        public Renderer(Grid grid, Board source)
         {
             this.source = source;
             for (int i = 0; i < 8; i++)
@@ -30,11 +30,11 @@ namespace Chess
                     grid.Children.Add(cells[x, y]);
                 }
             }
-            Icons.RegisterListener(Render);
-            Render();
+            Icons.RegisterListener(RenderIcons);
+            RenderIcons();
         }
 
-        public void Render()
+        public void RenderIcons()
         {
             for (int y = 0; y < 8; y++)
             {
@@ -49,6 +49,27 @@ namespace Chess
                         cells[x, y].SetImage(null);
                     }
                 }
+            }
+        }
+
+        public void SetHighlight(Highlight highlight, Point point)
+        {
+            cells[point.x, point.y].Highlighted = highlight;
+        }
+
+        public void SetHighlights(Tuple<Highlight, Point>[] highlights)
+        {
+            foreach (Tuple<Highlight, Point> highlight in highlights)
+            {
+                SetHighlight(highlight.Item1, highlight.Item2);
+            }
+        }
+
+        public void ResetHighlights()
+        {
+            foreach (Cell cell in cells)
+            {
+                cell.Highlighted = Highlight.None;
             }
         }
     }

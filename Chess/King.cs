@@ -18,5 +18,10 @@ namespace Chess
         {
             return Type.King;
         }
+
+        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        {
+            return new PieceMovesMask();
+        }
     }
 }

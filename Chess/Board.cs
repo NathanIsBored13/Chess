@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
+using System.Xml.Serialization;
 
 namespace Chess
 {
@@ -36,5 +37,23 @@ namespace Chess
         }
 
         public List<Vector> GetHistory() => history;
+
+        public Vector[] GetMoves(bool colour)
+        {
+            List<Vector> moves = new List<Vector>();
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (board[x, y] is Piece piece && piece.GetColour() == colour)
+                    {
+                        PieceMovesMask mask = piece.GetMovesMask(this, new Point(x, y));
+                        if (mask.moves != null) moves.AddRange(mask.moves);
+                        if (mask.attacks != null) moves.AddRange(mask.attacks);
+                    }
+                }
+            }
+            return moves.ToArray();
+        }
     }
 }

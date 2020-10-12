@@ -14,7 +14,7 @@ namespace Chess
     class Game
     {
         private readonly Board board = new Board();
-        private readonly ChessRenderer renderer;
+        private readonly Renderer renderer;
         private PlayerQueue playerQueue;
 
         private readonly Piece[,] template = new Piece[,]
@@ -31,20 +31,21 @@ namespace Chess
 
         public Game(Grid target)
         {
-            renderer = new ChessRenderer(target, board);
-            renderer.Render();
+            renderer = new Renderer(target, board);
+            renderer.RenderIcons();
         }
 
         public void Begin(PlayerType white, PlayerType black)
         {
             board.SetState(template);
-            renderer.Render();
-            playerQueue = new PlayerQueue(Player.MakePlayer(white, true), Player.MakePlayer(black, false));
+            renderer.RenderIcons();
+            playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer), Player.MakePlayer(black, false, renderer));
             while (true)
             {
+                Console.WriteLine(playerQueue.PeekPlayer().GetColour());
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
-                renderer.Render();
+                renderer.RenderIcons();
             }
         }
     };

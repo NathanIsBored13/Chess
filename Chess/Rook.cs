@@ -18,5 +18,37 @@ namespace Chess
         {
             return Type.Rook;
         }
+
+        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        {
+            List<Vector> moves = new List<Vector>();
+            List<Vector> attacks = new List<Vector>();
+            int index = 0;
+            int[,] dirs = { { 0, 1 }, { 1, 0 }, { -1, 0 }, { 0, -1 } };
+            do
+            {
+                bool hitPiece = false;
+                Point pointer = new Point(position.x + dirs[index, 0], position.y + dirs[index, 1]);
+                while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
+                {
+                    if (board.GetPiece(pointer.x, pointer.y) is Piece piece)
+                    {
+                        hitPiece = true;
+                        if (piece.GetColour() != GetColour())
+                        {
+                            attacks.Add(new Vector(position, pointer));
+                        }
+                    }
+                    else
+                    {
+                        moves.Add(new Vector(position, pointer));
+                    }
+                    pointer.x += dirs[index, 0];
+                    pointer.y += dirs[index, 1];
+                }
+                index++;
+            } while (index < 4);
+            return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
+        }
     }
 }
