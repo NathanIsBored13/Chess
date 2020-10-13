@@ -17,37 +17,75 @@ namespace Chess
         public override Vector Move(Board board)
         {
             Vector? ret = null;
+            Point? p1 = null;
+            Point? p2 = null;
             Vector[] moves = board.GetMoves(GetColour());
+            Vector[] filteredMoves = null;
+            GetRenderer().ResetHighlights();
             do
             {
-                GetRenderer().ResetHighlights();
-                Console.WriteLine("--MOVES--");
-                foreach (Vector vec in moves)
+                if (p1 == null)
                 {
-                    Console.WriteLine("[{0}, {1}] -> [{2}, {3}]", vec.p1.x, vec.p1.y, vec.p2.x, vec.p2.y);
-                }
-                Point p1 = Mouse.WaitForInput();
-                Vector[] PossibleMoves = moves.Where(v => v.p1.x == p1.x && v.p1.y == p1.y).ToArray();
-                foreach (Vector vec in PossibleMoves)
-                {
-                    Console.WriteLine("--Filtered Moves--");
-                    Console.WriteLine("[{0}, {1}] -> [{2}, {3}]", vec.p1.x, vec.p1.y, vec.p2.x, vec.p2.y);
-                    if (board.GetPiece(vec.p2.x, vec.p2.y) == null)
+                    p1 = Mouse.WaitForInput();
+                    filteredMoves = moves.Where(v => v.p1.x == p1.Value.x && v.p1.y == p1.Value.y).ToArray();
+                    if (filteredMoves.Length == 0)
                     {
-                        GetRenderer().SetHighlight(Highlight.MovePossible, vec.p2);
+                        p1 = null;
                     }
                     else
                     {
-                        GetRenderer().SetHighlight(Highlight.AttackMovePossible, vec.p2);
+                        foreach (Vector vec in filteredMoves)
+                        {
+                            if (board.GetPiece(vec.p2.x, vec.p2.y) is Piece)
+                            {
+                                GetRenderer().SetHighlight(Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
+                            }
+                            else
+                            {
+                                GetRenderer().SetHighlight(Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
+                            }
+                        }
+                    }
+
+                }
+                else if (p2 == null)
+                {
+                    Point buffer = Mouse.WaitForInput();
+                    foreach (Vector vec in filteredMoves)
+                    {
+                        if (vec.p2.x == buffer.x && vec.p2.y == buffer.y)
+                        {
+                            p2 = buffer;
+                        }
+                    }
+                    if (p2 == null)
+                    {
+                        p1 = buffer;
+                        GetRenderer().ResetHighlights();
+                        filteredMoves = moves.Where(v => v.p1.x == p1.Value.x && v.p1.y == p1.Value.y).ToArray();
+                        if (filteredMoves.Length == 0)
+                        {
+                            p1 = null;
+                        }
+                        else
+                        {
+                            foreach (Vector vec in filteredMoves)
+                            {
+                                if (board.GetPiece(vec.p2.x, vec.p2.y) is Piece)
+                                {
+                                    GetRenderer().SetHighlight(Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
+                                }
+                                else
+                                {
+                                    GetRenderer().SetHighlight(Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
+                                }
+                            }
+                        }
                     }
                 }
-                Point p2 = Mouse.WaitForInput();
-                foreach (Vector vec in PossibleMoves)
+                else
                 {
-                    if (vec.p2.x == p2.x && vec.p2.y == p2.y)
-                    {
-                        ret = new Vector(p1, p2);
-                    }
+                    ret = new Vector(p1.Value, p2.Value);
                 }
             } while (ret == null);
             return ret.Value;
