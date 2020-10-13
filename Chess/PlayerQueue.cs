@@ -19,7 +19,7 @@ namespace Chess
 
         public void Next()
         {
-            pointer = pointer++ % 2;
+            pointer = (pointer + 1) % 2;
         }
 
         public Player PeekPlayer() => queue[pointer];

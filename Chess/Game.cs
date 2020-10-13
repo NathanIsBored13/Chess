@@ -46,6 +46,7 @@ namespace Chess
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
                 renderer.RenderIcons();
+                playerQueue.Next();
             }
         }
     };
