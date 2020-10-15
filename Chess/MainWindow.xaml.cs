@@ -52,6 +52,11 @@ namespace Chess
 
         private void MakeGame_Click(object sender, RoutedEventArgs e)
         {
+            if (thread != null)
+            {
+                thread.Abort();
+                thread.Join();
+            }
             thread = new Thread(() => game.Begin(PlayerType.HumanPlayer, PlayerType.HumanPlayer));
             thread.Start();
         }
