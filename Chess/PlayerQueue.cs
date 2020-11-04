@@ -19,6 +19,7 @@ namespace Chess
 
         public void Next()
         {
+            Console.WriteLine("NEXT");
             pointer = (pointer + 1) % 2;
         }
 
