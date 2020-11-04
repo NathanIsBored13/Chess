@@ -72,5 +72,19 @@ namespace Chess
                 cell.Highlighted = Highlight.None;
             }
         }
+
+        public void ResetHighlights(Point[] exceptions)
+        {
+            for (int y = 0; y < 8; y++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    if (!exceptions.Any(p => p.x == x && p.y == y))
+                    {
+                        cells[x, y].Highlighted = Highlight.None;
+                    }
+                }
+            }
+        }
     }
 }

@@ -28,6 +28,8 @@ namespace Chess
 
         public Piece GetPiece(int x, int y) => board[x, y];
 
+        public Piece[,] GetPieces() => board;
+
         public void Move(Vector vector)
         {
             history.Add(vector);
@@ -54,6 +56,28 @@ namespace Chess
                 }
             }
             return moves.ToArray();
+        }
+
+        public void HighlightChecks(bool colour, Renderer renderer)
+        {
+            Vector[] attacks = GetMoves(colour);
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (board[x, y] is King king)
+                    {
+                        if (king.GetColour() == colour)
+                        {
+                            renderer.SetHighlight(Highlight.None, new Point(x, y));
+                        }
+                        else if (attacks.Any(v => v.p2.x == x && v.p2.y == y))
+                        {
+                            renderer.SetHighlight(Highlight.InCheck, new Point(x, y));
+                        }
+                    }
+                }
+            }
         }
     }
 }

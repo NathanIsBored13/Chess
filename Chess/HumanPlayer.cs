@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Chess
 {
@@ -16,12 +17,24 @@ namespace Chess
 
         public override Vector Move(Board board)
         {
+            Point king = new Point();
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (board.GetPiece(x, y) is King k && k.GetColour() == GetColour())
+                    {
+                        king = new Point(x, y);
+                    }
+                }
+            }
+            GetRenderer().ResetHighlights(new Point[] { king });
+
             Vector? ret = null;
             Point? p1 = null;
             Point? p2 = null;
             Vector[] moves = board.GetMoves(GetColour());
             Vector[] filteredMoves = null;
-            GetRenderer().ResetHighlights();
             do
             {
                 if (p1 == null)

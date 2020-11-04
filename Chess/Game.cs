@@ -45,6 +45,7 @@ namespace Chess
                 Console.WriteLine(playerQueue.PeekPlayer().GetColour());
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
+                board.HighlightChecks(playerQueue.PeekPlayer().GetColour(), renderer);
                 renderer.RenderIcons();
                 playerQueue.Next();
             }

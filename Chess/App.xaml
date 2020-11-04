@@ -16,6 +16,7 @@
         <SolidColorBrush x:Key="CellSelectedColour" Color="Green" Opacity="0.5"/>
         <SolidColorBrush x:Key="MovePossibleColour" Color="Blue" Opacity="0.5"/>
         <SolidColorBrush x:Key="AttackMovePossibleColour" Color="Red" Opacity="0.5"/>
+        <SolidColorBrush x:Key="InCheck" Color="Red"/>
 
         <ControlTemplate x:Key="CellTemplate" TargetType="local:Cell">
             <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="{TemplateBinding Margin}" Background="{TemplateBinding Background}">
@@ -47,6 +48,9 @@
                         </Trigger>
                         <Trigger Property="Highlighted" Value="AttackMovePossible">
                             <Setter Property="Foreground" Value="{DynamicResource AttackMovePossibleColour}"/>
+                        </Trigger>
+                        <Trigger Property="Highlighted" Value="InCheck">
+                            <Setter Property="Background" Value="{DynamicResource InCheck}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="{DynamicResource HiglightColour}"/>
