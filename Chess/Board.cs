@@ -34,6 +34,7 @@ namespace Chess
         {
             history.Add(vector);
             Console.WriteLine($"[{vector.p1.x}, {vector.p1.y}] => [{vector.p2.x}, {vector.p2.y}]");
+            board[vector.p2.x, vector.p2.y]?.IsDead();
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
             board[vector.p1.x, vector.p1.y] = null;
         }

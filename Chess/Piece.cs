@@ -32,6 +32,7 @@ namespace Chess
     abstract class Piece
     {
         private readonly bool colour;
+        private bool status = true;
 
         public Piece(bool colour)
         {
@@ -39,6 +40,13 @@ namespace Chess
         }
 
         public bool GetColour() => colour;
+
+        public bool IsAlive() => status;
+
+        public void IsDead()
+        {
+            status = false;
+        }
 
         public abstract new Type GetType();
 
