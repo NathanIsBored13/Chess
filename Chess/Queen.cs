@@ -9,7 +9,7 @@ namespace Chess
 {
     class Queen : Piece
     {
-        public Queen(bool colour) : base(colour)
+        public Queen(bool colour, Point position) : base(colour, position)
         {
 
         }

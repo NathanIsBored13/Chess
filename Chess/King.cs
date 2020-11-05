@@ -9,7 +9,7 @@ namespace Chess
 {
     class King : Piece
     {
-        private static Point[] mask = new Point[8]
+        private static readonly Point[] mask = new Point[8]
         {
             new Point(1, 1),
             new Point(0, 1),
@@ -21,7 +21,7 @@ namespace Chess
             new Point(1, 0),
         };
 
-        public King(bool colour) : base(colour)
+        public King(bool colour, Point position) : base(colour, position)
         {
 
         }
@@ -36,28 +36,22 @@ namespace Chess
             List<Vector> moves = new List<Vector>();
             List<Vector> attacks = new List<Vector>();
             List<Point> locked = new List<Point>();
-            for (int x = 0; x < 8; x++)
+            foreach (Piece piece in board.GetPieces(!GetColour()))
             {
-                for (int y = 0; y < 8; y++)
+                if (piece is King king)
                 {
-                    if (board.GetPiece(x, y) is Piece piece && piece.GetColour() != GetColour())
+                    locked.AddRange(GetPsudoMoveMask(board, king.GetPoition(), king.GetColour()));
+                }
+                else
+                {
+                    foreach (Vector v in piece.GetMovesMask(board, piece.GetPoition()).moves)
                     {
-                        if (piece is King)
-                        {
-                            locked.AddRange(GetPsudoMoveMask(board, new Point(x, y)));
-                        }
-                        else
-                        {
-                            foreach (Vector v in piece.GetMovesMask(board, new Point(x, y)).moves)
-                            {
-                                locked.Add(v.p2);
-                            }
-                        }
+                        locked.Add(v.p2);
                     }
                 }
             }
 
-            List<Point> kingMoves = GetPsudoMoveMask(board, position).Where(a => locked.All(b => a.x != b.x || a.y != b.y)).ToList();
+            List<Point> kingMoves = GetPsudoMoveMask(board, position, GetColour()).Where(a => locked.All(b => a.x != b.x || a.y != b.y)).ToList();
 
             foreach (Point p in kingMoves)
             {
@@ -73,13 +67,13 @@ namespace Chess
             return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
         }
 
-        private List<Point> GetPsudoMoveMask(Board board, Point position)
+        private static List<Point> GetPsudoMoveMask(Board board, Point position, bool colour)
         {
             List<Point> ret = new List<Point>();
             foreach (Point offset in mask)
             {
                 Point absolute = new Point(position.x + offset.x, position.y + offset.y);
-                if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8 && board.GetPiece(absolute.x, absolute.y)?.GetColour() != GetColour())
+                if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8 && board.GetPiece(absolute.x, absolute.y)?.GetColour() != colour)
                 {
                     ret.Add(absolute);
                 }

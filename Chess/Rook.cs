@@ -9,7 +9,7 @@ namespace Chess
 {
     class Rook : Piece
     {
-        public Rook(bool colour) : base(colour)
+        public Rook(bool colour, Point position) : base(colour, position)
         {
 
         }

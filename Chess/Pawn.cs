@@ -10,7 +10,7 @@ namespace Chess
 {
     class Pawn : Piece
     {
-        public Pawn(bool colour) : base(colour)
+        public Pawn(bool colour, Point position) : base(colour, position)
         {
 
         }
@@ -26,7 +26,7 @@ namespace Chess
             if (point.y > 0 && point.y < 8 && board.GetPiece(point.x, point.y + (GetColour() ? -1 : 1)) == null)
             {
                 moves.Add(new Vector(point, new Point(point.x, point.y + (GetColour() ? -1 : 1))));
-                if (point.y == 1 || point.y == 6)
+                if (point.y == 1 || point.y == 6 && board.GetPiece(point.x, point.y + (GetColour() ? -2 : 2)) == null)
                 {
                     moves.Add(new Vector(point, new Point(point.x, point.y + (GetColour() ? -2 : 2))));
                 }

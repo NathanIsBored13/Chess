@@ -21,7 +21,7 @@ namespace Chess
                 new Point(-2, -1)
         };
 
-        public Knight(bool colour) : base(colour)
+        public Knight(bool colour, Point position) : base(colour, position)
         {
 
         }

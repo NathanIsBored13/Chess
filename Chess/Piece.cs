@@ -33,10 +33,19 @@ namespace Chess
     {
         private readonly bool colour;
         private bool status = true;
+        private Point position;
 
-        public Piece(bool colour)
+        public Piece(bool colour, Point position)
         {
             this.colour = colour;
+            this.position = position;
+        }
+
+        public Point GetPoition() => position;
+
+        public void Move(Point p)
+        {
+            position = p;
         }
 
         public bool GetColour() => colour;

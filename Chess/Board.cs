@@ -10,10 +10,15 @@ namespace Chess
 {
     class Board
     {
-        readonly Piece[,] board = new Piece[8, 8];
-        readonly List<Vector> history = new List<Vector>();
+        private readonly Piece[,] board = new Piece[8, 8];
+        private readonly List<Vector> history = new List<Vector>();
+        private readonly PieceHashTable blackPieces;
+        private readonly PieceHashTable whitePieces;
 
-        public Board() { }
+        public Board()
+        {
+
+        }
 
         public void SetState(Piece[,] template)
         {
@@ -22,6 +27,15 @@ namespace Chess
                 for (int x = 0; x < 8; x++)
                 {
                     board[x, y] = template[x, y];
+                    switch (board[x, y]?.GetColour())
+                    {
+                        case true:
+                            blackPieces.AddPiece(board[x, y]);
+                        break;
+                        case false:
+                            blackPieces.AddPiece(board[x, y]);
+                        break;
+                    }
                 }
             }
         }
@@ -29,6 +43,10 @@ namespace Chess
         public Piece GetPiece(int x, int y) => board[x, y];
 
         public Piece[,] GetPieces() => board;
+
+        public Piece[] GetPieces(bool colour, Type type) => colour ? whitePieces.GetPieces(type) : blackPieces.GetPieces(type);
+
+        public Piece[] GetPieces(bool colour) => colour ? whitePieces.AsArray() : blackPieces.AsArray();
 
         public void Move(Vector vector)
         {

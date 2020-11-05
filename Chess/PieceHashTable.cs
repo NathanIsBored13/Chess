@@ -9,7 +9,7 @@ namespace Chess
 {
     class PieceHashTable
     {
-        private Hashtable pieces = new Hashtable();
+        private readonly Hashtable pieces = new Hashtable();
 
         public PieceHashTable(List<Piece> initial)
         {
@@ -29,7 +29,21 @@ namespace Chess
 
         public Piece[] GetPieces(Type type)
         {
-            return ((List<Piece>)pieces[type]).ToArray();
+            List<Piece> ret = (List<Piece>)pieces[type];
+
+            return ret.Where(x => x.IsAlive()).ToArray();
+        }
+
+        public Piece[] AsArray()
+        {
+            Piece[] ret = new Piece[pieces.Count];
+            pieces.CopyTo(ret, 0);
+            return ret;
+        }
+
+        public void AddPiece(Piece piece)
+        {
+            ((List<Piece>)pieces[piece.GetType()]).Add(piece);
         }
     }
 }
