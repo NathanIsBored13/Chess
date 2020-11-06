@@ -27,6 +27,11 @@ namespace Chess
             }
         }
 
+        public PieceHashTable()
+        {
+
+        }
+
         public Piece[] GetPieces(Type type)
         {
             List<Piece> ret = (List<Piece>)pieces[type];
@@ -36,14 +41,25 @@ namespace Chess
 
         public Piece[] AsArray()
         {
-            Piece[] ret = new Piece[pieces.Count];
-            pieces.CopyTo(ret, 0);
-            return ret;
+            List<Piece> ret = new List<Piece>();
+            foreach (List<Piece> list in pieces.Values)
+            {
+                ret.AddRange(list);
+            }
+            return ret.ToArray();
         }
 
         public void AddPiece(Piece piece)
         {
-            ((List<Piece>)pieces[piece.GetType()]).Add(piece);
+            if (pieces.ContainsKey(piece.GetType()))
+            {
+                ((List<Piece>)pieces[piece.GetType()]).Add(piece);
+            }
+            else
+            {
+                pieces.Add(piece.GetType(), new List<Piece>());
+                ((List<Piece>)pieces[piece.GetType()]).Add(piece);
+            }
         }
     }
 }

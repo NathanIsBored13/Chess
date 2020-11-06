@@ -12,8 +12,8 @@ namespace Chess
     {
         private readonly Piece[,] board = new Piece[8, 8];
         private readonly List<Vector> history = new List<Vector>();
-        private readonly PieceHashTable blackPieces;
-        private readonly PieceHashTable whitePieces;
+        private PieceHashTable blackPieces;
+        private PieceHashTable whitePieces;
 
         public Board()
         {
@@ -22,11 +22,14 @@ namespace Chess
 
         public void SetState(Piece[,] template)
         {
+            blackPieces = new PieceHashTable();
+            whitePieces = new PieceHashTable();
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
                 {
                     board[x, y] = template[x, y];
+                    board[x, y]?.Move(new Point(x, y));
                     switch (board[x, y]?.GetColour())
                     {
                         case true:
