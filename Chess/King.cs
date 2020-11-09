@@ -38,6 +38,7 @@ namespace Chess
             List<Point> locked = new List<Point>();
             foreach (Piece piece in board.GetPieces(!GetColour()))
             {
+                Console.WriteLine("[{0}, {1}]", piece.GetPoition().x, piece.GetPoition().y);
                 if (piece is King king)
                 {
                     locked.AddRange(GetPsudoMoveMask(board, king.GetPoition(), king.GetColour()));

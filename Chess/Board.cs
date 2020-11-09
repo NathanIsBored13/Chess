@@ -29,13 +29,14 @@ namespace Chess
                 for (int x = 0; x < 8; x++)
                 {
                     board[x, y] = template[x, y];
-                    board[x, y]?.Move(new Point(x, y));
                     switch (board[x, y]?.GetColour())
                     {
                         case true:
-                            blackPieces.AddPiece(board[x, y]);
+                            Console.WriteLine("Black: [{0}, {1}]", x, y);
+                            whitePieces.AddPiece(board[x, y]);
                         break;
                         case false:
+                            Console.WriteLine("White: [{0}, {1}]", x, y);
                             blackPieces.AddPiece(board[x, y]);
                         break;
                     }
@@ -57,6 +58,7 @@ namespace Chess
             Console.WriteLine($"[{vector.p1.x}, {vector.p1.y}] => [{vector.p2.x}, {vector.p2.y}]");
             board[vector.p2.x, vector.p2.y]?.IsDead();
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
+            board[vector.p1.x, vector.p1.y].Move(vector.p2);
             board[vector.p1.x, vector.p1.y] = null;
         }
 
