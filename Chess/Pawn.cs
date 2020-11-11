@@ -20,25 +20,25 @@ namespace Chess
             return Type.Pawn;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point point)
+        public override PieceMovesMask GetMovesMask(Board board)
         {
             List<Vector> moves = new List<Vector>();
-            if (point.y > 0 && point.y < 8 && board.GetPiece(point.x, point.y + (GetColour() ? -1 : 1)) == null)
+            if (GetPoition().y > 0 && GetPoition().y < 8 && board.GetPiece(GetPoition().x, GetPoition().y + (GetColour() ? -1 : 1)) == null)
             {
-                moves.Add(new Vector(point, new Point(point.x, point.y + (GetColour() ? -1 : 1))));
-                if (point.y == 1 || point.y == 6 && board.GetPiece(point.x, point.y + (GetColour() ? -2 : 2)) == null)
+                moves.Add(new Vector(GetPoition(), new Point(GetPoition().x, GetPoition().y + (GetColour() ? -1 : 1))));
+                if (GetPoition().y == 1 || GetPoition().y == 6 && board.GetPiece(GetPoition().x, GetPoition().y + (GetColour() ? -2 : 2)) == null)
                 {
-                    moves.Add(new Vector(point, new Point(point.x, point.y + (GetColour() ? -2 : 2))));
+                    moves.Add(new Vector(GetPoition(), new Point(GetPoition().x, GetPoition().y + (GetColour() ? -2 : 2))));
                 }
             }
             List<Vector> attacks = new List<Vector>();
-            if (point.y > 0 && point.y < 8 && point.x < 7 && board.GetPiece(point.x + 1, point.y + (GetColour() ? -1 : 1)) is Piece p1 && p1.GetColour() != GetColour())
+            if (GetPoition().y > 0 && GetPoition().y < 8 && GetPoition().x < 7 && board.GetPiece(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1)) is Piece p1 && p1.GetColour() != GetColour())
             {
-                attacks.Add(new Vector(point, new Point(point.x + 1, point.y + (GetColour() ? -1 : 1))));
+                attacks.Add(new Vector(GetPoition(), new Point(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1))));
             }
-            if (point.y > 0 && point.y < 8 && point.x > 1 && board.GetPiece(point.x - 1, point.y + (GetColour() ? -1 : 1)) is Piece p2 && p2.GetColour() != GetColour())
+            if (GetPoition().y > 0 && GetPoition().y < 8 && GetPoition().x > 1 && board.GetPiece(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1)) is Piece p2 && p2.GetColour() != GetColour())
             {
-                attacks.Add(new Vector(point, new Point(point.x - 1, point.y + (GetColour() ? -1 : 1))));
+                attacks.Add(new Vector(GetPoition(), new Point(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1))));
             }
             return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
         }

@@ -31,25 +31,25 @@ namespace Chess
             return Type.Knight;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point point)
+        public override PieceMovesMask GetMovesMask(Board board)
         {
             List<Vector> moves = new List<Vector>();
             List<Vector> attacks = new List<Vector>();
             foreach (Point p in checks)
             {
-                Point vec = new Point(p.x + point.x, p.y + point.y); 
+                Point vec = new Point(p.x + GetPoition().x, p.y + GetPoition().y); 
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
                 {
                     if (board.GetPiece(vec.x, vec.y) is Piece piece)
                     {
                         if (piece.GetColour() != GetColour())
                         {
-                            attacks.Add(new Vector(point, vec));
+                            attacks.Add(new Vector(GetPoition(), vec));
                         }
                     }
                     else
                     {
-                        moves.Add(new Vector(point, vec));
+                        moves.Add(new Vector(GetPoition(), vec));
                     }
                 }
             }

@@ -73,7 +73,7 @@ namespace Chess
                 {
                     if (board[x, y] is Piece piece && piece.GetColour() == colour)
                     {
-                        PieceMovesMask mask = piece.GetMovesMask(this, new Point(x, y));
+                        PieceMovesMask mask = piece.GetMovesMask(this);
                         if (mask.moves != null) moves.AddRange(mask.moves);
                         if (mask.attacks != null) moves.AddRange(mask.attacks);
                     }

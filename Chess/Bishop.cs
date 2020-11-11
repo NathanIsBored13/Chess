@@ -10,7 +10,7 @@ namespace Chess
 {
     class Bishop : Piece
     {
-        public Bishop(bool colour, Point position) : base(colour, position)
+        public Bishop(bool colour, Point GetPoition) : base(colour, GetPoition)
         {
 
         }
@@ -20,7 +20,7 @@ namespace Chess
             return Type.Bishop;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        public override PieceMovesMask GetMovesMask(Board board)
         {
             List<Vector> moves = new List<Vector>();
             List<Vector> attacks = new List<Vector>();
@@ -29,7 +29,7 @@ namespace Chess
             do
             {
                 bool hitPiece = false;
-                Point pointer = new Point(position.x + dirs[index, 0], position.y + dirs[index, 1]);
+                Point pointer = new Point(GetPoition().x + dirs[index, 0], GetPoition().y + dirs[index, 1]);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     if (board.GetPiece(pointer.x, pointer.y) is Piece piece)
@@ -37,12 +37,12 @@ namespace Chess
                         hitPiece = true;
                         if (piece.GetColour() != GetColour())
                         {
-                            attacks.Add(new Vector(position, pointer));
+                            attacks.Add(new Vector(GetPoition(), pointer));
                         }
                     }
                     else
                     {
-                        moves.Add(new Vector(position, pointer));
+                        moves.Add(new Vector(GetPoition(), pointer));
                     }
                     pointer.x += dirs[index, 0];
                     pointer.y += dirs[index, 1];

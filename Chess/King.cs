@@ -31,7 +31,7 @@ namespace Chess
             return Type.King;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        public override PieceMovesMask GetMovesMask(Board board)
         {
             List<Vector> moves = new List<Vector>();
             List<Vector> attacks = new List<Vector>();
@@ -45,24 +45,24 @@ namespace Chess
                 }
                 else
                 {
-                    foreach (Vector v in piece.GetMovesMask(board, piece.GetPoition()).moves)
+                    foreach (Vector v in piece.GetMovesMask(board).moves)
                     {
                         locked.Add(v.p2);
                     }
                 }
             }
 
-            List<Point> kingMoves = GetPsudoMoveMask(board, position, GetColour()).Where(a => locked.All(b => a.x != b.x || a.y != b.y)).ToList();
+            List<Point> kingMoves = GetPsudoMoveMask(board, GetPoition(), GetColour()).Where(a => locked.All(b => a.x != b.x || a.y != b.y)).ToList();
 
             foreach (Point p in kingMoves)
             {
                 if (board.GetPiece(p.x, p.y) == null)
                 {
-                    moves.Add(new Vector(position, p));
+                    moves.Add(new Vector(GetPoition(), p));
                 }
                 else
                 {
-                    attacks.Add(new Vector(position, p));
+                    attacks.Add(new Vector(GetPoition(), p));
                 }
             }
             return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
