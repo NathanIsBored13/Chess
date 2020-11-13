@@ -43,6 +43,11 @@ namespace Chess
                 {
                     locked.AddRange(GetPsudoMoveMask(board, king.GetPoition(), king.GetColour()));
                 }
+                else if (piece is Pawn pawn)
+                {
+                    locked.Add(new Point(pawn.GetPoition().x + 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
+                    locked.Add(new Point(pawn.GetPoition().x - 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
+                }
                 else
                 {
                     foreach (Vector v in piece.GetMovesMask(board).moves)
