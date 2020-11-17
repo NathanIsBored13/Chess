@@ -33,8 +33,8 @@ namespace Chess
 
         public override PieceMovesMask GetMovesMask(Board board)
         {
-            List<Vector> moves = new List<Vector>();
-            List<Vector> attacks = new List<Vector>();
+            BitBoard moves = new BitBoard();
+            BitBoard attacks = new BitBoard();
             foreach (Point p in checks)
             {
                 Point vec = new Point(p.x + GetPoition().x, p.y + GetPoition().y); 
@@ -44,16 +44,16 @@ namespace Chess
                     {
                         if (piece.GetColour() != GetColour())
                         {
-                            attacks.Add(new Vector(GetPoition(), vec));
+                            attacks.Set(vec);
                         }
                     }
                     else
                     {
-                        moves.Add(new Vector(GetPoition(), vec));
+                        moves.Set(vec);
                     }
                 }
             }
-            return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
+            return new PieceMovesMask(attacks, moves);
         }
     }
 }

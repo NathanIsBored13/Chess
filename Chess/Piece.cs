@@ -20,9 +20,9 @@ namespace Chess
 
     struct PieceMovesMask
     {
-        public Vector[] attacks;
-        public Vector[] moves;
-        public PieceMovesMask(Vector[] attacks, Vector[] moves)
+        public BitBoard attacks;
+        public BitBoard moves;
+        public PieceMovesMask(BitBoard attacks, BitBoard moves)
         {
             this.attacks = attacks;
             this.moves = moves;

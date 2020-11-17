@@ -22,25 +22,25 @@ namespace Chess
 
         public override PieceMovesMask GetMovesMask(Board board)
         {
-            List<Vector> moves = new List<Vector>();
+            BitBoard moves = new BitBoard();
             if (GetPoition().y > 0 && GetPoition().y < 8 && board.GetPiece(GetPoition().x, GetPoition().y + (GetColour() ? -1 : 1)) == null)
             {
-                moves.Add(new Vector(GetPoition(), new Point(GetPoition().x, GetPoition().y + (GetColour() ? -1 : 1))));
+                moves.Set(new Point(GetPoition().x, GetPoition().y + (GetColour() ? -1 : 1)));
                 if (GetPoition().y == 1 || GetPoition().y == 6 && board.GetPiece(GetPoition().x, GetPoition().y + (GetColour() ? -2 : 2)) == null)
                 {
-                    moves.Add(new Vector(GetPoition(), new Point(GetPoition().x, GetPoition().y + (GetColour() ? -2 : 2))));
+                    moves.Set(new Point(GetPoition().x, GetPoition().y + (GetColour() ? -2 : 2)));
                 }
             }
-            List<Vector> attacks = new List<Vector>();
+            BitBoard attacks = new BitBoard();
             if (GetPoition().y > 0 && GetPoition().y < 8 && GetPoition().x < 7 && board.GetPiece(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1)) is Piece p1 && p1.GetColour() != GetColour())
             {
-                attacks.Add(new Vector(GetPoition(), new Point(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1))));
+                attacks.Set(new Point(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1)));
             }
             if (GetPoition().y > 0 && GetPoition().y < 8 && GetPoition().x > 1 && board.GetPiece(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1)) is Piece p2 && p2.GetColour() != GetColour())
             {
-                attacks.Add(new Vector(GetPoition(), new Point(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1))));
+                attacks.Set(new Point(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1)));
             }
-            return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
+            return new PieceMovesMask(attacks, moves);
         }
     }
 }

@@ -33,55 +33,51 @@ namespace Chess
 
         public override PieceMovesMask GetMovesMask(Board board)
         {
-            List<Vector> moves = new List<Vector>();
-            List<Vector> attacks = new List<Vector>();
-            List<Point> locked = new List<Point>();
+            BitBoard moves = new BitBoard();
+            BitBoard attacks = new BitBoard();
+            BitBoard locked = new BitBoard();
             foreach (Piece piece in board.GetPieces(!GetColour()))
             {
                 Console.WriteLine("[{0}, {1}]", piece.GetPoition().x, piece.GetPoition().y);
                 if (piece is King king)
                 {
-                    locked.AddRange(GetPsudoMoveMask(board, king.GetPoition(), king.GetColour()));
+                    locked.Merge(GetPsudoMoveMask(board, king.GetPoition(), king.GetColour()));
                 }
                 else if (piece is Pawn pawn)
                 {
-                    locked.Add(new Point(pawn.GetPoition().x + 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
-                    locked.Add(new Point(pawn.GetPoition().x - 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
+                    locked.Set(new Point(pawn.GetPoition().x + 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
+                    locked.Set(new Point(pawn.GetPoition().x - 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
                 }
                 else
                 {
-                    foreach (Vector v in piece.GetMovesMask(board).moves)
-                    {
-                        locked.Add(v.p2);
-                    }
+                    locked.Merge(piece.GetMovesMask(board).moves);
                 }
             }
 
-            List<Point> kingMoves = GetPsudoMoveMask(board, GetPoition(), GetColour()).Where(a => locked.All(b => a.x != b.x || a.y != b.y)).ToList();
-
+            IEnumerable<Point> kingMoves = GetPsudoMoveMask(board, GetPoition(), GetColour()).GetAllSet().Where(p => !locked.Get(p));
             foreach (Point p in kingMoves)
             {
                 if (board.GetPiece(p.x, p.y) == null)
                 {
-                    moves.Add(new Vector(GetPoition(), p));
+                    moves.Set(p);
                 }
                 else
                 {
-                    attacks.Add(new Vector(GetPoition(), p));
+                    attacks.Set(p);
                 }
             }
-            return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
+            return new PieceMovesMask(attacks, moves);
         }
 
-        private static List<Point> GetPsudoMoveMask(Board board, Point position, bool colour)
+        private static BitBoard GetPsudoMoveMask(Board board, Point position, bool colour)
         {
-            List<Point> ret = new List<Point>();
+            BitBoard ret = new BitBoard();
             foreach (Point offset in mask)
             {
                 Point absolute = new Point(position.x + offset.x, position.y + offset.y);
                 if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8 && board.GetPiece(absolute.x, absolute.y)?.GetColour() != colour)
                 {
-                    ret.Add(absolute);
+                    ret.Set(absolute);
                 }
             }
             return ret;

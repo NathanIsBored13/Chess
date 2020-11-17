@@ -74,10 +74,14 @@ namespace Chess
                     if (board[x, y] is Piece piece && piece.GetColour() == colour)
                     {
                         PieceMovesMask mask = piece.GetMovesMask(this);
-                        if (mask.moves != null) moves.AddRange(mask.moves);
-                        if (mask.attacks != null) moves.AddRange(mask.attacks);
+                        moves.AddRange(mask.attacks.GetAllSet().Select(p => new Vector(new Point(x, y), p)));
+                        moves.AddRange(mask.moves.GetAllSet().Select(p => new Vector(new Point(x, y), p)));
                     }
                 }
+            }
+            foreach (Vector v in moves)
+            {
+                Console.WriteLine(v.ToString());
             }
             return moves.ToArray();
         }

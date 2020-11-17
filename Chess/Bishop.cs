@@ -22,8 +22,8 @@ namespace Chess
 
         public override PieceMovesMask GetMovesMask(Board board)
         {
-            List<Vector> moves = new List<Vector>();
-            List<Vector> attacks = new List<Vector>();
+            BitBoard moves = new BitBoard();
+            BitBoard attacks = new BitBoard();
             int index = 0;
             int[,] dirs = { { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
             do
@@ -37,19 +37,19 @@ namespace Chess
                         hitPiece = true;
                         if (piece.GetColour() != GetColour())
                         {
-                            attacks.Add(new Vector(GetPoition(), pointer));
+                            attacks.Set(pointer);
                         }
                     }
                     else
                     {
-                        moves.Add(new Vector(GetPoition(), pointer));
+                        moves.Set(pointer);
                     }
                     pointer.x += dirs[index, 0];
                     pointer.y += dirs[index, 1];
                 }
                 index++;
             } while (index < 4);
-            return new PieceMovesMask(attacks.ToArray(), moves.ToArray());
+            return new PieceMovesMask(attacks, moves);
         }
     }
 }

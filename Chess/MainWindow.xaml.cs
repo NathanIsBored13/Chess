@@ -25,6 +25,11 @@ namespace Chess
             this.x = x;
             this.y = y;
         }
+
+        public override string ToString()
+        {
+            return $"[{x}, {y}]";
+        }
     }
 
     struct Vector
@@ -35,6 +40,11 @@ namespace Chess
         {
             this.p1 = p1;
             this.p2 = p2;
+        }
+
+        public override string ToString()
+        {
+            return $"{p1.ToString()} => {p2.ToString()}";
         }
     }
 
