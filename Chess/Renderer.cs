@@ -10,8 +10,8 @@ namespace Chess
 {
     class Renderer
     {
-        Cell[,] cells = new Cell[8, 8];
-        Board source;
+        private readonly Cell[,] cells = new Cell[8, 8];
+        private readonly Board source;
 
         public Renderer(Grid grid, Board source)
         {

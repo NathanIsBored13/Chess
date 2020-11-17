@@ -32,11 +32,9 @@ namespace Chess
                     switch (board[x, y]?.GetColour())
                     {
                         case true:
-                            Console.WriteLine("Black: [{0}, {1}]", x, y);
                             whitePieces.AddPiece(board[x, y]);
                         break;
                         case false:
-                            Console.WriteLine("White: [{0}, {1}]", x, y);
                             blackPieces.AddPiece(board[x, y]);
                         break;
                     }
@@ -55,7 +53,6 @@ namespace Chess
         public void Move(Vector vector)
         {
             history.Add(vector);
-            Console.WriteLine($"[{vector.p1.x}, {vector.p1.y}] => [{vector.p2.x}, {vector.p2.y}]");
             board[vector.p2.x, vector.p2.y]?.IsDead();
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
             board[vector.p1.x, vector.p1.y].Move(vector.p2);
@@ -78,10 +75,6 @@ namespace Chess
                         moves.AddRange(mask.moves.GetAllSet().Select(p => new Vector(new Point(x, y), p)));
                     }
                 }
-            }
-            foreach (Vector v in moves)
-            {
-                Console.WriteLine(v.ToString());
             }
             return moves.ToArray();
         }

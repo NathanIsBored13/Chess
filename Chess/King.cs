@@ -38,7 +38,6 @@ namespace Chess
             BitBoard locked = new BitBoard();
             foreach (Piece piece in board.GetPieces(!GetColour()))
             {
-                Console.WriteLine("[{0}, {1}]", piece.GetPoition().x, piece.GetPoition().y);
                 if (piece is King king)
                 {
                     locked.Merge(GetPsudoMoveMask(board, king.GetPoition(), king.GetColour()));

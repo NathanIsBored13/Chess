@@ -8,7 +8,7 @@ namespace Chess
 {
     class BitBoard
     {
-        private byte[] board = new byte[8];
+        private readonly byte[] board = new byte[8];
 
         public BitBoard()
         {
@@ -32,10 +32,12 @@ namespace Chess
         public List<Point> GetAllSet()
         {
             List<Point> ret = new List<Point>();
-            for (int y = 0; y < 0; y++)
+            for (int y = 0; y < 8; y++)
                 for (int x = 0; x < 8; x++)
                     if (Get(x, y))
+                    {
                         ret.Add(new Point(x, y));
+                    }
             return ret;
         }
 

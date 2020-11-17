@@ -42,7 +42,6 @@ namespace Chess
             playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer), Player.MakePlayer(black, false, renderer));
             while (true)
             {
-                Console.WriteLine(playerQueue.PeekPlayer().GetColour());
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
                 board.HighlightChecks(playerQueue.PeekPlayer().GetColour(), renderer);

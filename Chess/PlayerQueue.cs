@@ -9,8 +9,8 @@ namespace Chess
 {
     class PlayerQueue
     {
-        int pointer = 0;
-        Player[] queue;
+        private int pointer = 0;
+        private readonly Player[] queue;
 
         public PlayerQueue(Player p1, Player p2)
         {
@@ -19,7 +19,6 @@ namespace Chess
 
         public void Next()
         {
-            Console.WriteLine("NEXT");
             pointer = (pointer + 1) % 2;
         }
 
