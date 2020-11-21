@@ -53,7 +53,8 @@ namespace Chess
         public void Move(Vector vector)
         {
             history.Add(vector);
-            board[vector.p2.x, vector.p2.y]?.IsDead();
+            if (board[vector.p1.x, vector.p1.y] is Piece p)
+                (p.GetColour() ? whitePieces : blackPieces).RemovePiece(p);
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
             board[vector.p1.x, vector.p1.y].Move(vector.p2);
             board[vector.p1.x, vector.p1.y] = null;
@@ -63,6 +64,7 @@ namespace Chess
 
         public Vector[] GetMoves(bool colour)
         {
+            Console.WriteLine("\n\n---Move Begin---");
             List<Vector> moves = new List<Vector>();
             for (int x = 0; x < 8; x++)
             {

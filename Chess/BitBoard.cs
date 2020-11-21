@@ -15,6 +15,8 @@ namespace Chess
             
         }
 
+        public override string ToString() => $"{{{string.Join(", ", GetAllSet().Select(x => x.ToString()))}}}";
+
         public void Set(Point p)
         {
             board[p.y] = (byte)(board[p.y] | 1 << p.x);
@@ -35,9 +37,7 @@ namespace Chess
             for (int y = 0; y < 8; y++)
                 for (int x = 0; x < 8; x++)
                     if (Get(x, y))
-                    {
                         ret.Add(new Point(x, y));
-                    }
             return ret;
         }
 

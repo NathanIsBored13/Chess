@@ -44,7 +44,7 @@ namespace Chess
 
         public override string ToString()
         {
-            return $"{p1.ToString()} => {p2.ToString()}";
+            return $"{p1} => {p2}";
         }
     }
 

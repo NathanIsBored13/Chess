@@ -38,18 +38,27 @@ namespace Chess
             BitBoard locked = new BitBoard();
             foreach (Piece piece in board.GetPieces(!GetColour()))
             {
+                Console.Write($"{piece.GetType()} at position {piece.GetPoition()} locks cells ");
+                BitBoard b;
                 if (piece is King king)
                 {
-                    locked.Merge(GetPsudoMoveMask(board, king.GetPoition(), king.GetColour()));
+                    b = GetPsudoMoveMask(board, king.GetPoition(), king.GetColour());
+                    Console.WriteLine(b);
+                    locked.Merge(b);
                 }
                 else if (piece is Pawn pawn)
                 {
-                    locked.Set(new Point(pawn.GetPoition().x + 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
-                    locked.Set(new Point(pawn.GetPoition().x - 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
+                    b = new BitBoard();
+                    b.Set(new Point(pawn.GetPoition().x + 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
+                    b.Set(new Point(pawn.GetPoition().x - 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
+                    Console.WriteLine(b);
+                    locked.Merge(b);
                 }
                 else
                 {
-                    locked.Merge(piece.GetMovesMask(board).moves);
+                    b = piece.GetMovesMask(board).moves;
+                    Console.WriteLine(b);
+                    locked.Merge(b);
                 }
             }
 

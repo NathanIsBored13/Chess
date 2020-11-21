@@ -61,5 +61,10 @@ namespace Chess
                 ((List<Piece>)pieces[piece.GetType()]).Add(piece);
             }
         }
+
+        public void RemovePiece(Piece piece)
+        {
+            ((List<Piece>)pieces[piece.GetType()]).Remove(piece);
+        }
     }
 }
