@@ -32,12 +32,7 @@ namespace Chess
 
         }
 
-        public Piece[] GetPieces(Type type)
-        {
-            List<Piece> ret = (List<Piece>)pieces[type];
-
-            return ret.Where(x => x.IsAlive()).ToArray();
-        }
+        public Piece[] GetPieces(Type type) => ((List<Piece>)pieces[type]).ToArray();
 
         public Piece[] AsArray()
         {

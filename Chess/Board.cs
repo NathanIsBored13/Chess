@@ -53,7 +53,7 @@ namespace Chess
         public void Move(Vector vector)
         {
             history.Add(vector);
-            if (board[vector.p1.x, vector.p1.y] is Piece p)
+            if (board[vector.p2.x, vector.p2.y] is Piece p)
                 (p.GetColour() ? whitePieces : blackPieces).RemovePiece(p);
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
             board[vector.p1.x, vector.p1.y].Move(vector.p2);
