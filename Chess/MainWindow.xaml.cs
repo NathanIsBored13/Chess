@@ -50,8 +50,8 @@ namespace Chess
 
     public partial class MainWindow : Window
     {
-        Game game;
-        Thread thread = null;
+        private Game game;
+        private Thread thread = null;
 
         public MainWindow()
         {

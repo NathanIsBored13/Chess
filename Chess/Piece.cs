@@ -52,5 +52,7 @@ namespace Chess
         public abstract new Type GetType();
 
         public abstract PieceMovesMask GetMovesMask(Board board);
+
+        public abstract BitBoard GetSeen(Board board);
     }
 }

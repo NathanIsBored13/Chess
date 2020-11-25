@@ -51,5 +51,30 @@ namespace Chess
             } while (index < 4);
             return new PieceMovesMask(attacks, moves);
         }
+
+        public override BitBoard GetSeen(Board board)
+        {
+            BitBoard seen = new BitBoard();
+            int index = 0;
+            int[,] dirs = { { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
+            do
+            {
+                bool hitPiece = false;
+                Point pointer = new Point(GetPoition().x + dirs[index, 0], GetPoition().y + dirs[index, 1]);
+                while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
+                {
+                    seen.Set(pointer);
+                    if (board.GetPiece(pointer.x, pointer.y) is Piece piece)
+                    {
+                        hitPiece = true;
+
+                    }
+                    pointer.x += dirs[index, 0];
+                    pointer.y += dirs[index, 1];
+                }
+                index++;
+            } while (index < 4);
+            return seen;
+        }
     }
 }

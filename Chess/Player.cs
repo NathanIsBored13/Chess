@@ -11,6 +11,7 @@ namespace Chess
     {
         HumanPlayer
     }
+
     abstract class Player
     {
         readonly bool colour;
