@@ -42,5 +42,15 @@ namespace Chess
             }
             return new PieceMovesMask(attacks, moves);
         }
+
+        public override BitBoard GetSeen(Board board)
+        {
+            BitBoard seen = new BitBoard();
+            if (GetColour() ? (GetPoition().y > 0) : (GetPoition().y < 7) && GetPoition().y < 7 && GetPoition().x > 0)
+                seen.Set(new Point(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1)));
+            if (GetColour() ? (GetPoition().y > 0) : (GetPoition().y < 7) && GetPoition().y > 0 && GetPoition().x > 0)
+                seen.Set(new Point(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1)));
+            return seen;
+        }
     }
 }

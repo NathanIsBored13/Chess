@@ -40,29 +40,12 @@ namespace Chess
             {
                 Console.Write($"{piece.GetType()} at position {piece.GetPoition()} locks cells ");
                 BitBoard b;
-                if (piece is King king)
-                {
-                    b = GetPsudoMoveMask(board, king.GetPoition(), king.GetColour());
-                    Console.WriteLine(b);
-                    locked.Merge(b);
-                }
-                else if (piece is Pawn pawn)
-                {
-                    b = new BitBoard();
-                    b.Set(new Point(pawn.GetPoition().x + 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
-                    b.Set(new Point(pawn.GetPoition().x - 1, pawn.GetPoition().y + (pawn.GetColour() ? -1 : 1)));
-                    Console.WriteLine(b);
-                    locked.Merge(b);
-                }
-                else
-                {
-                    b = piece.GetMovesMask(board).moves;
-                    Console.WriteLine(b);
-                    locked.Merge(b);
-                }
+                b = piece.GetSeen(board);
+                Console.WriteLine(b);
+                locked.Merge(b);
             }
 
-            IEnumerable<Point> kingMoves = GetPsudoMoveMask(board, GetPoition(), GetColour()).GetAllSet().Where(p => !locked.Get(p));
+            IEnumerable<Point> kingMoves = GetSeen(board).GetAllSet().Where(p => !locked.Get(p) && board.GetPiece(p.x, p.y)?.GetColour() != GetColour());
             foreach (Point p in kingMoves)
             {
                 if (board.GetPiece(p.x, p.y) == null)
@@ -77,13 +60,13 @@ namespace Chess
             return new PieceMovesMask(attacks, moves);
         }
 
-        private static BitBoard GetPsudoMoveMask(Board board, Point position, bool colour)
+        public override BitBoard GetSeen(Board board)
         {
             BitBoard ret = new BitBoard();
             foreach (Point offset in mask)
             {
-                Point absolute = new Point(position.x + offset.x, position.y + offset.y);
-                if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8 && board.GetPiece(absolute.x, absolute.y)?.GetColour() != colour)
+                Point absolute = new Point(GetPoition().x + offset.x, GetPoition().y + offset.y);
+                if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8)
                 {
                     ret.Set(absolute);
                 }
