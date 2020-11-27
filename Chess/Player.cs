@@ -15,18 +15,14 @@ namespace Chess
     abstract class Player
     {
         readonly bool colour;
-        readonly Renderer renderer;
-        public Player(bool colour, Renderer renderer)
+        public Player(bool colour)
         {
             this.colour = colour;
-            this.renderer = renderer;
         }
 
         public abstract Vector Move(Board board);
 
         public bool GetColour() => colour;
-
-        public Renderer GetRenderer() => renderer;
 
         public static Player MakePlayer(PlayerType type, bool colour, Renderer renderer)
         {

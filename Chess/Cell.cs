@@ -12,14 +12,6 @@ using System.Windows.Media.Imaging;
 
 namespace Chess
 {
-    enum Highlight
-    {
-        None,
-        CellSelected,
-        MovePossible,
-        AttackMovePossible,
-        InCheck
-    }
 
     class Cell : Button
     {
@@ -30,12 +22,12 @@ namespace Chess
         }
         public static readonly DependencyProperty CheckeredProperty = DependencyProperty.Register("Checkered", typeof(bool), typeof(Cell));
 
-        public Highlight Highlighted
+        public int Highlighted
         {
-            get { return (Highlight)GetValue(HighlightedProperty); }
+            get { return (int)Dispatcher.Invoke(new Func<object>(() => { return GetValue(HighlightedProperty); })); }
             set { Dispatcher.Invoke(() => SetValue(HighlightedProperty, value)); }
         }
-        public static readonly DependencyProperty HighlightedProperty = DependencyProperty.Register("Highlighted", typeof(Highlight), typeof(Cell));
+        public static readonly DependencyProperty HighlightedProperty = DependencyProperty.Register("Highlighted", typeof(int), typeof(Cell));
 
         private readonly Point position;
         private Image image = new Image()

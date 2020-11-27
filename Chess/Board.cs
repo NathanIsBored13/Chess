@@ -12,12 +12,20 @@ namespace Chess
     {
         private readonly Piece[,] board = new Piece[8, 8];
         private readonly List<Vector> history = new List<Vector>();
+        private Renderer renderer;
+        private int renderHandle;
         private PieceHashTable blackPieces;
         private PieceHashTable whitePieces;
 
         public Board()
         {
 
+        }
+
+        public void GiveRenderAccsess(Renderer renderer)
+        {
+            this.renderer = renderer;
+            renderHandle = renderer.Register();
         }
 
         public void SetState(Piece[,] template)
@@ -81,26 +89,15 @@ namespace Chess
             return moves.ToArray();
         }
 
-        public void HighlightChecks(bool colour, Renderer renderer)
+        public void HighlightChecks(bool colour)
         {
-            Vector[] attacks = GetMoves(colour);
-            for (int x = 0; x < 8; x++)
-            {
-                for (int y = 0; y < 8; y++)
-                {
-                    if (board[x, y] is King king)
-                    {
-                        if (king.GetColour() == colour)
-                        {
-                            renderer.SetHighlight(Highlight.None, new Point(x, y));
-                        }
-                        else if (attacks.Any(v => v.p2.x == x && v.p2.y == y))
-                        {
-                            renderer.SetHighlight(Highlight.InCheck, new Point(x, y));
-                        }
-                    }
-                }
-            }
+            renderer.ResetHighlights(renderHandle);
+            BitBoard attacks = new BitBoard();
+            foreach (Piece p in (colour ? whitePieces : blackPieces).AsArray())
+                attacks.Merge(p.GetSeen(this));
+            King k = (King)(colour ? blackPieces : whitePieces).GetPieces(Type.King)[0];
+            if (attacks.Get(k.GetPoition()))
+                renderer.SetHighlight(renderHandle, Highlight.InCheck, k.GetPoition());
         }
     }
 }

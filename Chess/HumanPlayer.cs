@@ -10,9 +10,12 @@ namespace Chess
 {
     class HumanPlayer : Player
     {
-        public HumanPlayer(bool colour, Renderer renderer) : base(colour, renderer)
+        int renderHandle;
+        Renderer renderer;
+        public HumanPlayer(bool colour, Renderer renderer) : base(colour)
         {
-
+            this.renderer = renderer;
+            renderHandle = renderer.Register();
         }
 
         public override Vector Move(Board board)
@@ -28,7 +31,7 @@ namespace Chess
                     }
                 }
             }
-            GetRenderer().ResetHighlights(new Point[] { king });
+            renderer.ResetHighlights(renderHandle);
 
             Vector? ret = null;
             Point? p1 = null;
@@ -51,11 +54,11 @@ namespace Chess
                         {
                             if (board.GetPiece(vec.p2.x, vec.p2.y) is Piece)
                             {
-                                GetRenderer().SetHighlight(Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
+                                renderer.SetHighlight(renderHandle, Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
                             }
                             else
                             {
-                                GetRenderer().SetHighlight(Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
+                                renderer.SetHighlight(renderHandle, Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
                             }
                         }
                     }
@@ -74,7 +77,7 @@ namespace Chess
                     if (p2 == null)
                     {
                         p1 = buffer;
-                        GetRenderer().ResetHighlights();
+                        renderer.ResetHighlights(renderHandle);
                         filteredMoves = moves.Where(v => v.p1.x == p1.Value.x && v.p1.y == p1.Value.y).ToArray();
                         if (filteredMoves.Length == 0)
                         {
@@ -86,11 +89,11 @@ namespace Chess
                             {
                                 if (board.GetPiece(vec.p2.x, vec.p2.y) is Piece)
                                 {
-                                    GetRenderer().SetHighlight(Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
+                                    renderer.SetHighlight(renderHandle, Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
                                 }
                                 else
                                 {
-                                    GetRenderer().SetHighlight(Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
+                                    renderer.SetHighlight(renderHandle, Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
                                 }
                             }
                         }
@@ -101,6 +104,7 @@ namespace Chess
                     ret = new Vector(p1.Value, p2.Value);
                 }
             } while (ret == null);
+            renderer.ResetHighlights(renderHandle);
             return ret.Value;
         }
     }

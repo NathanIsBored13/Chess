@@ -40,16 +40,16 @@
                         <Trigger Property="Checkered" Value="False">
                             <Setter Property="Background" Value="{DynamicResource CheckeredBrush2}"/>
                         </Trigger>
-                        <Trigger Property="Highlighted" Value="CellSelected">
+                        <Trigger Property="Highlighted" Value="1">
                             <Setter Property="Foreground" Value="{DynamicResource CellSelectedColour}"/>
                         </Trigger>
-                        <Trigger Property="Highlighted" Value="MovePossible">
+                        <Trigger Property="Highlighted" Value="2">
                             <Setter Property="Foreground" Value="{DynamicResource MovePossibleColour}"/>
                         </Trigger>
-                        <Trigger Property="Highlighted" Value="AttackMovePossible">
+                        <Trigger Property="Highlighted" Value="4">
                             <Setter Property="Foreground" Value="{DynamicResource AttackMovePossibleColour}"/>
                         </Trigger>
-                        <Trigger Property="Highlighted" Value="InCheck">
+                        <Trigger Property="Highlighted" Value="8">
                             <Setter Property="Background" Value="{DynamicResource InCheck}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">

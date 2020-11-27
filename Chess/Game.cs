@@ -32,6 +32,7 @@ namespace Chess
         public Game(Grid target)
         {
             renderer = new Renderer(target, board);
+            board.GiveRenderAccsess(renderer);
             renderer.RenderIcons();
         }
 
@@ -44,7 +45,7 @@ namespace Chess
             {
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
-                board.HighlightChecks(playerQueue.PeekPlayer().GetColour(), renderer);
+                board.HighlightChecks(playerQueue.PeekPlayer().GetColour());
                 renderer.RenderIcons();
                 playerQueue.Next();
             }

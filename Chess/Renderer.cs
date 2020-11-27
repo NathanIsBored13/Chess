@@ -1,17 +1,27 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace Chess
 {
+    enum Highlight
+    {
+        CellSelected = 1,
+        MovePossible = 2,
+        AttackMovePossible = 4,
+        InCheck = 8
+    }
+
     class Renderer
     {
         private readonly Cell[,] cells = new Cell[8, 8];
         private readonly Board source;
+        private readonly List<List<Tuple<Point, Highlight>>> deltas = new List<List<Tuple<Point, Highlight>>>();
+        private readonly List<int> free = new List<int>();
 
         public Renderer(Grid grid, Board source)
         {
@@ -52,39 +62,41 @@ namespace Chess
             }
         }
 
-        public void SetHighlight(Highlight highlight, Point point)
+        public int Register()
         {
-            cells[point.x, point.y].Highlighted = highlight;
+            int index;
+            if (free.Count > 0)
+            {
+                index = free[0];
+                free.RemoveAt(0);
+                deltas[index] = new List<Tuple<Point, Highlight>>();
+            }
+            else
+            {
+                index = deltas.Count;
+                deltas.Add(new List<Tuple<Point, Highlight>>());
+            }
+            return index;
         }
 
-        public void SetHighlights(Tuple<Highlight, Point>[] highlights)
+        public void SetHighlight(int handle, Highlight highlight, Point point)
+        {
+            deltas[handle].Add(new Tuple<Point, Highlight>(point, highlight));
+            cells[point.x, point.y].Highlighted = cells[point.x, point.y].Highlighted | (int)highlight;
+        }
+
+        public void SetHighlights(int handle, Tuple<Highlight, Point>[] highlights)
         {
             foreach (Tuple<Highlight, Point> highlight in highlights)
             {
-                SetHighlight(highlight.Item1, highlight.Item2);
+                SetHighlight(handle, highlight.Item1, highlight.Item2);
             }
         }
 
-        public void ResetHighlights()
+        public void ResetHighlights(int handle)
         {
-            foreach (Cell cell in cells)
-            {
-                cell.Highlighted = Highlight.None;
-            }
-        }
-
-        public void ResetHighlights(Point[] exceptions)
-        {
-            for (int y = 0; y < 8; y++)
-            {
-                for (int x = 0; x < 8; x++)
-                {
-                    if (!exceptions.Any(p => p.x == x && p.y == y))
-                    {
-                        cells[x, y].Highlighted = Highlight.None;
-                    }
-                }
-            }
+            foreach(Tuple<Point, Highlight> pair in deltas[handle])
+                cells[pair.Item1.x, pair.Item1.y].Highlighted = cells[pair.Item1.x, pair.Item1.y].Highlighted & (~(int)pair.Item2);
         }
     }
 }
