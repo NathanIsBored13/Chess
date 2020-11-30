@@ -17,7 +17,7 @@ namespace Chess
     {
         public bool Checkered
         {
-            get { return (bool)GetValue(CheckeredProperty); }
+            get { return (bool)Dispatcher.Invoke(new Func<object>(() => { return GetValue(CheckeredProperty); })); }
             set { Dispatcher.Invoke(() => SetValue(CheckeredProperty, value)); }
         }
         public static readonly DependencyProperty CheckeredProperty = DependencyProperty.Register("Checkered", typeof(bool), typeof(Cell));
