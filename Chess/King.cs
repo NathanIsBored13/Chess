@@ -36,6 +36,8 @@ namespace Chess
             BitBoard moves = new BitBoard();
             BitBoard attacks = new BitBoard();
             BitBoard locked = new BitBoard();
+
+            board.RemovePiece(this);
             foreach (Piece piece in board.GetPieces(!GetColour()))
             {
                 Console.Write($"{piece.GetType()} at position {piece.GetPoition()} locks cells ");
@@ -44,6 +46,7 @@ namespace Chess
                 Console.WriteLine(b);
                 locked.Merge(b);
             }
+            board.AddPiece(this);
 
             IEnumerable<Point> kingMoves = GetSeen(board).GetAllSet().Where(p => !locked.Get(p) && board.GetPiece(p.x, p.y)?.GetColour() != GetColour());
             foreach (Point p in kingMoves)

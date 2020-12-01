@@ -52,6 +52,18 @@ namespace Chess
 
         public Piece GetPiece(int x, int y) => board[x, y];
 
+        public void RemovePiece(Piece p)
+        {
+            board[p.GetPoition().x, p.GetPoition().y] = null;
+            (p.GetColour() ? whitePieces : blackPieces).RemovePiece(p);
+        }
+
+        public void AddPiece(Piece p)
+        {
+            board[p.GetPoition().x, p.GetPoition().y] = p;
+            (p.GetColour() ? whitePieces : blackPieces).AddPiece(p);
+        }
+
         public Piece[,] GetPieces() => board;
 
         public Piece[] GetPieces(bool colour, Type type) => colour ? whitePieces.GetPieces(type) : blackPieces.GetPieces(type);
