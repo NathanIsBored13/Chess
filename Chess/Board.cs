@@ -22,6 +22,21 @@ namespace Chess
 
         }
 
+        public Piece this[Point p]
+        {
+            get { return board[p.x, p.y]; }
+        }
+
+        public Piece[] this[bool colour, Type t]
+        {
+            get { return (colour ? whitePieces : blackPieces).GetPieces(t); }
+        }
+
+        public Piece[] this[bool colour]
+        {
+            get { return (colour ? whitePieces : blackPieces).AsArray(); }
+        }
+
         public void GiveRenderAccsess(Renderer renderer)
         {
             this.renderer = renderer;
