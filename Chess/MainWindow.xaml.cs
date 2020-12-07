@@ -66,6 +66,7 @@ namespace Chess
             {
                 thread.Abort();
                 thread.Join();
+                game = new Game(DrawTarget);
             }
             thread = new Thread(() => game.Begin(PlayerType.HumanPlayer, PlayerType.HumanPlayer));
             thread.Start();

@@ -19,13 +19,15 @@ namespace Chess
     class Renderer
     {
         private readonly Cell[,] cells = new Cell[8, 8];
-        private readonly Board source;
+        private Board source;
         private readonly List<List<Tuple<Point, Highlight>>> deltas = new List<List<Tuple<Point, Highlight>>>();
         private readonly List<int> free = new List<int>();
 
-        public Renderer(Grid grid, Board source)
+        public Renderer(Grid grid)
         {
-            this.source = source;
+            grid.RowDefinitions.Clear();
+            grid.ColumnDefinitions.Clear();
+            grid.Children.Clear();
             for (int i = 0; i < 8; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
@@ -41,7 +43,11 @@ namespace Chess
                 }
             }
             Icons.RegisterListener(RenderIcons);
-            RenderIcons();
+        }
+
+        public void SetSource(Board source)
+        {
+            this.source = source;
         }
 
         public void RenderIcons()

@@ -31,9 +31,9 @@ namespace Chess
 
         public Game(Grid target)
         {
-            renderer = new Renderer(target, board);
+            renderer = new Renderer(target);
+            renderer.SetSource(board);
             board.GiveRenderAccsess(renderer);
-            renderer.RenderIcons();
         }
 
         public void Begin(PlayerType white, PlayerType black)
