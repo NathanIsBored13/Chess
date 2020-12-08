@@ -72,7 +72,7 @@ namespace Chess
                     pointer.y += dirs[index, 1];
                 }
                 index++;
-            } while (index < 4);
+            } while (index < 8);
             return seen;
         }
     }
