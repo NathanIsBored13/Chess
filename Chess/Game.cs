@@ -15,6 +15,7 @@ namespace Chess
     {
         private readonly Board board = new Board();
         private readonly Renderer renderer;
+        private readonly int renderHandle;
         private PlayerQueue playerQueue;
 
         private readonly Piece[,] template = new Piece[,]
@@ -33,7 +34,7 @@ namespace Chess
         {
             renderer = new Renderer(target);
             renderer.SetSource(board);
-            board.GiveRenderAccsess(renderer);
+            renderHandle = renderer.Register();
         }
 
         public void Begin(PlayerType white, PlayerType black)
@@ -45,7 +46,9 @@ namespace Chess
             {
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
-                board.HighlightChecks(playerQueue.PeekPlayer().GetColour());
+                renderer.ResetHighlights(renderHandle);
+                if (board.HighlightChecks(playerQueue.PeekPlayer().GetColour()) is Point p)
+                    renderer.SetHighlight(renderHandle, Highlight.InCheck, p);
                 renderer.RenderIcons();
                 playerQueue.Next();
             }

@@ -12,8 +12,6 @@ namespace Chess
     {
         private Piece[,] board;
         private readonly List<Vector> history = new List<Vector>();
-        private Renderer renderer;
-        private int renderHandle;
         private PieceHashTable blackPieces;
         private PieceHashTable whitePieces;
 
@@ -35,12 +33,6 @@ namespace Chess
         public Piece[] this[bool colour]
         {
             get { return (colour ? whitePieces : blackPieces).AsArray(); }
-        }
-
-        public void GiveRenderAccsess(Renderer renderer)
-        {
-            this.renderer = renderer;
-            renderHandle = renderer.Register();
         }
 
         public void SetState(Piece[,] template)
@@ -117,15 +109,16 @@ namespace Chess
             return moves.ToArray();
         }
 
-        public void HighlightChecks(bool colour)
+        public Point? HighlightChecks(bool colour)
         {
-            renderer.ResetHighlights(renderHandle);
+            Point? ret = null;
             BitBoard attacks = new BitBoard();
             foreach (Piece p in (colour ? whitePieces : blackPieces).AsArray())
                 attacks.Merge(p.GetSeen(this));
             King k = (King)(colour ? blackPieces : whitePieces).GetPieces(Type.King)[0];
             if (attacks.Get(k.GetPoition()))
-                renderer.SetHighlight(renderHandle, Highlight.InCheck, k.GetPoition());
+                ret = k.GetPoition();
+            return ret;
         }
     }
 }
