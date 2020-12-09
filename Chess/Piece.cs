@@ -29,7 +29,7 @@ namespace Chess
         }
     }
 
-    abstract class Piece
+    abstract class Piece : ICloneable
     {
         private readonly bool colour;
         private Point position;
@@ -38,6 +38,11 @@ namespace Chess
         {
             this.colour = colour;
             this.position = position;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
 
         public Point GetPoition() => position;

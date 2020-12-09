@@ -8,10 +8,10 @@ using System.Xml.Serialization;
 
 namespace Chess
 {
-    class Board
+    class Board : ICloneable
     {
         private Piece[,] board;
-        private readonly List<Vector> history = new List<Vector>();
+        private readonly List<Vector> history;
         private PieceHashTable blackPieces;
         private PieceHashTable whitePieces;
 
@@ -19,22 +19,50 @@ namespace Chess
         {
             blackPieces = new PieceHashTable();
             whitePieces = new PieceHashTable();
+            history = new List<Vector>();
             board = new Piece[8, 8];
             for (int y = 0; y < 8; y++)
             {
                 for (int x = 0; x < 8; x++)
                 {
                     board[x, y] = template[x, y];
-                    switch (board[x, y]?.GetColour())
-                    {
-                        case true:
-                            whitePieces.AddPiece(board[x, y]);
-                            break;
-                        case false:
-                            blackPieces.AddPiece(board[x, y]);
-                            break;
-                    }
+                    PushToTable(x, y);
                 }
+            }
+        }
+
+        private Board(Board b)
+        {
+            blackPieces = new PieceHashTable();
+            whitePieces = new PieceHashTable();
+            history = b.history.Select(v => new Vector(new Point(v.p1.x, v.p1.y), new Point(v.p2.x, v.p2.y))).ToList(); ;
+            board = new Piece[8, 8];
+            for (int y = 0; y < 8; y++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    board[x, y] = (Piece)b.board[x, y]?.Clone();
+                    PushToTable(x, y);
+                }
+            }
+
+        }
+
+        public object Clone()
+        {
+            return new Board(this);
+        }
+
+        private void PushToTable(int x, int y)
+        {
+            switch (board[x, y]?.GetColour())
+            {
+                case true:
+                    whitePieces.AddPiece(board[x, y]);
+                    break;
+                case false:
+                    blackPieces.AddPiece(board[x, y]);
+                    break;
             }
         }
 
