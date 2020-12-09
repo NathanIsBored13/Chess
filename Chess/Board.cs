@@ -15,9 +15,27 @@ namespace Chess
         private PieceHashTable blackPieces;
         private PieceHashTable whitePieces;
 
-        public Board()
+        public Board(Piece[,] template)
         {
-
+            blackPieces = new PieceHashTable();
+            whitePieces = new PieceHashTable();
+            board = new Piece[8, 8];
+            for (int y = 0; y < 8; y++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    board[x, y] = template[x, y];
+                    switch (board[x, y]?.GetColour())
+                    {
+                        case true:
+                            whitePieces.AddPiece(board[x, y]);
+                            break;
+                        case false:
+                            blackPieces.AddPiece(board[x, y]);
+                            break;
+                    }
+                }
+            }
         }
 
         public Piece this[Point p]
@@ -33,29 +51,6 @@ namespace Chess
         public Piece[] this[bool colour]
         {
             get { return (colour ? whitePieces : blackPieces).AsArray(); }
-        }
-
-        public void SetState(Piece[,] template)
-        {
-            blackPieces = new PieceHashTable();
-            whitePieces = new PieceHashTable();
-            board = new Piece[8, 8];
-            for (int y = 0; y < 8; y++)
-            {
-                for (int x = 0; x < 8; x++)
-                {
-                    board[x, y] = template[x, y];
-                    switch (board[x, y]?.GetColour())
-                    {
-                        case true:
-                            whitePieces.AddPiece(board[x, y]);
-                        break;
-                        case false:
-                            blackPieces.AddPiece(board[x, y]);
-                        break;
-                    }
-                }
-            }
         }
 
         public Piece GetPiece(int x, int y) => board[x, y];
