@@ -45,7 +45,6 @@ namespace Chess
                     PushToTable(x, y);
                 }
             }
-
         }
 
         public object Clone()
@@ -124,8 +123,7 @@ namespace Chess
                     if (board[x, y] is Piece piece && piece.GetColour() == colour)
                     {
                         PieceMovesMask mask = piece.GetMovesMask(this);
-                        moves.AddRange(mask.attacks.GetAllSet().Select(p => new Vector(new Point(x, y), p)));
-                        moves.AddRange(mask.moves.GetAllSet().Select(p => new Vector(new Point(x, y), p)));
+                        moves.AddRange(Enumerable.Concat(mask.attacks.GetAllSet(), mask.moves.GetAllSet()).Select(p => new Vector(new Point(x, y), p)));
                     }
                 }
             }
