@@ -63,7 +63,7 @@ namespace Chess
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     seen.Set(pointer);
-                    if (board.GetPiece(pointer.x, pointer.y) is Piece piece)
+                    if (board.GetPiece(pointer.x, pointer.y) is Piece)
                     {
                         hitPiece = true;
 
