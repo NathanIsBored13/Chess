@@ -130,15 +130,22 @@ namespace Chess
             return moves.ToArray();
         }
 
-        public Point? HighlightChecks(bool colour)
+        public Point? GetChecks(bool colour)
         {
             Point? ret = null;
-            BitBoard attacks = new BitBoard();
-            foreach (Piece p in (colour ? whitePieces : blackPieces).AsArray())
-                attacks.Merge(p.GetSeen(this));
-            King k = (King)(colour ? blackPieces : whitePieces).GetPieces(Type.King)[0];
-            if (attacks.Get(k.GetPoition()))
-                ret = k.GetPoition();
+            Point pos = GetPieces(colour, Type.King)[0].GetPoition();
+            Piece[] pieceTemplates = new Piece[6]
+            {
+                new King(colour, pos),
+                new Queen(colour, pos),
+                new Rook(colour, pos),
+                new Knight(colour, pos),
+                new Bishop(colour, pos),
+                new Pawn(colour, pos)
+            };
+            foreach (Piece p in pieceTemplates)
+                if (p.GetSeen(this).GetAllSet().Any(v => board[v.x, v.y] != null && board[v.x, v.y].GetType() == p.GetType() && board[v.x, v.y].GetColour() == !colour))
+                    ret = pos;
             return ret;
         }
     }

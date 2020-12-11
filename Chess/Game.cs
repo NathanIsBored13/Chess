@@ -47,7 +47,7 @@ namespace Chess
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
                 renderer.ResetHighlights(renderHandle);
-                if (board.HighlightChecks(playerQueue.PeekPlayer().GetColour()) is Point p)
+                if (board.GetChecks(!playerQueue.PeekPlayer().GetColour()) is Point p)
                     renderer.SetHighlight(renderHandle, Highlight.InCheck, p);
                 renderer.RenderIcons();
                 playerQueue.Next();
