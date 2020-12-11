@@ -116,6 +116,27 @@ namespace Chess
         {
             Console.WriteLine("\n\n---Move Begin---");
             List<Vector> moves = new List<Vector>();
+            List<Piece> checkers = FindChecks(colour);
+            switch (checkers.Count())
+            {
+                case 0:
+                    moves = PsudoGetMoves(colour);
+                    break;
+                case 1:
+                    moves = PsudoGetMoves(colour);
+                    break;
+                case 2:
+                    Piece k = this[colour, Type.King][0];
+                    PieceMovesMask mask = k.GetMovesMask(this);
+                    moves.AddRange(Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPoition(), p)));
+                    break;
+            }
+            return moves.ToArray();
+        }
+
+        private List<Vector> PsudoGetMoves(bool colour)
+        {
+            List<Vector> moves = new List<Vector>();
             for (int x = 0; x < 8; x++)
             {
                 for (int y = 0; y < 8; y++)
@@ -127,12 +148,12 @@ namespace Chess
                     }
                 }
             }
-            return moves.ToArray();
+            return moves;
         }
 
-        public int CountChecks(bool colour)
+        public List<Piece> FindChecks(bool colour)
         {
-            int ret = 0;
+            List<Piece> ret = new List<Piece>();
             Point pos = GetPieces(colour, Type.King)[0].GetPoition();
             Piece[] pieceTemplates = new Piece[6]
             {
@@ -144,8 +165,7 @@ namespace Chess
                 new Pawn(colour, pos)
             };
             foreach (Piece p in pieceTemplates)
-                if (p.GetSeen(this).GetAllSet().Any(v => board[v.x, v.y] != null && board[v.x, v.y].GetType() == p.GetType() && board[v.x, v.y].GetColour() == !colour))
-                    ret++;
+                ret.AddRange(p.GetSeen(this).GetAllSet().Where(v => this[v] != null && this[v].GetColour() != colour && this[v].GetType() == p.GetType()).Select(v => this[v]));
             return ret;
         }
     }
