@@ -10,10 +10,10 @@ namespace Chess
 {
     class Board : ICloneable
     {
-        private Piece[,] board;
+        private readonly Piece[,] board;
         private readonly List<Vector> history;
-        private PieceHashTable blackPieces;
-        private PieceHashTable whitePieces;
+        private readonly PieceHashTable blackPieces;
+        private readonly PieceHashTable whitePieces;
 
         public Board(Piece[,] template)
         {
