@@ -130,9 +130,9 @@ namespace Chess
             return moves.ToArray();
         }
 
-        public Point? GetChecks(bool colour)
+        public int CountChecks(bool colour)
         {
-            Point? ret = null;
+            int ret = 0;
             Point pos = GetPieces(colour, Type.King)[0].GetPoition();
             Piece[] pieceTemplates = new Piece[6]
             {
@@ -145,7 +145,7 @@ namespace Chess
             };
             foreach (Piece p in pieceTemplates)
                 if (p.GetSeen(this).GetAllSet().Any(v => board[v.x, v.y] != null && board[v.x, v.y].GetType() == p.GetType() && board[v.x, v.y].GetColour() == !colour))
-                    ret = pos;
+                    ret++;
             return ret;
         }
     }
