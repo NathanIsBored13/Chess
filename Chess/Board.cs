@@ -120,16 +120,22 @@ namespace Chess
             switch (checkers.Count())
             {
                 case 0:
-                    moves = PsudoGetMoves(colour);
-                    break;
+                    {
+                        moves = PsudoGetMoves(colour);
+                    }
+                break;
                 case 1:
-                    moves = PsudoGetMoves(colour);
-                    break;
+                    {
+                        moves = PsudoGetMoves(colour);
+                    }
+                break;
                 case 2:
-                    Piece k = this[colour, Type.King][0];
-                    PieceMovesMask mask = k.GetMovesMask(this);
-                    moves.AddRange(Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPoition(), p)));
-                    break;
+                    {
+                        Piece k = this[colour, Type.King][0];
+                        PieceMovesMask mask = k.GetMovesMask(this);
+                        moves.AddRange(Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPoition(), p)));
+                    }
+                break;
             }
             return moves.ToArray();
         }
@@ -137,16 +143,10 @@ namespace Chess
         private List<Vector> PsudoGetMoves(bool colour)
         {
             List<Vector> moves = new List<Vector>();
-            for (int x = 0; x < 8; x++)
+            foreach(Piece piece in this[colour])
             {
-                for (int y = 0; y < 8; y++)
-                {
-                    if (board[x, y] is Piece piece && piece.GetColour() == colour)
-                    {
-                        PieceMovesMask mask = piece.GetMovesMask(this);
-                        moves.AddRange(Enumerable.Concat(mask.attacks.GetAllSet(), mask.moves.GetAllSet()).Select(p => new Vector(new Point(x, y), p)));
-                    }
-                }
+                PieceMovesMask mask = piece.GetMovesMask(this);
+                moves.AddRange(Enumerable.Concat(mask.attacks.GetAllSet(), mask.moves.GetAllSet()).Select(p => new Vector(piece.GetPoition(), p)));
             }
             return moves;
         }
