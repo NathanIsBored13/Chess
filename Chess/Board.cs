@@ -115,29 +115,42 @@ namespace Chess
         public Vector[] GetMoves(bool colour)
         {
             Console.WriteLine("\n\n---Move Begin---");
-            List<Vector> moves = new List<Vector>();
+            Vector[] ret = new Vector[0];
             List<Piece> checkers = FindChecks(colour);
             switch (checkers.Count())
             {
                 case 0:
                     {
-                        moves = PsudoGetMoves(colour);
+                        BitBoard pins = CalculatePinRays(this[colour, Type.King][0].GetPoition(), !colour);
+                        ret = PsudoGetMoves(colour).Where(x => !pins.Get(x.p1)).ToArray();
                     }
                 break;
                 case 1:
                     {
-                        moves = PsudoGetMoves(colour);
+                        ret = PsudoGetMoves(colour).ToArray();
                     }
                 break;
                 case 2:
                     {
                         Piece k = this[colour, Type.King][0];
                         PieceMovesMask mask = k.GetMovesMask(this);
-                        moves.AddRange(Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPoition(), p)));
+                        ret = Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPoition(), p)).ToArray();
                     }
                 break;
             }
-            return moves.ToArray();
+            return ret;
+        }
+
+        private BitBoard CalculatePinRays(Point p, bool colour)
+        {
+            BitBoard bishop = new Bishop(colour, p).GetMovesMask(this).attacks;
+            BitBoard rook = new Rook(colour, p).GetMovesMask(this).attacks;
+            BitBoard ret = new BitBoard();
+            foreach (Piece piece in this[colour, Type.Bishop])
+                ret.Merge(piece.GetMovesMask(this).attacks & bishop);
+            foreach (Piece piece in this[colour, Type.Rook])
+                ret.Merge(piece.GetMovesMask(this).attacks & rook);
+            return ret;
         }
 
         private List<Vector> PsudoGetMoves(bool colour)

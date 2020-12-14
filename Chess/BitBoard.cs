@@ -15,6 +15,14 @@ namespace Chess
             
         }
 
+        public static BitBoard operator &(BitBoard l, BitBoard r)
+        {
+            BitBoard ret = new BitBoard();
+            for (int i = 0; i < 8; i++)
+                ret.board[i] = (byte)(l.board[i] & r.board[i]);
+            return ret;
+        }
+
         public override string ToString() => $"{{{string.Join(", ", GetAllSet().Select(x => x.ToString()))}}}";
 
         public void Set(Point p)
@@ -46,6 +54,14 @@ namespace Chess
             for (int i = 0; i < 8; i++)
             {
                 board[i] |= b.board[i];
+            }
+        }
+
+        public void Intersection(BitBoard b)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                board[i] &= b.board[i];
             }
         }
     }
