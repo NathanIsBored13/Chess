@@ -20,14 +20,14 @@ namespace Chess
 
         private readonly Piece[,] template = new Piece[,]
         {
-            {new Rook(false, new Point(0, 0)),   new Pawn(false, new Point(0, 1)), null, null, null, null, new Pawn(true, new Point(0, 6)), new Rook(true, new Point(0, 7))     },
-            {new Knight(false, new Point(1, 0)), new Pawn(false, new Point(1, 1)), null, null, null, null, new Pawn(true, new Point(1, 6)), new Knight(true, new Point(1, 7))   },
-            {new Bishop(false, new Point(2, 0)), new Pawn(false, new Point(2, 1)), null, null, null, null, new Pawn(true, new Point(2, 6)), new Bishop(true, new Point(2, 7))   },
-            {new King(false, new Point(3, 0)),   new Pawn(false, new Point(3, 1)), null, null, null, null, new Pawn(true, new Point(3, 6)), new King(true, new Point(3, 7))     },
-            {new Queen(false, new Point(4, 0)),  new Pawn(false, new Point(4, 1)), null, null, null, null, new Pawn(true, new Point(4, 6)), new Queen(true, new Point(4, 7))    },
-            {new Bishop(false, new Point(5, 0)), new Pawn(false, new Point(5, 1)), null, null, null, null, new Pawn(true, new Point(5, 6)), new Bishop(true, new Point(5, 7))   },
-            {new Knight(false, new Point(6, 0)), new Pawn(false, new Point(6, 1)), null, null, null, null, new Pawn(true, new Point(6, 6)), new Knight(true, new Point(6, 7))   },
-            {new Rook(false, new Point(7, 0)),   new Pawn(false, new Point(7, 1)), null, null, null, null, new Pawn(true, new Point(7, 6)), new Rook(true, new Point(7, 7))     }
+            {new Rook(false),   new Pawn(false), null, null, null, null, new Pawn(true), new Rook(true)     },
+            {new Knight(false), new Pawn(false), null, null, null, null, new Pawn(true), new Knight(true)   },
+            {new Bishop(false), new Pawn(false), null, null, null, null, new Pawn(true), new Bishop(true)   },
+            {new King(false),   new Pawn(false), null, null, null, null, new Pawn(true), new King(true)     },
+            {new Queen(false),  new Pawn(false), null, null, null, null, new Pawn(true), new Queen(true)    },
+            {new Bishop(false), new Pawn(false), null, null, null, null, new Pawn(true), new Bishop(true)   },
+            {new Knight(false), new Pawn(false), null, null, null, null, new Pawn(true), new Knight(true)   },
+            {new Rook(false),   new Pawn(false), null, null, null, null, new Pawn(true), new Rook(true)     }
         };
 
         public Game(Grid target)
@@ -48,7 +48,7 @@ namespace Chess
                 board.Move(vec);
                 renderer.ResetHighlights(renderHandle);
                 if (board.FindChecks(!playerQueue.PeekPlayer().GetColour()).Count() > 0)
-                    renderer.SetHighlight(renderHandle, Highlight.InCheck, board[!playerQueue.PeekPlayer().GetColour(), Type.King][0].GetPosition());
+                    renderer.SetHighlight(renderHandle, Highlight.InCheck, board.FindKing(!playerQueue.PeekPlayer().GetColour()));
                 renderer.RenderIcons();
                 playerQueue.Next();
             }

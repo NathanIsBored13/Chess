@@ -32,12 +32,10 @@ namespace Chess
     abstract class Piece : ICloneable
     {
         private readonly bool colour;
-        private Point position;
 
-        public Piece(bool colour, Point position)
+        public Piece(bool colour)
         {
             this.colour = colour;
-            this.position = position;
         }
 
         public object Clone()
@@ -45,19 +43,12 @@ namespace Chess
             return MemberwiseClone();
         }
 
-        public Point GetPosition() => position;
-
-        public void Move(Point p)
-        {
-            position = p;
-        }
-
         public bool GetColour() => colour;
 
         public abstract new Type GetType();
 
-        public abstract PieceMovesMask GetMovesMask(Board board);
+        public abstract PieceMovesMask GetMovesMask(Board board, Point position);
 
-        public abstract BitBoard GetSeen(Board board);
+        public abstract BitBoard GetSeen(Board board, Point position);
     }
 }

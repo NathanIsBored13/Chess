@@ -21,7 +21,7 @@ namespace Chess
             new Point(1, 0),
         };
 
-        public King(bool colour, Point position) : base(colour, position)
+        public King(bool colour) : base(colour)
         {
 
         }
@@ -31,24 +31,22 @@ namespace Chess
             return Type.King;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board)
+        public override PieceMovesMask GetMovesMask(Board board, Point position)
         {
             BitBoard moves = new BitBoard();
             BitBoard attacks = new BitBoard();
             BitBoard locked = new BitBoard();
 
-            board.RemovePiece(this);
-            foreach (Piece piece in board.GetPieces(!GetColour()))
-            {
-                Console.Write($"{piece.GetType()} at position {piece.GetPosition()} locks cells ");
-                BitBoard b;
-                b = piece.GetSeen(board);
-                Console.WriteLine(b);
-                locked.Merge(b);
-            }
-            board.AddPiece(this);
+            board.RemovePiece(position);
 
-            IEnumerable<Point> kingMoves = GetSeen(board).GetAllSet().Where(p => !locked.Get(p) && board.GetPiece(p.x, p.y)?.GetColour() != GetColour());
+            board.ForEach(
+            (Piece p) => p.GetColour() != GetColour(),
+            (Point p) => { locked.Merge(board[p].GetSeen(board, p)); }
+            );
+
+            board.AddPiece(this, position);
+
+            IEnumerable<Point> kingMoves = GetSeen(board, position).GetAllSet().Where(p => !locked.Get(p) && board.GetPiece(p.x, p.y)?.GetColour() != GetColour());
             foreach (Point p in kingMoves)
             {
                 if (board.GetPiece(p.x, p.y) == null)
@@ -63,12 +61,12 @@ namespace Chess
             return new PieceMovesMask(attacks, moves);
         }
 
-        public override BitBoard GetSeen(Board board)
+        public override BitBoard GetSeen(Board board, Point position)
         {
             BitBoard ret = new BitBoard();
             foreach (Point offset in mask)
             {
-                Point absolute = new Point(GetPosition().x + offset.x, GetPosition().y + offset.y);
+                Point absolute = new Point(position.x + offset.x, position.y + offset.y);
                 if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8)
                 {
                     ret.Set(absolute);

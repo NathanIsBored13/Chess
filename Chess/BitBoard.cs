@@ -22,6 +22,13 @@ namespace Chess
                 ret.board[i] = (byte)(l.board[i] & r.board[i]);
             return ret;
         }
+        public static BitBoard operator |(BitBoard l, BitBoard r)
+        {
+            BitBoard ret = new BitBoard();
+            for (int i = 0; i < 8; i++)
+                ret.board[i] = (byte)(l.board[i] | r.board[i]);
+            return ret;
+        }
 
         public override string ToString() => $"{{{string.Join(", ", GetAllSet().Select(x => x.ToString()))}}}";
 

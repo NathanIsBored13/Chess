@@ -21,7 +21,7 @@ namespace Chess
                 new Point(-2, -1)
         };
 
-        public Knight(bool colour, Point position) : base(colour, position)
+        public Knight(bool colour) : base(colour)
         {
 
         }
@@ -31,13 +31,13 @@ namespace Chess
             return Type.Knight;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board)
+        public override PieceMovesMask GetMovesMask(Board board, Point position)
         {
             BitBoard moves = new BitBoard();
             BitBoard attacks = new BitBoard();
             foreach (Point p in checks)
             {
-                Point vec = new Point(p.x + GetPosition().x, p.y + GetPosition().y); 
+                Point vec = new Point(p.x + position.x, p.y + position.y); 
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
                 {
                     if (board.GetPiece(vec.x, vec.y) is Piece piece)
@@ -56,12 +56,12 @@ namespace Chess
             return new PieceMovesMask(attacks, moves);
         }
 
-        public override BitBoard GetSeen(Board board)
+        public override BitBoard GetSeen(Board board, Point position)
         {
             BitBoard seen = new BitBoard();
             foreach (Point p in checks)
             {
-                Point vec = new Point(p.x + GetPosition().x, p.y + GetPosition().y);
+                Point vec = new Point(p.x + position.x, p.y + position.y);
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
                 {
                     seen.Set(vec);

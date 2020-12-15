@@ -12,39 +12,23 @@ namespace Chess
     {
         private readonly Piece[,] board;
         private readonly List<Vector> history;
-        private readonly PieceHashTable blackPieces;
-        private readonly PieceHashTable whitePieces;
 
         public Board(Piece[,] template)
         {
-            blackPieces = new PieceHashTable();
-            whitePieces = new PieceHashTable();
             history = new List<Vector>();
             board = new Piece[8, 8];
             for (int y = 0; y < 8; y++)
-            {
                 for (int x = 0; x < 8; x++)
-                {
-                    board[x, y] = template[x, y];
-                    PushToTable(x, y);
-                }
-            }
+                        board[x, y] = template[x, y];
         }
 
         private Board(Board b)
         {
-            blackPieces = new PieceHashTable();
-            whitePieces = new PieceHashTable();
             history = b.history.Select(v => new Vector(new Point(v.p1.x, v.p1.y), new Point(v.p2.x, v.p2.y))).ToList(); ;
             board = new Piece[8, 8];
             for (int y = 0; y < 8; y++)
-            {
                 for (int x = 0; x < 8; x++)
-                {
                     board[x, y] = (Piece)b.board[x, y]?.Clone();
-                    PushToTable(x, y);
-                }
-            }
         }
 
         public object Clone()
@@ -52,27 +36,9 @@ namespace Chess
             return new Board(this);
         }
 
-        private void PushToTable(int x, int y)
-        {
-            switch (board[x, y]?.GetColour())
-            {
-                case true:
-                    whitePieces.AddPiece(board[x, y]);
-                    break;
-                case false:
-                    blackPieces.AddPiece(board[x, y]);
-                    break;
-            }
-        }
-
         public Piece this[Point p]
         {
             get { return board[p.x, p.y]; }
-        }
-
-        public Piece[] this[bool colour, Type t]
-        {
-            get { return (colour ? whitePieces : blackPieces).GetPieces(t); }
         }
 
         public Point this[Piece p]
@@ -88,38 +54,42 @@ namespace Chess
             }
         }
 
-        public Piece[] this[bool colour]
+        public void ForEach(Func<Piece, bool> test, Action<Point> method)
         {
-            get { return (colour ? whitePieces : blackPieces).AsArray(); }
+            for (int x = 0; x < 8; x++)
+                for (int y = 0; y < 8; y++)
+                    if (board[x, y] is Piece p && test(p))
+                        method(new Point(x, y));
+        }
+
+        public Point FindKing(bool colour)
+        {
+            Point ret = new Point(-1, -1);
+            ForEach(
+                (piece) => piece.GetType() == Type.King && piece.GetColour() == colour,
+                (point) => ret = point
+                );
+            return ret;
         }
 
         public Piece GetPiece(int x, int y) => board[x, y];
 
-        public void RemovePiece(Piece p)
+        public void RemovePiece(Point point)
         {
-            board[p.GetPosition().x, p.GetPosition().y] = null;
-            (p.GetColour() ? whitePieces : blackPieces).RemovePiece(p);
+            board[point.x, point.y] = null;
         }
 
-        public void AddPiece(Piece p)
+        public void AddPiece(Piece piece, Point point)
         {
-            board[p.GetPosition().x, p.GetPosition().y] = p;
-            (p.GetColour() ? whitePieces : blackPieces).AddPiece(p);
+            board[point.x, point.y] = piece;
         }
 
         public Piece[,] GetPieces() => board;
 
-        public Piece[] GetPieces(bool colour, Type type) => colour ? whitePieces.GetPieces(type) : blackPieces.GetPieces(type);
-
-        public Piece[] GetPieces(bool colour) => colour ? whitePieces.AsArray() : blackPieces.AsArray();
-
         public void Move(Vector vector)
         {
             history.Add(vector);
-            if (board[vector.p2.x, vector.p2.y] is Piece p)
-                (p.GetColour() ? whitePieces : blackPieces).RemovePiece(p);
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
-            board[vector.p1.x, vector.p1.y].Move(vector.p2);
             board[vector.p1.x, vector.p1.y] = null;
         }
 
@@ -127,29 +97,32 @@ namespace Chess
 
         public Vector[] GetMoves(bool colour)
         {
-            Console.WriteLine("\n\n---Move Begin---");
             Vector[] ret = new Vector[0];
             List<Piece> checkers = FindChecks(colour);
             switch (checkers.Count())
             {
                 case 0:
                     {
-                        BitBoard pins = CalculatePinRays(this[colour, Type.King][0].GetPosition(), !colour);
+                        BitBoard pins = CalculatePinRays(FindKing(colour), !colour);
                         ret = PsudoGetMoves(colour).Where(x => !pins.Get(x.p1)).ToArray();
                     }
                 break;
                 case 1:
                     {
-                        Point k = this[colour, Type.King][0].GetPosition();
-                        BitBoard crit = GetCritPath(k, checkers[0].GetPosition());
+                        Point k = FindKing(colour);
+                        BitBoard crit = GetCritPath(k, this[checkers[0]]);
                         ret = PsudoGetMoves(colour).Where(x => crit.Get(x.p2) || (x.p1.x == k.x && x.p1.y == k.y)).ToArray();
                     }
                 break;
                 case 2:
                     {
-                        Piece k = this[colour, Type.King][0];
-                        PieceMovesMask mask = k.GetMovesMask(this);
-                        ret = Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPosition(), p)).ToArray();
+                        ForEach(
+                        (piece) => piece.GetType() == Type.King && piece.GetColour() == colour,
+                        (point) =>
+                        {
+                            PieceMovesMask mask = this[point].GetMovesMask(this, point);
+                            ret = (mask.attacks | mask.moves).GetAllSet().Select(p => new Vector(point, p)).ToArray();
+                        });
                     }
                 break;
             }
@@ -158,13 +131,17 @@ namespace Chess
 
         private BitBoard CalculatePinRays(Point p, bool colour)
         {
-            BitBoard bishop = new Bishop(colour, p).GetMovesMask(this).attacks;
-            BitBoard rook = new Rook(colour, p).GetMovesMask(this).attacks;
+            BitBoard bishop = new Bishop(colour).GetMovesMask(this, p).attacks;
+            BitBoard rook = new Rook(colour).GetMovesMask(this, p).attacks;
             BitBoard ret = new BitBoard();
-            foreach (Piece piece in this[colour, Type.Bishop])
-                ret.Merge(piece.GetMovesMask(this).attacks & bishop);
-            foreach (Piece piece in this[colour, Type.Rook])
-                ret.Merge(piece.GetMovesMask(this).attacks & rook);
+            ForEach(
+            (piece) => piece.GetType() == Type.Bishop,
+            (point) => { ret.Merge(this[point].GetMovesMask(this, point).attacks & bishop); } 
+            );
+            ForEach(
+            (piece) => piece.GetType() == Type.Rook,
+            (point) => { ret.Merge(this[point].GetMovesMask(this, point).attacks & rook); }
+            );
             return ret;
         }
 
@@ -187,29 +164,31 @@ namespace Chess
         private List<Vector> PsudoGetMoves(bool colour)
         {
             List<Vector> moves = new List<Vector>();
-            foreach(Piece piece in this[colour])
+            ForEach(
+            (piece) => piece.GetColour() == colour,
+            (point) =>
             {
-                PieceMovesMask mask = piece.GetMovesMask(this);
-                moves.AddRange(Enumerable.Concat(mask.attacks.GetAllSet(), mask.moves.GetAllSet()).Select(p => new Vector(piece.GetPosition(), p)));
-            }
+                PieceMovesMask mask = this[point].GetMovesMask(this, point);
+                moves.AddRange((mask.attacks | mask.moves).GetAllSet().Select(p => new Vector(point, p)));
+            });
             return moves;
         }
 
         public List<Piece> FindChecks(bool colour)
         {
             List<Piece> ret = new List<Piece>();
-            Point pos = GetPieces(colour, Type.King)[0].GetPosition();
+            Point pos = FindKing(colour);
             Piece[] pieceTemplates = new Piece[6]
             {
-                new King(colour, pos),
-                new Queen(colour, pos),
-                new Rook(colour, pos),
-                new Knight(colour, pos),
-                new Bishop(colour, pos),
-                new Pawn(colour, pos)
+                new King(colour),
+                new Queen(colour),
+                new Rook(colour),
+                new Knight(colour),
+                new Bishop(colour),
+                new Pawn(colour)
             };
             foreach (Piece p in pieceTemplates)
-                ret.AddRange(p.GetSeen(this).GetAllSet().Where(v => this[v] != null && this[v].GetColour() != colour && this[v].GetType() == p.GetType()).Select(v => this[v]));
+                ret.AddRange(p.GetSeen(this, pos).GetAllSet().Where(v => this[v] != null && this[v].GetColour() != colour && this[v].GetType() == p.GetType()).Select(v => this[v]));
             return ret;
         }
     }

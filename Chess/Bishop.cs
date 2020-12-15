@@ -10,7 +10,7 @@ namespace Chess
 {
     class Bishop : Piece
     {
-        public Bishop(bool colour, Point GetPoition) : base(colour, GetPoition)
+        public Bishop(bool colour) : base(colour)
         {
 
         }
@@ -20,7 +20,7 @@ namespace Chess
             return Type.Bishop;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board)
+        public override PieceMovesMask GetMovesMask(Board board, Point position)
         {
             BitBoard moves = new BitBoard();
             BitBoard attacks = new BitBoard();
@@ -29,7 +29,7 @@ namespace Chess
             do
             {
                 bool hitPiece = false;
-                Point pointer = new Point(GetPosition().x + dirs[index, 0], GetPosition().y + dirs[index, 1]);
+                Point pointer = new Point(position.x + dirs[index, 0], position.y + dirs[index, 1]);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     if (board.GetPiece(pointer.x, pointer.y) is Piece piece)
@@ -52,7 +52,7 @@ namespace Chess
             return new PieceMovesMask(attacks, moves);
         }
 
-        public override BitBoard GetSeen(Board board)
+        public override BitBoard GetSeen(Board board, Point position)
         {
             BitBoard seen = new BitBoard();
             int index = 0;
@@ -60,7 +60,7 @@ namespace Chess
             do
             {
                 bool hitPiece = false;
-                Point pointer = new Point(GetPosition().x + dirs[index, 0], GetPosition().y + dirs[index, 1]);
+                Point pointer = new Point(position.x + dirs[index, 0], position.y + dirs[index, 1]);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     seen.Set(pointer);
