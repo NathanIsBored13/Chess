@@ -75,6 +75,19 @@ namespace Chess
             get { return (colour ? whitePieces : blackPieces).GetPieces(t); }
         }
 
+        public Point this[Piece p]
+        {
+            get
+            {
+                Point ret = new Point(-1, -1);
+                for (int x = 0; x < 8; x++)
+                    for (int y = 0; y < 8; y++)
+                        if (board[x, y] == p)
+                            ret = new Point(x, y);
+                return ret;
+            }
+        }
+
         public Piece[] this[bool colour]
         {
             get { return (colour ? whitePieces : blackPieces).AsArray(); }
