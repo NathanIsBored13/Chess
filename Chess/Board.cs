@@ -127,7 +127,9 @@ namespace Chess
                 break;
                 case 1:
                     {
-                        ret = PsudoGetMoves(colour).ToArray();
+                        Point k = this[colour, Type.King][0].GetPoition();
+                        BitBoard crit = GetCritPath(k, checkers[0].GetPoition());
+                        ret = PsudoGetMoves(colour).Where(x => crit.Get(x.p2) || (x.p1.x == k.x && x.p1.y == k.y)).ToArray();
                     }
                 break;
                 case 2:
@@ -150,6 +152,22 @@ namespace Chess
                 ret.Merge(piece.GetMovesMask(this).attacks & bishop);
             foreach (Piece piece in this[colour, Type.Rook])
                 ret.Merge(piece.GetMovesMask(this).attacks & rook);
+            return ret;
+        }
+
+        private BitBoard GetCritPath(Point s, Point f)
+        {
+            BitBoard ret = new BitBoard();
+
+            int[] dir = new int[] { Math.Sign(f.x - s.x), Math.Sign(f.y - s.y) };
+
+            do
+            {
+                s.x += dir[0];
+                s.y += dir[1];
+                ret.Set(s);
+            }
+            while (s.x != f.x && s.y != f.y);
             return ret;
         }
 
