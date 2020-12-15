@@ -48,7 +48,7 @@ namespace Chess
                 board.Move(vec);
                 renderer.ResetHighlights(renderHandle);
                 if (board.FindChecks(!playerQueue.PeekPlayer().GetColour()).Count() > 0)
-                    renderer.SetHighlight(renderHandle, Highlight.InCheck, board[!playerQueue.PeekPlayer().GetColour(), Type.King][0].GetPoition());
+                    renderer.SetHighlight(renderHandle, Highlight.InCheck, board[!playerQueue.PeekPlayer().GetColour(), Type.King][0].GetPosition());
                 renderer.RenderIcons();
                 playerQueue.Next();
             }

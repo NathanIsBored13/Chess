@@ -23,22 +23,22 @@ namespace Chess
         public override PieceMovesMask GetMovesMask(Board board)
         {
             BitBoard moves = new BitBoard();
-            if (GetPoition().y > 0 && GetPoition().y < 8 && board.GetPiece(GetPoition().x, GetPoition().y + (GetColour() ? -1 : 1)) == null)
+            if (GetPosition().y > 0 && GetPosition().y < 8 && board.GetPiece(GetPosition().x, GetPosition().y + (GetColour() ? -1 : 1)) == null)
             {
-                moves.Set(new Point(GetPoition().x, GetPoition().y + (GetColour() ? -1 : 1)));
-                if (GetPoition().y == 1 || GetPoition().y == 6 && board.GetPiece(GetPoition().x, GetPoition().y + (GetColour() ? -2 : 2)) == null)
+                moves.Set(new Point(GetPosition().x, GetPosition().y + (GetColour() ? -1 : 1)));
+                if (GetPosition().y == 1 || GetPosition().y == 6 && board.GetPiece(GetPosition().x, GetPosition().y + (GetColour() ? -2 : 2)) == null)
                 {
-                    moves.Set(new Point(GetPoition().x, GetPoition().y + (GetColour() ? -2 : 2)));
+                    moves.Set(new Point(GetPosition().x, GetPosition().y + (GetColour() ? -2 : 2)));
                 }
             }
             BitBoard attacks = new BitBoard();
-            if (GetPoition().y > 0 && GetPoition().y < 8 && GetPoition().x < 7 && board.GetPiece(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1)) is Piece p1 && p1.GetColour() != GetColour())
+            if (GetPosition().y > 0 && GetPosition().y < 8 && GetPosition().x < 7 && board.GetPiece(GetPosition().x + 1, GetPosition().y + (GetColour() ? -1 : 1)) is Piece p1 && p1.GetColour() != GetColour())
             {
-                attacks.Set(new Point(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1)));
+                attacks.Set(new Point(GetPosition().x + 1, GetPosition().y + (GetColour() ? -1 : 1)));
             }
-            if (GetPoition().y > 0 && GetPoition().y < 8 && GetPoition().x > 1 && board.GetPiece(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1)) is Piece p2 && p2.GetColour() != GetColour())
+            if (GetPosition().y > 0 && GetPosition().y < 8 && GetPosition().x > 1 && board.GetPiece(GetPosition().x - 1, GetPosition().y + (GetColour() ? -1 : 1)) is Piece p2 && p2.GetColour() != GetColour())
             {
-                attacks.Set(new Point(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1)));
+                attacks.Set(new Point(GetPosition().x - 1, GetPosition().y + (GetColour() ? -1 : 1)));
             }
             return new PieceMovesMask(attacks, moves);
         }
@@ -46,10 +46,10 @@ namespace Chess
         public override BitBoard GetSeen(Board board)
         {
             BitBoard seen = new BitBoard();
-            if (GetColour() ? (GetPoition().y > 0) : (GetPoition().y < 7) && GetPoition().y < 7 && GetPoition().x > 0)
-                seen.Set(new Point(GetPoition().x - 1, GetPoition().y + (GetColour() ? -1 : 1)));
-            if (GetColour() ? (GetPoition().y > 0) : (GetPoition().y < 7) && GetPoition().y > 0 && GetPoition().x > 0)
-                seen.Set(new Point(GetPoition().x + 1, GetPoition().y + (GetColour() ? -1 : 1)));
+            if (GetColour() ? (GetPosition().y > 0) : (GetPosition().y < 7) && GetPosition().y < 7 && GetPosition().x > 0)
+                seen.Set(new Point(GetPosition().x - 1, GetPosition().y + (GetColour() ? -1 : 1)));
+            if (GetColour() ? (GetPosition().y > 0) : (GetPosition().y < 7) && GetPosition().y > 0 && GetPosition().x > 0)
+                seen.Set(new Point(GetPosition().x + 1, GetPosition().y + (GetColour() ? -1 : 1)));
             return seen;
         }
     }

@@ -28,7 +28,7 @@ namespace Chess
             do
             {
                 bool hitPiece = false;
-                Point pointer = new Point(GetPoition().x + dirs[index, 0], GetPoition().y + dirs[index, 1]);
+                Point pointer = new Point(GetPosition().x + dirs[index, 0], GetPosition().y + dirs[index, 1]);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     if (board.GetPiece(pointer.x, pointer.y) is Piece piece)
@@ -59,7 +59,7 @@ namespace Chess
             do
             {
                 bool hitPiece = false;
-                Point pointer = new Point(GetPoition().x + dirs[index, 0], GetPoition().y + dirs[index, 1]);
+                Point pointer = new Point(GetPosition().x + dirs[index, 0], GetPosition().y + dirs[index, 1]);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     seen.Set(pointer);

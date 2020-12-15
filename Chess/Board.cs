@@ -84,13 +84,13 @@ namespace Chess
 
         public void RemovePiece(Piece p)
         {
-            board[p.GetPoition().x, p.GetPoition().y] = null;
+            board[p.GetPosition().x, p.GetPosition().y] = null;
             (p.GetColour() ? whitePieces : blackPieces).RemovePiece(p);
         }
 
         public void AddPiece(Piece p)
         {
-            board[p.GetPoition().x, p.GetPoition().y] = p;
+            board[p.GetPosition().x, p.GetPosition().y] = p;
             (p.GetColour() ? whitePieces : blackPieces).AddPiece(p);
         }
 
@@ -121,14 +121,14 @@ namespace Chess
             {
                 case 0:
                     {
-                        BitBoard pins = CalculatePinRays(this[colour, Type.King][0].GetPoition(), !colour);
+                        BitBoard pins = CalculatePinRays(this[colour, Type.King][0].GetPosition(), !colour);
                         ret = PsudoGetMoves(colour).Where(x => !pins.Get(x.p1)).ToArray();
                     }
                 break;
                 case 1:
                     {
-                        Point k = this[colour, Type.King][0].GetPoition();
-                        BitBoard crit = GetCritPath(k, checkers[0].GetPoition());
+                        Point k = this[colour, Type.King][0].GetPosition();
+                        BitBoard crit = GetCritPath(k, checkers[0].GetPosition());
                         ret = PsudoGetMoves(colour).Where(x => crit.Get(x.p2) || (x.p1.x == k.x && x.p1.y == k.y)).ToArray();
                     }
                 break;
@@ -136,7 +136,7 @@ namespace Chess
                     {
                         Piece k = this[colour, Type.King][0];
                         PieceMovesMask mask = k.GetMovesMask(this);
-                        ret = Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPoition(), p)).ToArray();
+                        ret = Enumerable.Concat(mask.moves.GetAllSet(), mask.attacks.GetAllSet()).Select(p => new Vector(k.GetPosition(), p)).ToArray();
                     }
                 break;
             }
@@ -177,7 +177,7 @@ namespace Chess
             foreach(Piece piece in this[colour])
             {
                 PieceMovesMask mask = piece.GetMovesMask(this);
-                moves.AddRange(Enumerable.Concat(mask.attacks.GetAllSet(), mask.moves.GetAllSet()).Select(p => new Vector(piece.GetPoition(), p)));
+                moves.AddRange(Enumerable.Concat(mask.attacks.GetAllSet(), mask.moves.GetAllSet()).Select(p => new Vector(piece.GetPosition(), p)));
             }
             return moves;
         }
@@ -185,7 +185,7 @@ namespace Chess
         public List<Piece> FindChecks(bool colour)
         {
             List<Piece> ret = new List<Piece>();
-            Point pos = GetPieces(colour, Type.King)[0].GetPoition();
+            Point pos = GetPieces(colour, Type.King)[0].GetPosition();
             Piece[] pieceTemplates = new Piece[6]
             {
                 new King(colour, pos),

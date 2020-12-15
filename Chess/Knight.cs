@@ -37,7 +37,7 @@ namespace Chess
             BitBoard attacks = new BitBoard();
             foreach (Point p in checks)
             {
-                Point vec = new Point(p.x + GetPoition().x, p.y + GetPoition().y); 
+                Point vec = new Point(p.x + GetPosition().x, p.y + GetPosition().y); 
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
                 {
                     if (board.GetPiece(vec.x, vec.y) is Piece piece)
@@ -61,7 +61,7 @@ namespace Chess
             BitBoard seen = new BitBoard();
             foreach (Point p in checks)
             {
-                Point vec = new Point(p.x + GetPoition().x, p.y + GetPoition().y);
+                Point vec = new Point(p.x + GetPosition().x, p.y + GetPosition().y);
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
                 {
                     seen.Set(vec);

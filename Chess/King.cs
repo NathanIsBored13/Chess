@@ -40,7 +40,7 @@ namespace Chess
             board.RemovePiece(this);
             foreach (Piece piece in board.GetPieces(!GetColour()))
             {
-                Console.Write($"{piece.GetType()} at position {piece.GetPoition()} locks cells ");
+                Console.Write($"{piece.GetType()} at position {piece.GetPosition()} locks cells ");
                 BitBoard b;
                 b = piece.GetSeen(board);
                 Console.WriteLine(b);
@@ -68,7 +68,7 @@ namespace Chess
             BitBoard ret = new BitBoard();
             foreach (Point offset in mask)
             {
-                Point absolute = new Point(GetPoition().x + offset.x, GetPoition().y + offset.y);
+                Point absolute = new Point(GetPosition().x + offset.x, GetPosition().y + offset.y);
                 if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8)
                 {
                     ret.Set(absolute);

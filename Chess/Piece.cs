@@ -45,7 +45,7 @@ namespace Chess
             return MemberwiseClone();
         }
 
-        public Point GetPoition() => position;
+        public Point GetPosition() => position;
 
         public void Move(Point p)
         {
