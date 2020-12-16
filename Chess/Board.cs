@@ -97,8 +97,8 @@ namespace Chess
 
         public Vector[] GetMoves(bool colour)
         {
-            Vector[] ret = new Vector[0];
             List<Piece> checkers = FindChecks(colour);
+            Vector[] ret = null;
             switch (checkers.Count())
             {
                 case 0:
@@ -114,7 +114,7 @@ namespace Chess
                         ret = PsudoGetMoves(colour).Where(x => crit.Get(x.p2) || (x.p1.x == k.x && x.p1.y == k.y)).ToArray();
                     }
                 break;
-                case 2:
+                default:
                     {
                         ForEach(
                         (piece) => piece.GetType() == Type.King && piece.GetColour() == colour,
