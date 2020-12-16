@@ -41,19 +41,6 @@ namespace Chess
             get { return board[p.x, p.y]; }
         }
 
-        public Point this[Piece p]
-        {
-            get
-            {
-                Point ret = new Point(-1, -1);
-                for (int x = 0; x < 8; x++)
-                    for (int y = 0; y < 8; y++)
-                        if (board[x, y] == p)
-                            ret = new Point(x, y);
-                return ret;
-            }
-        }
-
         public void ForEach(Func<Piece, bool> test, Action<Point> method)
         {
             for (int x = 0; x < 8; x++)
@@ -97,7 +84,7 @@ namespace Chess
 
         public Vector[] GetMoves(bool colour)
         {
-            List<Piece> checkers = FindChecks(colour);
+            List<Point> checkers = FindChecks(colour);
             Vector[] ret = null;
             switch (checkers.Count())
             {
@@ -110,7 +97,7 @@ namespace Chess
                 case 1:
                     {
                         Point k = FindKing(colour);
-                        BitBoard crit = GetCritPath(k, this[checkers[0]]);
+                        BitBoard crit = GetCritPath(k, checkers[0]);
                         ret = PsudoGetMoves(colour).Where(x => crit.Get(x.p2) || (x.p1.x == k.x && x.p1.y == k.y)).ToArray();
                     }
                 break;
@@ -174,9 +161,9 @@ namespace Chess
             return moves;
         }
 
-        public List<Piece> FindChecks(bool colour)
+        public List<Point> FindChecks(bool colour)
         {
-            List<Piece> ret = new List<Piece>();
+            List<Point> ret = new List<Point>();
             Point pos = FindKing(colour);
             Piece[] pieceTemplates = new Piece[6]
             {
@@ -188,7 +175,7 @@ namespace Chess
                 new Pawn(colour)
             };
             foreach (Piece p in pieceTemplates)
-                ret.AddRange(p.GetSeen(this, pos).GetAllSet().Where(v => this[v] != null && this[v].GetColour() != colour && this[v].GetType() == p.GetType()).Select(v => this[v]));
+                ret.AddRange(p.GetSeen(this, pos).GetAllSet().Where(v => this[v] != null && this[v].GetColour() != colour && this[v].GetType() == p.GetType()));
             return ret;
         }
     }
