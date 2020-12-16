@@ -22,6 +22,7 @@ namespace Chess
                 ret.board[i] = (byte)(l.board[i] & r.board[i]);
             return ret;
         }
+
         public static BitBoard operator |(BitBoard l, BitBoard r)
         {
             BitBoard ret = new BitBoard();
@@ -54,22 +55,6 @@ namespace Chess
                     if (Get(x, y))
                         ret.Add(new Point(x, y));
             return ret;
-        }
-
-        public void Merge(BitBoard b)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                board[i] |= b.board[i];
-            }
-        }
-
-        public void Intersection(BitBoard b)
-        {
-            for (int i = 0; i < 8; i++)
-            {
-                board[i] &= b.board[i];
-            }
         }
     }
 }

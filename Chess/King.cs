@@ -41,7 +41,7 @@ namespace Chess
 
             board.ForEach(
             (Piece p) => p.GetColour() != GetColour(),
-            (Point p) => { locked.Merge(board[p].GetSeen(board, p)); }
+            (Point p) => { locked |= board[p].GetSeen(board, p); }
             );
 
             board.AddPiece(this, position);

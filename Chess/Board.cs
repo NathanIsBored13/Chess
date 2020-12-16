@@ -136,11 +136,11 @@ namespace Chess
             BitBoard ret = new BitBoard();
             ForEach(
             (piece) => piece.GetType() == Type.Bishop,
-            (point) => { ret.Merge(this[point].GetMovesMask(this, point).attacks & bishop); } 
+            (point) => { ret |= this[point].GetMovesMask(this, point).attacks & bishop; }
             );
             ForEach(
             (piece) => piece.GetType() == Type.Rook,
-            (point) => { ret.Merge(this[point].GetMovesMask(this, point).attacks & rook); }
+            (point) => { ret |= this[point].GetMovesMask(this, point).attacks & rook; }
             );
             return ret;
         }
