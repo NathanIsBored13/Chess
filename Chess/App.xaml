@@ -46,10 +46,10 @@
                         <Trigger Property="Highlighted" Value="2">
                             <Setter Property="Foreground" Value="{DynamicResource MovePossibleColour}"/>
                         </Trigger>
-                        <Trigger Property="Highlighted" Value="4">
+                        <Trigger Property="Highlighted" Value="3">
                             <Setter Property="Foreground" Value="{DynamicResource AttackMovePossibleColour}"/>
                         </Trigger>
-                        <Trigger Property="Highlighted" Value="8">
+                        <Trigger Property="Highlighted" Value="4">
                             <Setter Property="Background" Value="{DynamicResource InCheck}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">

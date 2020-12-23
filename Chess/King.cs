@@ -37,26 +37,22 @@ namespace Chess
             BitBoard attacks = new BitBoard();
             BitBoard locked = new BitBoard();
 
-            board.RemovePiece(position);
+            board[position] = null;
 
             board.ForEach(
             (Piece p) => p.GetColour() != GetColour(),
             (Point p) => { locked |= board[p].GetSeen(board, p); }
             );
 
-            board.AddPiece(this, position);
+            board[position] = this;
 
-            IEnumerable<Point> kingMoves = GetSeen(board, position).GetAllSet().Where(p => !locked.Get(p) && board.GetPiece(p.x, p.y)?.GetColour() != GetColour());
+            IEnumerable<Point> kingMoves = GetSeen(board, position).GetAllSet().Where(p => !locked[p] && board[p]?.GetColour() != GetColour());
             foreach (Point p in kingMoves)
             {
-                if (board.GetPiece(p.x, p.y) == null)
-                {
+                if (board[p] == null)
                     moves.Set(p);
-                }
                 else
-                {
                     attacks.Set(p);
-                }
             }
             return new PieceMovesMask(attacks, moves);
         }
@@ -68,9 +64,7 @@ namespace Chess
             {
                 Point absolute = new Point(position.x + offset.x, position.y + offset.y);
                 if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8)
-                {
                     ret.Set(absolute);
-                }
             }
             return ret;
         }

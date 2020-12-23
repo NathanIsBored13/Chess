@@ -57,7 +57,6 @@
     </ApplicationDefinition>
     <Compile Include="Bishop.cs" />
     <Compile Include="BitBoard.cs" />
-    <Compile Include="PieceHashTable.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Icons.cs" />

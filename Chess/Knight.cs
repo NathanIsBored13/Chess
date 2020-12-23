@@ -40,17 +40,11 @@ namespace Chess
                 Point vec = new Point(p.x + position.x, p.y + position.y); 
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
                 {
-                    if (board.GetPiece(vec.x, vec.y) is Piece piece)
-                    {
+                    if (board[vec] is Piece piece)
                         if (piece.GetColour() != GetColour())
-                        {
                             attacks.Set(vec);
-                        }
-                    }
                     else
-                    {
                         moves.Set(vec);
-                    }
                 }
             }
             return new PieceMovesMask(attacks, moves);
@@ -63,9 +57,7 @@ namespace Chess
             {
                 Point vec = new Point(p.x + position.x, p.y + position.y);
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
-                {
                     seen.Set(vec);
-                }
             }
             return seen;
         }

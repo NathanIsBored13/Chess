@@ -10,10 +10,11 @@ namespace Chess
 {
     enum Highlight
     {
-        CellSelected = 1,
-        MovePossible = 2,
-        AttackMovePossible = 4,
-        InCheck = 8
+        none,
+        CellSelected,
+        MovePossible,
+        AttackMovePossible,
+        InCheck
     }
 
     class Renderer
@@ -34,14 +35,12 @@ namespace Chess
                 grid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            for (int y = 0; y < 8; y++)
+            Board.ForEach(
+            (p) =>
             {
-                for (int x = 0; x < 8; x++)
-                {
-                    cells[x, y] = new Cell(new Point(x, y));
-                    grid.Children.Add(cells[x, y]);
-                }
-            }
+                cells[p.x, p.y] = new Cell(new Point(p.x, p.y));
+                grid.Children.Add(cells[p.x, p.y]);
+            });
             Icons.RegisterListener(RenderIcons);
         }
 
@@ -52,20 +51,14 @@ namespace Chess
 
         public void RenderIcons()
         {
-            for (int y = 0; y < 8; y++)
+            Board.ForEach(
+            (point) =>
             {
-                for (int x = 0; x < 8; x++)
-                {
-                    if (source.GetPiece(x, y) is Piece piece)
-                    {
-                        cells[x, y].SetImage(Icons.GetImage(piece.GetType(), piece.GetColour()));
-                    }
-                    else
-                    {
-                        cells[x, y].SetImage(null);
-                    }
-                }
-            }
+                if (source[point] is Piece piece)
+                    cells[point.x, point.y].SetImage(Icons.GetImage(piece.GetType(), piece.GetColour()));
+                else
+                    cells[point.x, point.y].SetImage(null);
+            });
         }
 
         public int Register()
@@ -94,9 +87,7 @@ namespace Chess
         public void SetHighlights(int handle, Tuple<Highlight, Point>[] highlights)
         {
             foreach (Tuple<Highlight, Point> highlight in highlights)
-            {
                 SetHighlight(handle, highlight.Item1, highlight.Item2);
-            }
         }
 
         public void ResetHighlights(int handle)

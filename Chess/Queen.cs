@@ -31,18 +31,14 @@ namespace Chess
                 Point pointer = new Point(position.x + dirs[index, 0], position.y + dirs[index, 1]);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
-                    if (board.GetPiece(pointer.x, pointer.y) is Piece piece)
+                    if (board[pointer] is Piece piece)
                     {
                         hitPiece = true;
                         if (piece.GetColour() != GetColour())
-                        {
                             attacks.Set(pointer);
-                        }
                     }
                     else
-                    {
                         moves.Set(pointer);
-                    }
                     pointer.x += dirs[index, 0];
                     pointer.y += dirs[index, 1];
                 }
@@ -63,11 +59,8 @@ namespace Chess
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     seen.Set(pointer);
-                    if (board.GetPiece(pointer.x, pointer.y) is Piece)
-                    {
+                    if (board[pointer] is Piece)
                         hitPiece = true;
-
-                    }
                     pointer.x += dirs[index, 0];
                     pointer.y += dirs[index, 1];
                 }

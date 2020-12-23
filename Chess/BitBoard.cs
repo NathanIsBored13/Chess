@@ -15,6 +15,16 @@ namespace Chess
             
         }
 
+        public bool this[int x, int y]
+        {
+            get { return (board[y] & (1 << x)) > 0;}
+        }
+
+        public bool this[Point p]
+        {
+            get { return this[p.x, p.y]; }
+        }
+
         public static BitBoard operator &(BitBoard l, BitBoard r)
         {
             BitBoard ret = new BitBoard();
@@ -37,23 +47,16 @@ namespace Chess
         {
             board[p.y] = (byte)(board[p.y] | 1 << p.x);
         }
-        
-        public void UnSet(Point p)
-        {
-            board[p.y] = (byte)(board[p.y] & ~(1 << p.x));
-        }
-
-        public bool Get(Point p) => (board[p.y] & (1 << p.x)) > 0;
-
-        public bool Get(int x, int y) => (board[y] & (1 << x)) > 0;
 
         public List<Point> GetAllSet()
         {
             List<Point> ret = new List<Point>();
-            for (int y = 0; y < 8; y++)
-                for (int x = 0; x < 8; x++)
-                    if (Get(x, y))
-                        ret.Add(new Point(x, y));
+            Board.ForEach(
+            (Point p) =>
+            {
+                if (this[p])
+                    ret.Add(p);
+            });
             return ret;
         }
     }
