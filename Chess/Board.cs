@@ -12,6 +12,7 @@ namespace Chess
     {
         private readonly Piece[,] board;
         private readonly List<Vector> history;
+        private Vector[] cash = null;
 
         public Board(Piece[,] template)
         {
@@ -83,6 +84,7 @@ namespace Chess
 
         public void Move(Vector vector)
         {
+            cash = null;
             history.Add(vector);
             board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
             board[vector.p1.x, vector.p1.y] = null;
@@ -90,7 +92,9 @@ namespace Chess
 
         public List<Vector> GetHistory() => history;
 
-        public Vector[] GetMoves(bool colour)
+        public Vector[] GetMoves(bool colour) => cash ?? GetMovesInternal(colour);
+
+        private Vector[] GetMovesInternal(bool colour)
         {
             List<Point> checkers = FindChecks(colour);
             Vector[] ret = null;

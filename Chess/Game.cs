@@ -43,7 +43,7 @@ namespace Chess
             renderer.SetSource(board);
             renderer.RenderIcons();
             playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer, mouse), Player.MakePlayer(black, false, renderer, mouse));
-            while (true)
+            while (board.GetMoves(playerQueue.PeekPlayer().GetColour()).Length > 0)
             {
                 Vector vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
@@ -53,6 +53,8 @@ namespace Chess
                 renderer.RenderIcons();
                 playerQueue.Next();
             }
+            playerQueue.Next();
+            Console.WriteLine("{0} player won", playerQueue.PeekPlayer().GetColour() ? "white" : "black");
         }
     };
 }
