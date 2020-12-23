@@ -24,7 +24,7 @@ namespace Chess
         private readonly List<List<Tuple<Point, Highlight>>> deltas = new List<List<Tuple<Point, Highlight>>>();
         private readonly List<int> free = new List<int>();
 
-        public Renderer(Grid grid)
+        public Renderer(Grid grid, Mouse mouse)
         {
             grid.RowDefinitions.Clear();
             grid.ColumnDefinitions.Clear();
@@ -38,7 +38,7 @@ namespace Chess
             Board.ForEach(
             (p) =>
             {
-                cells[p.x, p.y] = new Cell(new Point(p.x, p.y));
+                cells[p.x, p.y] = new Cell(new Point(p.x, p.y), mouse);
                 grid.Children.Add(cells[p.x, p.y]);
             });
             Icons.RegisterListener(RenderIcons);

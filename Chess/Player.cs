@@ -24,13 +24,13 @@ namespace Chess
 
         public bool GetColour() => colour;
 
-        public static Player MakePlayer(PlayerType type, bool colour, Renderer renderer)
+        public static Player MakePlayer(PlayerType type, bool colour, Renderer renderer, Mouse mouse)
         {
             Player ret = null;
             switch (type)
             {
                 case PlayerType.HumanPlayer:
-                    ret = new HumanPlayer(colour, renderer);
+                    ret = new HumanPlayer(colour, renderer, mouse);
                 break;
             }
             return ret;

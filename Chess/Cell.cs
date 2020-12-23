@@ -29,25 +29,27 @@ namespace Chess
         }
         public static readonly DependencyProperty HighlightedProperty = DependencyProperty.Register("Highlighted", typeof(int), typeof(Cell));
 
+        private readonly Mouse mouse;
         private readonly Point position;
-        private Image image = new Image()
+        private readonly Image image = new Image()
         {
             Stretch = Stretch.UniformToFill
         };
 
-        public Cell(Point position) : base()
+        public Cell(Point position, Mouse mouse) : base()
         {
             Grid.SetColumn(this, position.x);
             Grid.SetRow(this, position.y);
             this.position = position;
             Checkered = (((position.y % 2) + position.x) % 2) == 0;
+            this.mouse = mouse;
             Click += Cell_Click;
             Content = image;
         }
 
         private void Cell_Click(object sender, RoutedEventArgs e)
         {
-            Mouse.SetLastClicked(position);
+            mouse.SetLastClicked(position);
         }
 
         public void SetImage(BitmapImage image)

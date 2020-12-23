@@ -16,6 +16,7 @@ namespace Chess
         private Board board;
         private readonly Renderer renderer;
         private readonly int renderHandle;
+        private readonly Mouse mouse = new Mouse();
         private PlayerQueue playerQueue;
 
         private readonly Piece[,] template = new Piece[,]
@@ -32,7 +33,7 @@ namespace Chess
 
         public Game(Grid target)
         {
-            renderer = new Renderer(target);
+            renderer = new Renderer(target, mouse);
             renderHandle = renderer.Register();
         }
 
@@ -41,7 +42,7 @@ namespace Chess
             board = new Board(template);
             renderer.SetSource(board);
             renderer.RenderIcons();
-            playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer), Player.MakePlayer(black, false, renderer));
+            playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer, mouse), Player.MakePlayer(black, false, renderer, mouse));
             while (true)
             {
                 Vector vec = playerQueue.PeekPlayer().Move(board);

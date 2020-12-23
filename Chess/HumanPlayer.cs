@@ -10,74 +10,104 @@ namespace Chess
 {
     class HumanPlayer : Player
     {
-        int renderHandle;
-        Renderer renderer;
-        public HumanPlayer(bool colour, Renderer renderer) : base(colour)
+        private readonly int renderHandle;
+        private readonly Renderer renderer;
+        private readonly Mouse mouse;
+
+        public HumanPlayer(bool colour, Renderer renderer, Mouse mouse) : base(colour)
         {
             this.renderer = renderer;
             renderHandle = renderer.Register();
+            this.mouse = mouse;
         }
 
         public override Vector Move(Board board)
         {
-            Point king = board.FindKing(GetColour());
-            renderer.ResetHighlights(renderHandle);
-
-            Vector? ret = null;
-            Point? p1 = null;
-            Point? p2 = null;
+            BitBoard highlighted = new BitBoard();
             Vector[] moves = board.GetMoves(GetColour());
-            Vector[] filteredMoves = null;
-            do
-            {
-                if (p1 == null)
-                {
-                    p1 = Mouse.WaitForInput();
-                    filteredMoves = moves.Where(v => v.p1.x == p1.Value.x && v.p1.y == p1.Value.y).ToArray();
-                    if (filteredMoves.Length == 0)
-                        p1 = null;
-                    else
-                    {
-                        foreach (Vector vec in filteredMoves)
-                        {
-                            if (board[vec.p2] is Piece)
-                                renderer.SetHighlight(renderHandle, Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
-                            else
-                                renderer.SetHighlight(renderHandle, Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
-                        }
-                    }
+            Vector ret = new Vector();
 
-                }
-                else if (p2 == null)
+            new StateMachine(
+            new State[]
+            {
+                new State(
+                new TransitionExpressioin[]
                 {
-                    Point buffer = Mouse.WaitForInput();
-                    foreach (Vector vec in filteredMoves)
-                        if (vec.p2.x == buffer.x && vec.p2.y == buffer.y)
-                            p2 = buffer;
-                    if (p2 == null)
+                    new TransitionExpressioin
                     {
-                        p1 = buffer;
-                        renderer.ResetHighlights(renderHandle);
-                        filteredMoves = moves.Where(v => v.p1.x == p1.Value.x && v.p1.y == p1.Value.y).ToArray();
-                        if (filteredMoves.Length == 0)
-                            p1 = null;
-                        else
+                        function = () => { },
+                        ptr = 0
+                    },
+
+                    new TransitionExpressioin
+                    {
+                        function = () =>
                         {
-                            foreach (Vector vec in filteredMoves)
+                            ret.p1 = mouse.GetLastClicked();
+                            foreach (Vector v in moves.Where(x => x.p1.x == mouse.GetLastClicked().x && x.p1.y == mouse.GetLastClicked().y))
                             {
-                                if (board[vec.p2] is Piece)
-                                    renderer.SetHighlight(renderHandle, Highlight.AttackMovePossible, new Point(vec.p2.x, vec.p2.y));
-                                else
-                                    renderer.SetHighlight(renderHandle, Highlight.MovePossible, new Point(vec.p2.x, vec.p2.y));
+                                highlighted.Set(v.p2);
+                                renderer.SetHighlight(renderHandle, board[v.p2] == null ? Highlight.MovePossible : Highlight.AttackMovePossible, v.p2);
                             }
-                        }
+                        },
+                        ptr = 1
                     }
-                }
-                else
-                    ret = new Vector(p1.Value, p2.Value);
-            } while (ret == null);
-            renderer.ResetHighlights(renderHandle);
-            return ret.Value;
+                },
+
+                () =>
+                {
+                    mouse.WaitForInput();
+                    return board[mouse.GetLastClicked()]?.GetColour() == GetColour() ? 1 : 0;
+                }),
+
+                new State(
+                new TransitionExpressioin[]
+                {
+                    new TransitionExpressioin
+                    {
+                        function = () =>
+                        {
+                            highlighted = new BitBoard();
+                            renderer.ResetHighlights(renderHandle);
+                        },
+                        ptr = 0
+                    },
+
+                    new TransitionExpressioin
+                    {
+                        function = () =>
+                        {
+                            highlighted = new BitBoard();
+                            renderer.ResetHighlights(renderHandle);
+                            ret.p1 = mouse.GetLastClicked();
+                            foreach (Vector v in moves.Where(x => x.p1.x == mouse.GetLastClicked().x && x.p1.y == mouse.GetLastClicked().y))
+                            {
+                                highlighted.Set(v.p2);
+                                renderer.SetHighlight(renderHandle, board[v.p2] == null ? Highlight.MovePossible : Highlight.AttackMovePossible, v.p2);
+                            }
+                        },
+                        ptr = 1
+                    },
+
+                    new TransitionExpressioin
+                    {
+                        function = () =>
+                        {
+                            renderer.ResetHighlights(renderHandle);
+                            ret.p2 = mouse.GetLastClicked();
+                        },
+                        ptr = -1
+                    }
+                },
+
+                () =>
+                {
+                    mouse.WaitForInput();
+                    return highlighted[mouse.GetLastClicked()] ? 2 : (board[mouse.GetLastClicked()]?.GetColour() == GetColour() ? 1 : 0 );
+                })
+            }).Run();
+
+            return ret;
         }
     }
 }

@@ -41,8 +41,10 @@ namespace Chess
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
                 {
                     if (board[vec] is Piece piece)
+                    {
                         if (piece.GetColour() != GetColour())
                             attacks.Set(vec);
+                    }
                     else
                         moves.Set(vec);
                 }
