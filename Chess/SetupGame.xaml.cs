@@ -20,23 +20,18 @@ namespace Chess
     /// </summary>
     public partial class SetupGame : Window
     {
-        readonly AutoResetEvent autoResetEvent = new AutoResetEvent(false);
+        readonly Action<Tuple<PlayerType, PlayerType>> callback;
 
-        public SetupGame()
+        public SetupGame(Action<Tuple<PlayerType, PlayerType>> callback)
         {
+            this.callback = callback;
             InitializeComponent();
-        }
-
-        public Tuple<PlayerType, PlayerType> AwaitEntery()
-        {
-
-            autoResetEvent.WaitOne();
-            return Dispatcher.Invoke(new Func<Tuple<PlayerType, PlayerType>>(() => new Tuple<PlayerType, PlayerType>((PlayerType)(WhiteComboBox.SelectedItem as Tuple<Enum, string>).Item1, (PlayerType)(BlackComboBox.SelectedItem as Tuple<Enum, string>).Item1)));
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            autoResetEvent.Set();
+            callback(Dispatcher.Invoke(new Func<Tuple<PlayerType, PlayerType>>(() => new Tuple<PlayerType, PlayerType>((PlayerType)(WhiteComboBox.SelectedItem as Tuple<Enum, string>).Item1, (PlayerType)(BlackComboBox.SelectedItem as Tuple<Enum, string>).Item1))));
+            Close();
         }
     }
 }

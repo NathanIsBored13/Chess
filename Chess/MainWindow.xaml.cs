@@ -62,23 +62,22 @@ namespace Chess
 
         private void MakeGame_Click(object sender, RoutedEventArgs e)
         {
+            SetupGame wnd = new SetupGame(MakeGame)
+            {
+                Owner = this
+            };
+            wnd.Show();
+        }
+
+        private void MakeGame(Tuple<PlayerType, PlayerType> players)
+        {
             if (thread != null)
             {
                 thread.Abort();
                 thread.Join();
                 game = new Game(DrawTarget);
             }
-            SetupGame wnd = new SetupGame
-            {
-                Owner = this
-            };
-            wnd.Show();
-            thread = new Thread(() =>
-            {
-                Tuple<PlayerType, PlayerType> types = wnd.AwaitEntery();
-                Dispatcher.Invoke(() => wnd.Close());
-                game.Begin(types.Item1, types.Item2);
-            });
+            thread = new Thread(() => game.Begin(players.Item1, players.Item2));
             thread.Start();
         }
 
