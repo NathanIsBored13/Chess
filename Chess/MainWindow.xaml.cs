@@ -68,7 +68,17 @@ namespace Chess
                 thread.Join();
                 game = new Game(DrawTarget);
             }
-            thread = new Thread(() => game.Begin(PlayerType.HumanPlayer, PlayerType.HumanPlayer));
+            SetupGame wnd = new SetupGame
+            {
+                Owner = this
+            };
+            wnd.Show();
+            thread = new Thread(() =>
+            {
+                Tuple<PlayerType, PlayerType> types = wnd.AwaitEntery();
+                Dispatcher.Invoke(() => wnd.Close());
+                game.Begin(types.Item1, types.Item2);
+            });
             thread.Start();
         }
 

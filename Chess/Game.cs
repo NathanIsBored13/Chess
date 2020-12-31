@@ -43,6 +43,7 @@ namespace Chess
             renderer.SetSource(board);
             renderer.RenderIcons();
             playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer, mouse), Player.MakePlayer(black, false, renderer, mouse));
+            
             while (board.GetMoves(playerQueue.PeekPlayer().GetColour()).Length > 0)
             {
                 Vector vec = playerQueue.PeekPlayer().Move(board);

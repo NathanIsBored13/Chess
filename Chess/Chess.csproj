@@ -37,6 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -46,6 +48,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -57,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Bishop.cs" />
     <Compile Include="BitBoard.cs" />
+    <Compile Include="ComboBoxWidthFromItemsBehavior.cs" />
     <Compile Include="Renderer.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Icons.cs" />
@@ -66,8 +70,12 @@
     <Compile Include="PlayerQueue.cs" />
     <Compile Include="Queen.cs" />
     <Compile Include="Rook.cs" />
+    <Compile Include="SetupGame.xaml.cs">
+      <DependentUpon>SetupGame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="State.cs" />
     <Compile Include="StateMachine.cs" />
+    <Compile Include="Extentions.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -84,6 +92,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SetupGame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Pawn.cs" />

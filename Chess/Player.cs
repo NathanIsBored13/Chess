@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,9 +8,16 @@ using System.Windows.Documents;
 
 namespace Chess
 {
-    enum PlayerType
+    public enum PlayerType
     {
-        HumanPlayer
+        [Description("Human (Local)")]
+        HumanPlayerLOCAL,
+        [Description("AI (Easy)")]
+        AIPlayerEASY,
+        [Description("AI (Medium)")]
+        AIPlayerMEDIUM,
+        [Description("AI (Hard)")]
+        AIPlayerHARD,
     }
 
     abstract class Player
@@ -29,7 +37,7 @@ namespace Chess
             Player ret = null;
             switch (type)
             {
-                case PlayerType.HumanPlayer:
+                case PlayerType.HumanPlayerLOCAL:
                     ret = new HumanPlayer(colour, renderer, mouse);
                 break;
             }

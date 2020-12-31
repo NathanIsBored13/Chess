@@ -1,0 +1,48 @@
+﻿<Window x:Class="Chess.SetupGame"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chess"
+        xmlns:extentions="clr-namespace:Extentions"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Style="{StaticResource WindowStyle}"
+        Title="SetupGame"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize">
+    <Border Margin="10" Padding="10">
+        <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.Resources>
+                    <ObjectDataProvider x:Key="PlayerTypeEnumSource" MethodName="GetEnumDescriptions" ObjectType="extentions:Extentions">
+                        <ObjectDataProvider.MethodParameters>
+                            <x:Type TypeName="local:PlayerType"/>
+                        </ObjectDataProvider.MethodParameters>
+                    </ObjectDataProvider>
+                    <DataTemplate x:Key="TupleDataTemplate">
+                        <Label Content="{Binding Path=Item2}"/>
+                    </DataTemplate>
+                    <Style TargetType="ComboBox">
+                        <Setter Property="ItemsSource" Value="{Binding Source={StaticResource PlayerTypeEnumSource}}"/>
+                        <Setter Property="ItemTemplate" Value="{StaticResource TupleDataTemplate}"/>
+                        <Setter Property="SelectedIndex" Value="0"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="White Player"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Black Player"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="WhiteComboBox" extentions:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="BlackComboBox" extentions:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True"/>
+            </Grid>
+            <Button Content="Start" Click="Start_Click" Margin="0, 10, 0, 0"/>
+        </StackPanel>
+    </Border>
+</Window>

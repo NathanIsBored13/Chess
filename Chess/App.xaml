@@ -8,10 +8,11 @@
         <SolidColorBrush x:Key="WindowBackground" Color="Gray"/>
         <SolidColorBrush x:Key="BoarderBackground" Color="Silver"/>
         <SolidColorBrush x:Key="ButtonBackground" Color="LightGray"/>
-        <SolidColorBrush x:Key="CheckeredBrush1" Color="GhostWhite"/>
-        <SolidColorBrush x:Key="CheckeredBrush2" Color="DimGray"/>
         <SolidColorBrush x:Key="FontColour" Color="Black"/>
         <SolidColorBrush x:Key="HiglightColour" Color="LightBlue"/>
+        
+        <SolidColorBrush x:Key="CheckeredBrush1" Color="GhostWhite"/>
+        <SolidColorBrush x:Key="CheckeredBrush2" Color="DimGray"/>
 
         <SolidColorBrush x:Key="CellSelectedColour" Color="Green" Opacity="0.5"/>
         <SolidColorBrush x:Key="MovePossibleColour" Color="Blue" Opacity="0.5"/>
@@ -27,8 +28,25 @@
             </Border>
         </ControlTemplate>
 
-        <Style TargetType="Window" x:Key="Parent_Style">
+        <Style TargetType="Window" x:Key="WindowStyle">
             <Style.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Background" Value="{DynamicResource ButtonBackground}"/>
+                    <Style.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                            <Setter Property="Padding" Value="5"/>
+                        </Style>
+                    </Style.Resources>
+                </Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{DynamicResource BoarderBackground}"/>
+                </Style>
+                <Style TargetType="Label">
+                    <Setter Property="Foreground" Value="{DynamicResource FontColour}"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
                 <Style TargetType="local:Cell">
                     <Setter Property="Template" Value="{StaticResource CellTemplate}"/>
                     <Setter Property="Margin" Value="1"/>
@@ -57,23 +75,9 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-                <Style TargetType="Button">
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Background" Value="{DynamicResource ButtonBackground}"/>
-                    <Style.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10"/>
-                            <Setter Property="Padding" Value="5"/>
-                        </Style>
-                    </Style.Resources>
-                </Style>
-                <Style TargetType="Border">
+                <!--<Style TargetType="ComboBox">
                     <Setter Property="Background" Value="{DynamicResource BoarderBackground}"/>
-                </Style>
-                <Style TargetType="Label">
-                    <Setter Property="Foreground" Value="{DynamicResource FontColour}"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                </Style>
+                </Style>-->
             </Style.Resources>
             <Setter Property="Background" Value="{DynamicResource WindowBackground}"/>
         </Style>
