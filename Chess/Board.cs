@@ -129,9 +129,12 @@ namespace Chess
             BitBoard seen = new Queen(colour).GetMovesMask(this, p).attacks;
             BitBoard ret = new BitBoard();
             ForEach(
-            (piece) => piece.GetType() == Type.Bishop || piece.GetType() == Type.Rook,
-            (point) => { ret |= this[point].GetMovesMask(this, point).attacks & seen; }
-            );
+            (piece) => (piece.GetType() == Type.Bishop || piece.GetType() == Type.Rook),
+            (point) =>
+            {
+                if (Math.Abs(point.x - p.x) == Math.Abs(point.y - p.y))
+                    ret |= this[point].GetMovesMask(this, point).attacks & seen;
+            });
             return ret;
         }
 

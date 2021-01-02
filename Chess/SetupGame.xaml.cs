@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace Chess
 {
-    /// <summary>
-    /// Interaction logic for SetupGame.xaml
-    /// </summary>
     public partial class SetupGame : Window
     {
         readonly Action<Tuple<PlayerType, PlayerType>> callback;
