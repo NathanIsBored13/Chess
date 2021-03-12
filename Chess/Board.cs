@@ -96,63 +96,70 @@ namespace Chess
 
         private Vector[] GetMovesInternal(bool colour)
         {
-            List<Point> checkers = FindChecks(colour);
-            Vector[] ret = null;
-            switch (checkers.Count())
-            {
-                case 0:
-                    {
-                        BitBoard pins = CalculatePinRays(FindKing(colour), !colour);
-                        ret = PsudoGetMoves(colour).Where(x => !pins[x.p1]).ToArray();
-                    }
-                break;
-                case 1:
-                    {
-                        Point k = FindKing(colour);
-                        BitBoard crit = GetCritPath(k, checkers[0]);
-                        ret = PsudoGetMoves(colour).Where(x => crit[x.p2] || (x.p1.x == k.x && x.p1.y == k.y)).ToArray();
-                    }
-                break;
-                default:
-                    {
-                        Point pos = FindKing(colour);
-                        PieceMovesMask mask = this[pos].GetMovesMask(this, pos);
-                        ret = (mask.attacks | mask.moves).GetAllSet().Select(p => new Vector(pos, p)).ToArray();
-                    }
-                break;
-            }
-            return ret;
+            //List<Point> checkers = FindChecks(colour);
+            //Vector[] ret = null;
+            //Point k = FindKing(colour);
+            //switch (checkers.Count())
+            //{
+            //    case 0:
+            //        {
+            //            List<Tuple<Point, BitBoard>> pins = CalculatePinRays(FindKing(colour), !colour);
+            //            ret = PsudoGetMoves(colour).Where(x => !pins.Any(p => p.Item2[x.p1] && !GetCritPath(k, p.Item1)[x.p2])).ToArray();
+            //        }
+            //    break;
+            //    case 1:
+            //        {
+            //            BitBoard crit = GetCritPath(k, checkers[0]);
+            //            ret = PsudoGetMoves(colour).Where(x => crit[x.p2] || (x.p1.x == k.x && x.p1.y == k.y)).ToArray();
+            //        }
+            //    break;
+            //    default:
+            //        {
+            //            PieceMovesMask mask = this[k].GetMovesMask(this, k);
+            //            ret = (mask.attacks | mask.moves).GetAllSet().Select(p => new Vector(k, p)).ToArray();
+            //        }
+            //    break;
+            //}
+            return PsudoGetMoves(colour).Where(x => !WouldCheck(x)).ToArray();
         }
 
-        private BitBoard CalculatePinRays(Point p, bool colour)
+        private bool WouldCheck(Vector v)
         {
-            BitBoard seen = new Queen(colour).GetMovesMask(this, p).attacks;
-            BitBoard ret = new BitBoard();
-            ForEach(
-            (piece) => (piece.GetType() == Type.Bishop || piece.GetType() == Type.Rook),
-            (point) =>
-            {
-                if (Math.Abs(point.x - p.x) == Math.Abs(point.y - p.y))
-                    ret |= this[point].GetMovesMask(this, point).attacks & seen;
-            });
-            return ret;
+            Board b = new Board(this);
+            b.Move(v);
+            return b.FindChecks(this[v.p1].GetColour()).Count() > 0;
         }
 
-        private BitBoard GetCritPath(Point s, Point f)
-        {
-            BitBoard ret = new BitBoard();
+        //private List<Tuple<Point, BitBoard>> CalculatePinRays(Point p, bool colour)
+        //{
+        //    BitBoard seen = new Queen(colour).GetMovesMask(this, p).attacks;
+        //    List<Tuple<Point, BitBoard>> ret = new List<Tuple<Point, BitBoard>>();
+        //    ForEach(
+        //    (piece) => (piece.GetType() == Type.Bishop || piece.GetType() == Type.Rook),
+        //    (point) =>
+        //    {
+        //        Type type = this[point].GetType();
+        //        if (point)
+        //            ret.Add(new Tuple<Point, BitBoard>(point, this[point].GetMovesMask(this, point).attacks & seen));
+        //    });
+        //    return ret;
+        //}
 
-            int[] dir = new int[] { Math.Sign(f.x - s.x), Math.Sign(f.y - s.y) };
+        //private BitBoard GetCritPath(Point s, Point f)
+        //{
+        //    BitBoard ret = new BitBoard();
 
-            do
-            {
-                s.x += dir[0];
-                s.y += dir[1];
-                ret.Set(s);
-            }
-            while (s.x != f.x && s.y != f.y);
-            return ret;
-        }
+        //    int[] dir = new int[] { Math.Sign(f.x - s.x), Math.Sign(f.y - s.y) };
+
+        //    do
+        //    {
+        //        s.x += dir[0];
+        //        s.y += dir[1];
+        //        ret.Set(s);
+        //    }
+        //    while (s.x != f.x && s.y != f.y);
+        //    return ret;
+        //}
 
         private List<Vector> PsudoGetMoves(bool colour)
         {
