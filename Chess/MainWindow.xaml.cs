@@ -30,6 +30,10 @@ namespace Chess
         {
             return $"[{x}, {y}]";
         }
+
+        public static bool operator ==(Point l, Point r) => l.x == r.x && l.y == r.y;
+
+        public static bool operator !=(Point l, Point r) => l.x != r.x || l.y != r.y;
     }
 
     struct Vector
@@ -41,6 +45,9 @@ namespace Chess
             this.p1 = p1;
             this.p2 = p2;
         }
+        public static bool operator ==(Vector l, Vector r) => l.p1 == r.p1 && l.p2 == r.p2;
+
+        public static bool operator !=(Vector l, Vector r) => l.p1 != r.p1 || l.p2 != r.p2;
 
         public override string ToString()
         {
