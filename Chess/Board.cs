@@ -12,7 +12,7 @@ namespace Chess
     {
         private readonly Piece[,] board;
         private readonly List<Vector> history;
-        private Vector[] cash = null;
+        private PieceMove[] cash = null;
 
         public Board(Piece[,] template)
         {
@@ -27,7 +27,7 @@ namespace Chess
 
         private Board(Board b)
         {
-            history = b.history.Select(v => new Vector(new Point(v.p1.x, v.p1.y), new Point(v.p2.x, v.p2.y))).ToList(); ;
+            history = b.history.Select(v => new Vector(new Point(v.p1.x, v.p1.y), new Point(v.p2.x, v.p2.y))).ToList(); 
             board = new Piece[8, 8];
             ForEach(
             (Point p) =>
@@ -86,15 +86,15 @@ namespace Chess
         {
             cash = null;
             history.Add(vector);
-            board[vector.p2.x, vector.p2.y] = board[vector.p1.x, vector.p1.y];
-            board[vector.p1.x, vector.p1.y] = null;
+            this[vector.p2] = this[vector.p1];
+            this[vector.p1] = null;
         }
 
         public List<Vector> GetHistory() => history;
 
-        public Vector[] GetMoves(bool colour) => cash ?? GetMovesInternal(colour);
+        public PieceMove[] GetMoves(bool colour) => cash ?? (cash = GetMovesInternal(colour));
 
-        private Vector[] GetMovesInternal(bool colour)
+        private PieceMove[] GetMovesInternal(bool colour)
         {
             //List<Point> checkers = FindChecks(colour);
             //Vector[] ret = null;
@@ -120,7 +120,7 @@ namespace Chess
             //        }
             //    break;
             //}
-            return PsudoGetMoves(colour).Where(x => !WouldCheck(x)).ToArray();
+            return PsudoGetMoves(colour).Where(x => !WouldCheck(x.vector)).ToArray();
         }
 
         private bool WouldCheck(Vector v)
@@ -160,17 +160,13 @@ namespace Chess
         //    while (s.x != f.x && s.y != f.y);
         //    return ret;
         //}
-
-        private List<Vector> PsudoGetMoves(bool colour)
+        
+        private List<PieceMove> PsudoGetMoves(bool colour)
         {
-            List<Vector> moves = new List<Vector>();
+            List<PieceMove> moves = new List<PieceMove>();
             ForEach(
             (piece) => piece.GetColour() == colour,
-            (point) =>
-            {
-                PieceMovesMask mask = this[point].GetMovesMask(this, point);
-                moves.AddRange((mask.attacks | mask.moves).GetAllSet().Select(p => new Vector(point, p)));
-            });
+            (point) => moves.AddRange(this[point].GetMovesMask(this, point)));
             return moves;
         }
 

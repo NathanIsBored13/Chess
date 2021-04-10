@@ -31,10 +31,9 @@ namespace Chess
             return Type.King;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        public override List<PieceMove> GetMovesMask(Board board, Point position)
         {
-            BitBoard moves = new BitBoard();
-            BitBoard attacks = new BitBoard();
+            List<PieceMove> ret = new List<PieceMove>();
             BitBoard locked = new BitBoard();
 
             board[position] = null;
@@ -50,11 +49,11 @@ namespace Chess
             foreach (Point p in kingMoves)
             {
                 if (board[p] == null)
-                    moves.Set(p);
+                    ret.Add(new PieceMove(new Vector(position, p), MoveType.Move));
                 else
-                    attacks.Set(p);
+                    ret.Add(new PieceMove(new Vector(position, p), MoveType.Capture));
             }
-            return new PieceMovesMask(attacks, moves);
+            return ret;
         }
 
         public override BitBoard GetSeen(Board board, Point position)
@@ -64,7 +63,7 @@ namespace Chess
             {
                 Point absolute = new Point(position.x + offset.x, position.y + offset.y);
                 if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8)
-                    ret.Set(absolute);
+                    ret[absolute] = true;
             }
             return ret;
         }

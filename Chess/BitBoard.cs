@@ -8,7 +8,7 @@ namespace Chess
 {
     class BitBoard
     {
-        private readonly byte[] board = new byte[8];
+        private readonly bool[,] board = new bool[8, 8];
 
         public BitBoard()
         {
@@ -17,36 +17,31 @@ namespace Chess
 
         public bool this[int x, int y]
         {
-            get { return (board[y] & (1 << x)) > 0;}
+            get { return board[x, y]; }
+            set { board[x, y] = value; }
         }
 
         public bool this[Point p]
         {
-            get { return this[p.x, p.y]; }
+            get { return board[p.x, p.y]; }
+            set { board[p.x, p.y] = value; }
         }
 
         public static BitBoard operator &(BitBoard l, BitBoard r)
         {
             BitBoard ret = new BitBoard();
-            for (int i = 0; i < 8; i++)
-                ret.board[i] = (byte)(l.board[i] & r.board[i]);
+            Board.ForEach(point => { if (l[point] && r[point]) ret[point] = true; });
             return ret;
         }
 
         public static BitBoard operator |(BitBoard l, BitBoard r)
         {
             BitBoard ret = new BitBoard();
-            for (int i = 0; i < 8; i++)
-                ret.board[i] = (byte)(l.board[i] | r.board[i]);
+            Board.ForEach(point => { if (l[point] || r[point]) ret[point] = true; });
             return ret;
         }
 
         public override string ToString() => $"{{{string.Join(", ", GetAllSet().Select(x => x.ToString()))}}}";
-
-        public void Set(Point p)
-        {
-            board[p.y] = (byte)(board[p.y] | 1 << p.x);
-        }
 
         public List<Point> GetAllSet()
         {

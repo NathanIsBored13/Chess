@@ -10,6 +10,8 @@ namespace Chess
 {
     class Bishop : Piece
     {
+        private readonly Point[] dirs = { new Point(1, 1), new Point(1, -1), new Point(-1, 1), new Point(-1, -1) };
+
         public Bishop(bool colour) : base(colour)
         {
 
@@ -20,53 +22,46 @@ namespace Chess
             return Type.Bishop;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        public override List<PieceMove> GetMovesMask(Board board, Point position)
         {
-            BitBoard moves = new BitBoard();
-            BitBoard attacks = new BitBoard();
-            int index = 0;
-            int[,] dirs = { { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
-            do
+            List<PieceMove> ret = new List<PieceMove>();
+            foreach(Point dir in dirs)
             {
                 bool hitPiece = false;
-                Point pointer = new Point(position.x + dirs[index, 0], position.y + dirs[index, 1]);
+                Point pointer = new Point(position.x + dir.x, position.y + dir.y);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
                     if (board[pointer] is Piece piece)
                     {
                         hitPiece = true;
                         if (piece.GetColour() != GetColour())
-                            attacks.Set(pointer);
+                            ret.Add(new PieceMove(new Vector(position, pointer), MoveType.Capture));
                     }
                     else
-                        moves.Set(pointer);
-                    pointer.x += dirs[index, 0];
-                    pointer.y += dirs[index, 1];
+                        ret.Add(new PieceMove(new Vector(position, pointer), MoveType.Move));
+                    pointer.x += dir.x;
+                    pointer.y += dir.y;
                 }
-                index++;
-            } while (index < 4);
-            return new PieceMovesMask(attacks, moves);
+            }
+            return ret;
         }
 
         public override BitBoard GetSeen(Board board, Point position)
         {
             BitBoard seen = new BitBoard();
-            int index = 0;
-            int[,] dirs = { { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
-            do
+            foreach (Point dir in dirs)
             {
                 bool hitPiece = false;
-                Point pointer = new Point(position.x + dirs[index, 0], position.y + dirs[index, 1]);
+                Point pointer = new Point(position.x + dir.x, position.y + dir.y);
                 while (pointer.x <= 7 && pointer.x >= 0 && pointer.y <= 7 && pointer.y >= 0 && !hitPiece)
                 {
-                    seen.Set(pointer);
+                    seen[pointer] = true;
                     if (board[pointer.x, pointer.y] is Piece)
                         hitPiece = true;
-                    pointer.x += dirs[index, 0];
-                    pointer.y += dirs[index, 1];
+                    pointer.x += dir.x;
+                    pointer.y += dir.y;
                 }
-                index++;
-            } while (index < 4);
+            }
             return seen;
         }
     }

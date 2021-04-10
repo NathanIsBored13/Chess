@@ -31,10 +31,9 @@ namespace Chess
             return Type.Knight;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        public override List<PieceMove> GetMovesMask(Board board, Point position)
         {
-            BitBoard moves = new BitBoard();
-            BitBoard attacks = new BitBoard();
+            List<PieceMove> ret = new List<PieceMove>();
             foreach (Point p in checks)
             {
                 Point vec = new Point(p.x + position.x, p.y + position.y); 
@@ -43,13 +42,13 @@ namespace Chess
                     if (board[vec] is Piece piece)
                     {
                         if (piece.GetColour() != GetColour())
-                            attacks.Set(vec);
+                            ret.Add(new PieceMove(new Vector(position, vec), MoveType.Capture));
                     }
                     else
-                        moves.Set(vec);
+                        ret.Add(new PieceMove(new Vector(position, vec), MoveType.Move));
                 }
             }
-            return new PieceMovesMask(attacks, moves);
+            return ret;
         }
 
         public override BitBoard GetSeen(Board board, Point position)
@@ -59,7 +58,7 @@ namespace Chess
             {
                 Point vec = new Point(p.x + position.x, p.y + position.y);
                 if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
-                    seen.Set(vec);
+                    seen[vec] = true;
             }
             return seen;
         }

@@ -24,7 +24,7 @@ namespace Chess
         public override Vector Move(Board board)
         {
             BitBoard highlighted = new BitBoard();
-            Vector[] moves = board.GetMoves(GetColour());
+            PieceMove[] moves = board.GetMoves(GetColour());
             Vector ret = new Vector();
 
             new StateMachine(
@@ -44,10 +44,10 @@ namespace Chess
                         function = () =>
                         {
                             ret.p1 = mouse.GetLastClicked();
-                            foreach (Vector v in moves.Where(x => x.p1.x == mouse.GetLastClicked().x && x.p1.y == mouse.GetLastClicked().y))
+                            foreach (PieceMove v in moves.Where(x => x.vector.p1.x == mouse.GetLastClicked().x && x.vector.p1.y == mouse.GetLastClicked().y))
                             {
-                                highlighted.Set(v.p2);
-                                renderer.SetHighlight(renderHandle, board[v.p2] == null ? Highlight.MovePossible : Highlight.AttackMovePossible, v.p2);
+                                highlighted[v.vector.p2] = true;
+                                renderer.SetHighlight(renderHandle, v.type == MoveType.Move ? Highlight.MovePossible : Highlight.AttackMovePossible, v.vector.p2);
                             }
                         },
                         ptr = 1
@@ -80,10 +80,10 @@ namespace Chess
                             highlighted = new BitBoard();
                             renderer.ResetHighlights(renderHandle);
                             ret.p1 = mouse.GetLastClicked();
-                            foreach (Vector v in moves.Where(x => x.p1.x == mouse.GetLastClicked().x && x.p1.y == mouse.GetLastClicked().y))
+                            foreach (PieceMove v in moves.Where(x => x.vector.p1.x == mouse.GetLastClicked().x && x.vector.p1.y == mouse.GetLastClicked().y))
                             {
-                                highlighted.Set(v.p2);
-                                renderer.SetHighlight(renderHandle, board[v.p2] == null ? Highlight.MovePossible : Highlight.AttackMovePossible, v.p2);
+                                highlighted[v.vector.p2] = true;
+                                renderer.SetHighlight(renderHandle, v.type == MoveType.Move ? Highlight.MovePossible : Highlight.AttackMovePossible, v.vector.p2);
                             }
                         },
                         ptr = 1

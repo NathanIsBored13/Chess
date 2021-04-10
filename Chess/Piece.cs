@@ -18,6 +18,23 @@ namespace Chess
         Pawn
     }
 
+    enum MoveType
+    {
+        Capture,
+        Move
+    }
+
+    struct PieceMove
+    {
+        public Vector vector;
+        public MoveType type;
+        public PieceMove(Vector vector, MoveType type)
+        {
+            this.vector = vector;
+            this.type = type;
+        }
+    }
+
     struct PieceMovesMask
     {
         public BitBoard attacks;
@@ -47,7 +64,7 @@ namespace Chess
 
         public abstract new Type GetType();
 
-        public abstract PieceMovesMask GetMovesMask(Board board, Point position);
+        public abstract List<PieceMove> GetMovesMask(Board board, Point position);
 
         public abstract BitBoard GetSeen(Board board, Point position);
     }

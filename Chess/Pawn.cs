@@ -22,31 +22,39 @@ namespace Chess
             return Type.Pawn;
         }
 
-        public override PieceMovesMask GetMovesMask(Board board, Point position)
+        public override List<PieceMove> GetMovesMask(Board board, Point position)
         {
-            BitBoard moves = new BitBoard();
+            List<PieceMove> ret = new List<PieceMove>();
             if (position.y > 0 && position.y < 8 && board[position.x, position.y + dir] == null)
             {
-                moves.Set(new Point(position.x, position.y + dir));
+                ret.Add(new PieceMove(new Vector(position, new Point(position.x, position.y + dir)), MoveType.Move));
                 if (position.y == 1 || position.y == 6 && board[position.x, position.y + 2 * dir] == null)
-                    moves.Set(new Point(position.x, position.y + 2 * dir));
+                    ret.Add(new PieceMove(new Vector(position, new Point(position.x, position.y + 2 * dir)), MoveType.Move));
             }
-            BitBoard attacks = new BitBoard();
             if (position.y > 0 && position.y < 8 && position.x < 7 && board[position.x + 1, position.y + dir] is Piece p1 && p1.GetColour() != GetColour())
-                attacks.Set(new Point(position.x + 1, position.y + dir));
-            if (position.y > 0 && position.y < 8 && position.x > 1 && board[position.x - 1, position.y + dir] is Piece p2 && p2.GetColour() != GetColour())
-                attacks.Set(new Point(position.x - 1, position.y + dir));
+                ret.Add(new PieceMove(new Vector(position, new Point(position.x + 1, position.y + dir)), MoveType.Capture));
+            if (position.y > 0 && position.y < 8 && position.x > 0 && board[position.x - 1, position.y + dir] is Piece p2 && p2.GetColour() != GetColour())
+                ret.Add(new PieceMove(new Vector(position, new Point(position.x - 1, position.y + dir)), MoveType.Capture));
 
-            return new PieceMovesMask(attacks, moves);
+            List<Vector> moveHistory = board.GetHistory();
+            if (moveHistory.Count > 0)
+            {
+                Vector lastMove = moveHistory.Last();
+                if (board[lastMove.p2].GetType() == Type.Pawn && Math.Abs(lastMove.p1.y - lastMove.p2.y) == 2)
+                    foreach (Point p in GetSeen(board, position).GetAllSet().Where(x => x.x == lastMove.p1.x && x.x == lastMove.p2.x && Math.Sign(x.y - lastMove.p2.y) != Math.Sign(x.y - lastMove.p1.y)))
+                        ret.Add(new PieceMove(new Vector(position, p), MoveType.Capture));
+            }
+
+            return ret;
         }
 
         public override BitBoard GetSeen(Board board, Point position)
         {
             BitBoard seen = new BitBoard();
-            if (GetColour() ? (position.y > 0) : (position.y < 7) && position.y < 7 && position.x > 0)
-                seen.Set(new Point(position.x - 1, position.y + dir));
-            if (GetColour() ? (position.y > 0) : (position.y < 7) && position.y > 0 && position.x > 0)
-                seen.Set(new Point(position.x + 1, position.y + dir));
+            if (GetColour() ? (position.y > 0) : (position.y < 7) && position.y < 7 && position.x > 0 && position.x > 0)
+                seen[position.x - 1, position.y + dir] = true;
+            if (GetColour() ? (position.y > 0) : (position.y < 7) && position.y > 0 && position.x > 0 && position.x < 7)
+                seen[position.x + 1, position.y + dir] = true;
             return seen;
         }
     }
