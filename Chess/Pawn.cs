@@ -31,9 +31,9 @@ namespace Chess
                 if (position.y == 1 || position.y == 6 && board[position.x, position.y + 2 * dir] == null)
                     ret.Add(new PieceMove(new Vector(position, new Point(position.x, position.y + 2 * dir)), MoveType.Move));
             }
-            if (position.y > 0 && position.y < 8 && position.x < 7 && board[position.x + 1, position.y + dir] is Piece p1 && p1.GetColour() != GetColour())
+            if (position.y > 0 && position.y < 8 && position.x < 7 && !board[position.x + 1, position.y + dir]?.GetColour() == GetColour())
                 ret.Add(new PieceMove(new Vector(position, new Point(position.x + 1, position.y + dir)), MoveType.Capture));
-            if (position.y > 0 && position.y < 8 && position.x > 0 && board[position.x - 1, position.y + dir] is Piece p2 && p2.GetColour() != GetColour())
+            if (position.y > 0 && position.y < 8 && position.x > 0 && !board[position.x - 1, position.y + dir]?.GetColour() == GetColour())
                 ret.Add(new PieceMove(new Vector(position, new Point(position.x - 1, position.y + dir)), MoveType.Capture));
 
             List<Vector> moveHistory = board.GetHistory();
@@ -41,7 +41,7 @@ namespace Chess
             {
                 Vector lastMove = moveHistory.Last();
                 if (board[lastMove.p2].GetType() == Type.Pawn && Math.Abs(lastMove.p1.y - lastMove.p2.y) == 2)
-                    foreach (Point p in GetSeen(board, position).GetAllSet().Where(x => x.x == lastMove.p1.x && x.x == lastMove.p2.x && Math.Sign(x.y - lastMove.p2.y) != Math.Sign(x.y - lastMove.p1.y)))
+                    foreach (Point p in GetSeen(board, position).GetAllSet().Where(x => x.x == lastMove.p1.x && x.x == lastMove.p2.x && Math.Sign(x.y - lastMove.p2.y) + Math.Sign(x.y - lastMove.p1.y) == 0))
                         ret.Add(new PieceMove(new Vector(position, p), MoveType.Capture));
             }
 
@@ -51,9 +51,9 @@ namespace Chess
         public override BitBoard GetSeen(Board board, Point position)
         {
             BitBoard seen = new BitBoard();
-            if (GetColour() ? (position.y > 0) : (position.y < 7) && position.y < 7 && position.x > 0 && position.x > 0)
+            if (position.y > 0 && position.y < 8 && position.x > 0)
                 seen[position.x - 1, position.y + dir] = true;
-            if (GetColour() ? (position.y > 0) : (position.y < 7) && position.y > 0 && position.x > 0 && position.x < 7)
+            if (position.y > 0 && position.y < 8 && position.x < 7)
                 seen[position.x + 1, position.y + dir] = true;
             return seen;
         }
