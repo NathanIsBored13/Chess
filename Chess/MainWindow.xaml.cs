@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 
 namespace Chess
 {
-    struct Point
+    public struct Point
     {
         public int x;
         public int y;
@@ -36,7 +36,7 @@ namespace Chess
         public static bool operator !=(Point l, Point r) => l.x != r.x || l.y != r.y;
     }
 
-    struct Vector
+    public struct Vector
     {
         public Point p1;
         public Point p2;
@@ -53,6 +53,23 @@ namespace Chess
         {
             return $"{p1} => {p2}";
         }
+    }
+
+    public struct Optional<T>
+    {
+        public T Value
+        {
+            get { return value; }
+            set
+            {
+                this.value = value;
+                set = true;
+            }
+        }
+        private T value;
+
+        public bool Set { get { return set; } }
+        private bool set;
     }
 
     public partial class MainWindow : Window

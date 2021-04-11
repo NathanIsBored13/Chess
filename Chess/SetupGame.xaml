@@ -27,6 +27,7 @@
                         <Setter Property="ItemsSource" Value="{Binding Source={StaticResource PlayerTypeEnumSource}}"/>
                         <Setter Property="ItemTemplate" Value="{StaticResource TupleDataTemplate}"/>
                         <Setter Property="SelectedIndex" Value="0"/>
+                        <Setter Property="extentions:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems" Value="True"/>
                     </Style>
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
@@ -39,8 +40,8 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Content="White Player"/>
                 <Label Grid.Row="1" Grid.Column="0" Content="Black Player"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="WhiteComboBox" extentions:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="BlackComboBox" extentions:ComboBoxWidthFromItemsBehavior.ComboBoxWidthFromItems="True"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="WhiteComboBox"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="BlackComboBox"/>
             </Grid>
             <Button Content="Start" Click="Start_Click" Margin="0, 10, 0, 0"/>
         </StackPanel>

@@ -1,0 +1,47 @@
+﻿<Window x:Class="Chess.PawnPromotionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chess"
+        xmlns:extentions="clr-namespace:Extentions"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Style="{StaticResource WindowStyle}"
+        Title="PromotePawn"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize">
+    <Border Margin="10" Padding="10">
+        <StackPanel>
+            <StackPanel.Resources>
+                <ObjectDataProvider x:Key="PlayerTypeEnumSource" MethodName="GetPromotions" ObjectType="extentions:Extentions"/>
+                <Style TargetType="ComboBox">
+                    <Setter Property="ItemsSource" Value="{Binding Source={StaticResource PlayerTypeEnumSource}}"/>
+                    <Setter Property="SelectedIndex" Value="0"/>
+                </Style>
+            </StackPanel.Resources>
+            
+            <Label Content="Select Type to promote to"/>
+            <Grid>
+                <ComboBox x:Name="PromotionSelection"/>
+            </Grid>
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="Margin" Value="3, 5, 3, 3"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0">
+                    <Button Content="Promote" Click="Promote_Button_Click"/>
+                </Border>
+                <Border Grid.Column="1">
+                    <Button Content="Cancel" Click="Cancel_Button_Click"/>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

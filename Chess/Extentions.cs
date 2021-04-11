@@ -1,5 +1,4 @@
-﻿using Extentions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -21,7 +20,9 @@ namespace Extentions
         public static string GetDescriptor(this Enum value) => (Enum.GetName(value.GetType(), value) is string name && value.GetType().GetField(name) is FieldInfo field && Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr) ? attr.Description : value.ToString();
 
         public static IEnumerable<T> SubArray<T>(this IEnumerable<T> data, int skip, int leave) => data.Skip(skip).Take(data.Count() - skip - leave);
-        
+
+        public static IEnumerable<Enum> GetPromotions() => Enum.GetValues(typeof(Chess.Type)).OfType<Enum>().Where(x => x.ToString() != "Pawn" && x.ToString() != "King");
+
         public static void SetWidthFromItems(this ComboBox comboBox)
         {
             double comboBoxWidth = 19;
@@ -31,8 +32,7 @@ namespace Extentions
             EventHandler eventHandler = null;
             eventHandler = new EventHandler(delegate
             {
-                if (comboBox.IsDropDownOpen &&
-                    comboBox.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+                if (comboBox.IsDropDownOpen && comboBox.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
                 {
                     double width = 0;
                     foreach (var item in comboBox.Items)
@@ -40,9 +40,7 @@ namespace Extentions
                         ComboBoxItem comboBoxItem = comboBox.ItemContainerGenerator.ContainerFromItem(item) as ComboBoxItem;
                         comboBoxItem.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                         if (comboBoxItem.DesiredSize.Width > width)
-                        {
                             width = comboBoxItem.DesiredSize.Width;
-                        }
                     }
                     comboBox.Width = comboBoxWidth + width;
                     comboBox.ItemContainerGenerator.StatusChanged -= eventHandler;

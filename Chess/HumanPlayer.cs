@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Chess
 {
@@ -13,6 +17,9 @@ namespace Chess
         private readonly int renderHandle;
         private readonly Renderer renderer;
         private readonly Mouse mouse;
+
+        private readonly AutoResetEvent threadLatch = new AutoResetEvent(false);
+        private Optional<Type> threadBuffer;
 
         public HumanPlayer(bool colour, Renderer renderer, Mouse mouse) : base(colour)
         {
@@ -108,6 +115,21 @@ namespace Chess
             }).Run();
 
             return moves.First(x => x.vector == ret);
+        }
+
+        private Optional<Type> RequestPawnPromo()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                PawnPromotionWindow wnd = new PawnPromotionWindow(Callback);
+                wnd.ShowDialog();
+            });
+            return threadBuffer;
+        }
+
+        private void Callback(Optional<Type> value)
+        {
+            threadBuffer = value;
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace Chess
 {
-    enum Type
+    public enum Type
     {
         King,
         Queen,
