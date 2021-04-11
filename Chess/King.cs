@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Extentions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,17 @@ namespace Chess
 {
     class King : Piece
     {
+        private struct CastelingMask
+        {
+            public int kingFinal, rookInitial, rookFinal;
+            public CastelingMask(int kingFinal, int rookInitial, int rookFinal)
+            {
+                this.kingFinal = kingFinal;
+                this.rookInitial = rookInitial;
+                this.rookFinal = rookFinal;
+            }
+        }
+
         private static readonly Point[] mask = new Point[8]
         {
             new Point(1, 1),
@@ -19,6 +31,12 @@ namespace Chess
             new Point(0, -1),
             new Point(1, -1),
             new Point(1, 0),
+        };
+
+        private static readonly CastelingMask[] castelingMasks = new CastelingMask[]
+        {
+            new CastelingMask(1, 0, 2),
+            new CastelingMask(5, 7, 4)
         };
 
         public King(bool colour) : base(colour)
@@ -47,12 +65,13 @@ namespace Chess
 
             IEnumerable<Point> kingMoves = GetSeen(board, position).GetAllSet().Where(p => !locked[p] && board[p]?.GetColour() != GetColour());
             foreach (Point p in kingMoves)
-            {
-                if (board[p] == null)
-                    ret.Add(new PieceMove(new Vector(position, p), MoveType.Move));
-                else
-                    ret.Add(new PieceMove(new Vector(position, p), MoveType.Capture));
-            }
+                ret.Add(new PieceMove(new Vector(position, p), board[p] == null? MoveType.Move : MoveType.Capture));
+
+            if (!board.GetHistory().Any(x => x.p2 == position))
+                foreach (CastelingMask mask in castelingMasks)
+                    if (!board.GetHistory().Any(x => x.p1 == new Point(mask.rookInitial, position.y)) && Enumerate(position.x, mask.kingFinal).All(x => board.FindAttacks(GetColour(), new Point(x, position.y)).Count() == 0) && Enumerate(mask.rookInitial, position.x).SubArray(1, 1).All(x => board[x, position.y] == null))
+                        ret.Add(new PieceMove(new Vector(position, new Point(mask.kingFinal, position.y)), new Vector[] { new Vector(new Point(mask.rookInitial, position.y), new Point(mask.rookFinal, position.y)) }, MoveType.Move));
+
             return ret;
         }
 
@@ -67,5 +86,6 @@ namespace Chess
             }
             return ret;
         }
+        private IEnumerable<int> Enumerate(int start, int stop) => Enumerable.Range(Math.Min(start, stop), Math.Abs(start - stop));
     }
 }

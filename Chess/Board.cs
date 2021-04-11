@@ -178,10 +178,11 @@ namespace Chess
             return moves;
         }
 
-        public List<Point> FindChecks(bool colour)
+        public List<Point> FindChecks(bool colour) => FindAttacks(colour, FindKing(colour));
+
+        public List<Point> FindAttacks(bool colour, Point point)
         {
             List<Point> ret = new List<Point>();
-            Point pos = FindKing(colour);
             Piece[] pieceTemplates = new Piece[6]
             {
                 new King(colour),
@@ -192,7 +193,7 @@ namespace Chess
                 new Pawn(colour)
             };
             foreach (Piece p in pieceTemplates)
-                ret.AddRange(p.GetSeen(this, pos).GetAllSet().Where(v => this[v] != null && this[v].GetColour() != colour && this[v].GetType() == p.GetType()));
+                ret.AddRange(p.GetSeen(this, point).GetAllSet().Where(v => this[v] != null && this[v].GetColour() != colour && this[v].GetType() == p.GetType()));
             return ret;
         }
     }

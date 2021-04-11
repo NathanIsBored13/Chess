@@ -19,6 +19,9 @@ namespace Extentions
         public static Tuple<Enum, string>[] GetEnumDescriptions(Type enumType) => Enum.GetValues(enumType).OfType<Enum>().Select(e => new Tuple<Enum, string>(e, e.GetDescriptor())).ToArray();
 
         public static string GetDescriptor(this Enum value) => (Enum.GetName(value.GetType(), value) is string name && value.GetType().GetField(name) is FieldInfo field && Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr) ? attr.Description : value.ToString();
+
+        public static IEnumerable<T> SubArray<T>(this IEnumerable<T> data, int skip, int leave) => data.Skip(skip).Take(data.Count() - skip - leave);
+        
         public static void SetWidthFromItems(this ComboBox comboBox)
         {
             double comboBoxWidth = 19;
