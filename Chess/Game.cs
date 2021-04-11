@@ -46,7 +46,7 @@ namespace Chess
             
             while (board.GetMoves(playerQueue.PeekPlayer().GetColour()).Length > 0)
             {
-                Vector vec = playerQueue.PeekPlayer().Move(board);
+                PieceMove vec = playerQueue.PeekPlayer().Move(board);
                 board.Move(vec);
                 renderer.ResetHighlights(renderHandle);
                 if (board.FindChecks(!playerQueue.PeekPlayer().GetColour()).Count() > 0)

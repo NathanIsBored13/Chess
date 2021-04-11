@@ -82,11 +82,19 @@ namespace Chess
 
         public Piece[,] GetPieces() => board;
 
-        public void Move(Vector vector)
+        public void Move(PieceMove vector)
         {
             cash = null;
-            history.Add(vector);
-            this[vector.p2] = this[vector.p1];
+            history.Add(vector.vector);
+            ExecuteVector(vector.vector);
+            foreach (Vector vec in vector.additionalMoves ?? new Vector[] { })
+                ExecuteVector(vec);
+        }
+
+        public void ExecuteVector(Vector vector)
+        {
+            if (vector.p2 != new Point(-1, -1))
+                this[vector.p2] = this[vector.p1];
             this[vector.p1] = null;
         }
 
@@ -120,14 +128,14 @@ namespace Chess
             //        }
             //    break;
             //}
-            return PsudoGetMoves(colour).Where(x => !WouldCheck(x.vector)).ToArray();
+            return PsudoGetMoves(colour).Where(x => !WouldCheck(x)).ToArray();
         }
 
-        private bool WouldCheck(Vector v)
+        private bool WouldCheck(PieceMove v)
         {
             Board b = new Board(this);
             b.Move(v);
-            return b.FindChecks(this[v.p1].GetColour()).Count() > 0;
+            return b.FindChecks(this[v.vector.p1].GetColour()).Count() > 0;
         }
 
         //private List<Tuple<Point, BitBoard>> CalculatePinRays(Point p, bool colour)

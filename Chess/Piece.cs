@@ -27,10 +27,18 @@ namespace Chess
     struct PieceMove
     {
         public Vector vector;
+        public Vector[] additionalMoves;
         public MoveType type;
         public PieceMove(Vector vector, MoveType type)
         {
             this.vector = vector;
+            additionalMoves = null;
+            this.type = type;
+        }
+        public PieceMove(Vector vector, Vector[] additionalMoves, MoveType type)
+        {
+            this.vector = vector;
+            this.additionalMoves = additionalMoves;
             this.type = type;
         }
     }

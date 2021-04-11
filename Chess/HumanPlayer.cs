@@ -21,7 +21,7 @@ namespace Chess
             this.mouse = mouse;
         }
 
-        public override Vector Move(Board board)
+        public override PieceMove Move(Board board)
         {
             BitBoard highlighted = new BitBoard();
             PieceMove[] moves = board.GetMoves(GetColour());
@@ -107,7 +107,7 @@ namespace Chess
                 })
             }).Run();
 
-            return ret;
+            return moves.First(x => x.vector == ret);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Chess
                 Vector lastMove = moveHistory.Last();
                 if (board[lastMove.p2].GetType() == Type.Pawn && Math.Abs(lastMove.p1.y - lastMove.p2.y) == 2)
                     foreach (Point p in GetSeen(board, position).GetAllSet().Where(x => x.x == lastMove.p1.x && x.x == lastMove.p2.x && Math.Sign(x.y - lastMove.p2.y) + Math.Sign(x.y - lastMove.p1.y) == 0))
-                        ret.Add(new PieceMove(new Vector(position, p), MoveType.Capture));
+                        ret.Add(new PieceMove(new Vector(position, p), new Vector[] { new Vector(lastMove.p2, new Point(-1, -1)) }, MoveType.Capture));
             }
 
             return ret;

@@ -65,6 +65,8 @@ namespace Chess
             InitializeComponent();
             Icons.LoadImages("Set1");
             game = new Game(DrawTarget);
+            Point[] vals = new Point[] { };
+            Console.WriteLine(vals.FirstOrDefault());
         }
 
         private void MakeGame_Click(object sender, RoutedEventArgs e)
