@@ -28,7 +28,7 @@ namespace Chess
             if (position.y > 0 && position.y < 8 && board[position.x, position.y + dir] == null)
             {
                 ret.Add(new PieceMove(new Vector(position, new Point(position.x, position.y + dir)), MoveType.Move));
-                if (position.y == 1 || position.y == 6 && board[position.x, position.y + 2 * dir] == null)
+                if ((dir == 1 ? position.y == 1 : position.y == 6) && board[position.x, position.y + 2 * dir] == null)
                     ret.Add(new PieceMove(new Vector(position, new Point(position.x, position.y + 2 * dir)), MoveType.Move));
             }
             if (position.y > 0 && position.y < 8 && position.x < 7 && !board[position.x + 1, position.y + dir]?.GetColour() == GetColour())

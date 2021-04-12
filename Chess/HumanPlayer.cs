@@ -32,7 +32,7 @@ namespace Chess
         {
             BitBoard highlighted = new BitBoard();
             PieceMove[] moves = board.GetMoves(GetColour());
-            Vector ret = new Vector();
+            Vector buildVector = new Vector();
 
             new StateMachine(
             new State[]
@@ -50,9 +50,10 @@ namespace Chess
                     {
                         function = () =>
                         {
-                            ret.p1 = mouse.GetLastClicked();
+                            buildVector.p1 = mouse.GetLastClicked();
                             foreach (PieceMove v in moves.Where(x => x.vector.p1.x == mouse.GetLastClicked().x && x.vector.p1.y == mouse.GetLastClicked().y))
                             {
+                                Console.WriteLine($"{v.vector}");
                                 highlighted[v.vector.p2] = true;
                                 renderer.SetHighlight(renderHandle, v.type == MoveType.Move ? Highlight.MovePossible : Highlight.AttackMovePossible, v.vector.p2);
                             }
@@ -86,7 +87,7 @@ namespace Chess
                         {
                             highlighted = new BitBoard();
                             renderer.ResetHighlights(renderHandle);
-                            ret.p1 = mouse.GetLastClicked();
+                            buildVector.p1 = mouse.GetLastClicked();
                             foreach (PieceMove v in moves.Where(x => x.vector.p1.x == mouse.GetLastClicked().x && x.vector.p1.y == mouse.GetLastClicked().y))
                             {
                                 highlighted[v.vector.p2] = true;
@@ -101,7 +102,7 @@ namespace Chess
                         function = () =>
                         {
                             renderer.ResetHighlights(renderHandle);
-                            ret.p2 = mouse.GetLastClicked();
+                            buildVector.p2 = mouse.GetLastClicked();
                         },
                         ptr = -1
                     }
@@ -114,7 +115,11 @@ namespace Chess
                 })
             }).Run();
 
-            return moves.First(x => x.vector == ret);
+            PieceMove ret = moves.First(x => x.vector == buildVector);
+            if (board[buildVector.p1]?.GetType() == Type.Pawn && (buildVector.p2.y == 0 || buildVector.p2.y == 7))
+                ret.additionalMoves = new Vector[] { new Vector(new Point((int)RequestPawnPromo().Value, GetColour() ? -1 : -2), buildVector.p2) };
+
+            return ret;
         }
 
         private Optional<Type> RequestPawnPromo()

@@ -63,6 +63,26 @@ namespace Chess
             this.colour = colour;
         }
 
+        public static Piece Initialise(Type type, bool colour)
+        {
+            switch (type)
+            {
+                case Type.Bishop:
+                    return new Bishop(colour);
+                case Type.King:
+                    return new King(colour);
+                case Type.Knight:
+                    return new Knight(colour);
+                case Type.Pawn:
+                    return new Pawn(colour);
+                case Type.Queen:
+                    return new Queen(colour);
+                case Type.Rook:
+                    return new Rook(colour);
+            }
+            return null;
+        }
+
         public object Clone()
         {
             return MemberwiseClone();

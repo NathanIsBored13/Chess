@@ -93,9 +93,14 @@ namespace Chess
 
         public void ExecuteVector(Vector vector)
         {
-            if (vector.p2 != new Point(-1, -1))
-                this[vector.p2] = this[vector.p1];
-            this[vector.p1] = null;
+            if (vector.p1.y < 0)
+                this[vector.p2] = Piece.Initialise((Type)vector.p1.x, vector.p1.y == -1);
+            else
+            {
+                if (vector.p2.y != -1)
+                    this[vector.p2] = this[vector.p1];
+                this[vector.p1] = null;
+            }
         }
 
         public List<Vector> GetHistory() => history;
