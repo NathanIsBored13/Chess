@@ -51,6 +51,7 @@ namespace Chess
                         function = () =>
                         {
                             buildVector.p1 = mouse.GetLastClicked();
+                            renderer.SetHighlight(renderHandle, Highlight.CellSelected, buildVector.p1);
                             foreach (PieceMove v in moves.Where(x => x.vector.p1.x == mouse.GetLastClicked().x && x.vector.p1.y == mouse.GetLastClicked().y))
                             {
                                 Console.WriteLine($"{v.vector}");
@@ -88,6 +89,7 @@ namespace Chess
                             highlighted = new BitBoard();
                             renderer.ResetHighlights(renderHandle);
                             buildVector.p1 = mouse.GetLastClicked();
+                            renderer.SetHighlight(renderHandle, Highlight.CellSelected, buildVector.p1);
                             foreach (PieceMove v in moves.Where(x => x.vector.p1.x == mouse.GetLastClicked().x && x.vector.p1.y == mouse.GetLastClicked().y))
                             {
                                 highlighted[v.vector.p2] = true;
