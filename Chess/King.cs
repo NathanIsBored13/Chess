@@ -1,10 +1,6 @@
 ﻿using Extentions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 
 namespace Chess
 {
@@ -21,7 +17,7 @@ namespace Chess
             }
         }
 
-        private static readonly Point[] mask = new Point[8]
+        private static readonly Point[] mask = new Point[]
         {
             new Point(1, 1),
             new Point(0, 1),
@@ -44,10 +40,7 @@ namespace Chess
 
         }
 
-        public override Type GetType()
-        {
-            return Type.King;
-        }
+        public override Type GetType() => Type.King;
 
         public override List<PieceMove> GetMovesMask(Board board, Point position)
         {
@@ -57,19 +50,18 @@ namespace Chess
             board[position] = null;
 
             board.ForEach(
-            (Piece p) => p.GetColour() != GetColour(),
-            (Point p) => { locked |= board[p].GetSeen(board, p); }
-            );
+            (Piece piece) => piece.GetColour() != GetColour(),
+            (Point point) => locked |= board[point].GetSeen(board, point));
 
             board[position] = this;
 
-            IEnumerable<Point> kingMoves = GetSeen(board, position).GetAllSet().Where(p => !locked[p] && board[p]?.GetColour() != GetColour());
-            foreach (Point p in kingMoves)
-                ret.Add(new PieceMove(new Vector(position, p), board[p] == null? MoveType.Move : MoveType.Capture));
+            IEnumerable<Point> kingMoves = GetSeen(board, position).GetAllSet().Where(kingMove => !locked[kingMove] && board[kingMove]?.GetColour() != GetColour());
+            foreach (Point kingMove in kingMoves)
+                ret.Add(new PieceMove(new Vector(position, kingMove), board[kingMove] == null? MoveType.Move : MoveType.Capture));
 
-            if (!board.GetHistory().Any(x => x.p2 == position))
+            if (!board.GetHistory().Any(historicalMove => historicalMove.p2 == position))
                 foreach (CastelingMask mask in castelingMasks)
-                    if (!board.GetHistory().Any(x => x.p1 == new Point(mask.rookInitial, position.y)) && Enumerate(position.x, mask.kingFinal).All(x => board.FindAttacks(GetColour(), new Point(x, position.y)).Count() == 0) && Enumerate(mask.rookInitial, position.x).SubArray(1, 1).All(x => board[x, position.y] == null))
+                    if (!board.GetHistory().Any(historicalMove => historicalMove.p1 == new Point(mask.rookInitial, position.y)) && Extentions.Extentions.Enumerate(position.x, mask.kingFinal).All(kingMoveX => board.FindAttacks(GetColour(), new Point(kingMoveX, position.y)).Count() == 0) && Extentions.Extentions.Enumerate(mask.rookInitial, position.x).SubArray(1, 1).All(movedThrough => board[movedThrough, position.y] == null))
                         ret.Add(new PieceMove(new Vector(position, new Point(mask.kingFinal, position.y)), new Vector[] { new Vector(new Point(mask.rookInitial, position.y), new Point(mask.rookFinal, position.y)) }, MoveType.Move));
 
             return ret;
@@ -80,12 +72,11 @@ namespace Chess
             BitBoard ret = new BitBoard();
             foreach (Point offset in mask)
             {
-                Point absolute = new Point(position.x + offset.x, position.y + offset.y);
-                if (absolute.x >= 0 && absolute.x < 8 && absolute.y >= 0 && absolute.y < 8)
-                    ret[absolute] = true;
+                Point absolutePosition = new Point(position.x + offset.x, position.y + offset.y);
+                if (absolutePosition.x >= 0 && absolutePosition.x < 8 && absolutePosition.y >= 0 && absolutePosition.y < 8)
+                    ret[absolutePosition] = true;
             }
             return ret;
         }
-        private IEnumerable<int> Enumerate(int start, int stop) => Enumerable.Range(Math.Min(start, stop), Math.Abs(start - stop));
     }
 }

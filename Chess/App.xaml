@@ -59,7 +59,7 @@
                             <Setter Property="Background" Value="{DynamicResource CheckeredBrush2}"/>
                         </Trigger>
                         <Trigger Property="Highlighted" Value="1">
-                            <Setter Property="Foreground" Value="{DynamicResource CellSelectedColour}"/>
+                            <Setter Property="Background" Value="{DynamicResource CellSelectedColour}"/>
                         </Trigger>
                         <Trigger Property="Highlighted" Value="2">
                             <Setter Property="Foreground" Value="{DynamicResource MovePossibleColour}"/>

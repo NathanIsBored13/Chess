@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -40,8 +34,8 @@ namespace Chess
         {
             Grid.SetColumn(this, position.x);
             Grid.SetRow(this, position.y);
-            this.position = position;
             Checkered = (((position.y % 2) + position.x) % 2) == 0;
+            this.position = position;
             this.mouse = mouse;
             Click += Cell_Click;
             Content = image;

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Navigation;
-
-namespace Chess
+﻿namespace Chess
 {
     class PlayerQueue
     {
@@ -17,10 +10,7 @@ namespace Chess
             queue = new Player[] { p1, p2 };
         }
 
-        public void Next()
-        {
-            pointer = (pointer + 1) % 2;
-        }
+        public Player Next() => queue[pointer = (pointer + 1) % 2];
 
         public Player PeekPlayer() => queue[pointer];
     }

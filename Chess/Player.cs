@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+﻿using System.ComponentModel;
 
 namespace Chess
 {
@@ -23,6 +17,7 @@ namespace Chess
     abstract class Player
     {
         readonly bool colour;
+
         public Player(bool colour)
         {
             this.colour = colour;
@@ -34,14 +29,12 @@ namespace Chess
 
         public static Player MakePlayer(PlayerType type, bool colour, Renderer renderer, Mouse mouse)
         {
-            Player ret = null;
             switch (type)
             {
                 case PlayerType.HumanPlayerLOCAL:
-                    ret = new HumanPlayer(colour, renderer, mouse);
-                break;
+                    return new HumanPlayer(colour, renderer, mouse);
             }
-            return ret;
+            return null;
         }
     }
 }

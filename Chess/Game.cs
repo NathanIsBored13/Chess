@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace Chess
 {
@@ -39,23 +32,24 @@ namespace Chess
 
         public void Begin(PlayerType white, PlayerType black)
         {
+            playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer, mouse), Player.MakePlayer(black, false, renderer, mouse));
             board = new Board(template);
             renderer.SetSource(board);
             renderer.RenderIcons();
-            playerQueue = new PlayerQueue(Player.MakePlayer(white, true, renderer, mouse), Player.MakePlayer(black, false, renderer, mouse));
+            Player player = playerQueue.PeekPlayer();
             
-            while (board.GetMoves(playerQueue.PeekPlayer().GetColour()).Length > 0)
+            while (board.GetMoves(player.GetColour()).Length > 0)
             {
-                PieceMove vec = playerQueue.PeekPlayer().Move(board);
-                board.Move(vec);
+                board.Move(player.Move(board));
                 renderer.ResetHighlights(renderHandle);
-                if (board.FindChecks(!playerQueue.PeekPlayer().GetColour()).Count() > 0)
-                    renderer.SetHighlight(renderHandle, Highlight.InCheck, board.FindKing(!playerQueue.PeekPlayer().GetColour()));
+
+                player = playerQueue.Next();
+
+                if (board.FindChecks(player.GetColour()).Count() > 0)
+                    renderer.SetHighlight(renderHandle, Highlight.InCheck, board.FindKing(player.GetColour()));
                 renderer.RenderIcons();
-                playerQueue.Next();
             }
-            playerQueue.Next();
-            Console.WriteLine("{0} player won", playerQueue.PeekPlayer().GetColour() ? "white" : "black");
+            Console.WriteLine("{0} player won", player.GetColour() ? "black" : "white");
         }
     };
 }

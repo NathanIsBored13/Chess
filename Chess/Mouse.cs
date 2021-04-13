@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 
 
 namespace Chess
 {
     class Mouse
     {
-        private readonly AutoResetEvent wait = new AutoResetEvent(false);
+        private readonly AutoResetEvent thredLock = new AutoResetEvent(false);
         private Point lastClicked;
 
         public Mouse()
@@ -20,13 +16,13 @@ namespace Chess
         public void SetLastClicked(Point position)
         {
             lastClicked = position;
-            wait.Set();
+            thredLock.Set();
         }
 
         public Point WaitForInput()
         {
-            wait.Reset();
-            wait.WaitOne();
+            thredLock.Reset();
+            thredLock.WaitOne();
             return lastClicked;
         }
 

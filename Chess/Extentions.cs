@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
@@ -19,7 +17,13 @@ namespace Extentions
 
         public static string GetDescriptor(this Enum value) => (Enum.GetName(value.GetType(), value) is string name && value.GetType().GetField(name) is FieldInfo field && Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attr) ? attr.Description : value.ToString();
 
-        public static IEnumerable<T> SubArray<T>(this IEnumerable<T> data, int skip, int leave) => data.Skip(skip).Take(data.Count() - skip - leave);
+        public static IEnumerable<T> SubArray<T>(this IEnumerable<T> data, int skip, int leave)
+        {
+            for (int i = skip; i < data.Count() - leave; i++)
+                yield return data.ElementAt(i);
+        }
+
+        public static IEnumerable<int> Enumerate(int start, int stop) => Enumerable.Range(Math.Min(start, stop), Math.Abs(start - stop));
 
         public static IEnumerable<Enum> GetPromotions() => Enum.GetValues(typeof(Chess.Type)).OfType<Enum>().Where(x => x.ToString() != "Pawn" && x.ToString() != "King");
 

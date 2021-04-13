@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Chess
@@ -29,6 +25,7 @@ namespace Chess
             grid.RowDefinitions.Clear();
             grid.ColumnDefinitions.Clear();
             grid.Children.Clear();
+
             for (int i = 0; i < 8; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
@@ -36,10 +33,10 @@ namespace Chess
             }
 
             Board.ForEach(
-            (p) =>
+            (point) =>
             {
-                cells[p.x, p.y] = new Cell(new Point(p.x, p.y), mouse);
-                grid.Children.Add(cells[p.x, p.y]);
+                cells[point.x, point.y] = new Cell(new Point(point.x, point.y), mouse);
+                grid.Children.Add(cells[point.x, point.y]);
             });
             Icons.RegisterListener(RenderIcons);
         }

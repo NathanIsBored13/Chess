@@ -9,8 +9,8 @@ namespace Chess
 {
     static class Icons
     {
-        private static BitmapImage[] images = new BitmapImage[12];
-        private static List<Action> listeneres = new List<Action>();
+        private static readonly BitmapImage[] images = new BitmapImage[12];
+        private static readonly List<Action> listeneres = new List<Action>();
 
         public static void LoadImages(string folderName)
         {
@@ -28,9 +28,7 @@ namespace Chess
             images[11] = new BitmapImage(new Uri($@"{Environment.CurrentDirectory}\Resources\{folderName}\BPawn.png"));
 
             foreach (Action action in listeneres)
-            {
-                action.Invoke();
-            }
+                action();
         }
 
         public static BitmapImage GetImage(Type type, bool colour) => images[(int)type + (colour ? 0 : 6)];

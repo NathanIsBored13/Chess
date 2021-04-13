@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
+﻿using System.Collections.Generic;
 
 namespace Chess
 {
     class Knight : Piece
     {
-        private static readonly Point[] checks = new Point[8]
+        private static readonly Point[] mask = new Point[]
         {
                 new Point(-2, 1),
                 new Point(-1, 2),
@@ -26,26 +21,23 @@ namespace Chess
 
         }
 
-        public override Type GetType()
-        {
-            return Type.Knight;
-        }
+        public override Type GetType() => Type.Knight;
 
         public override List<PieceMove> GetMovesMask(Board board, Point position)
         {
             List<PieceMove> ret = new List<PieceMove>();
-            foreach (Point p in checks)
+            foreach (Point offset in mask)
             {
-                Point vec = new Point(p.x + position.x, p.y + position.y); 
-                if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
+                Point absolutePosition = new Point(offset.x + position.x, offset.y + position.y); 
+                if (absolutePosition.x >= 0 && absolutePosition.x < 8 && absolutePosition.y >= 0 && absolutePosition.y < 8)
                 {
-                    if (board[vec] is Piece piece)
+                    if (board[absolutePosition] is Piece piece)
                     {
                         if (piece.GetColour() != GetColour())
-                            ret.Add(new PieceMove(new Vector(position, vec), MoveType.Capture));
+                            ret.Add(new PieceMove(new Vector(position, absolutePosition), MoveType.Capture));
                     }
                     else
-                        ret.Add(new PieceMove(new Vector(position, vec), MoveType.Move));
+                        ret.Add(new PieceMove(new Vector(position, absolutePosition), MoveType.Move));
                 }
             }
             return ret;
@@ -54,11 +46,11 @@ namespace Chess
         public override BitBoard GetSeen(Board board, Point position)
         {
             BitBoard seen = new BitBoard();
-            foreach (Point p in checks)
+            foreach (Point offset in mask)
             {
-                Point vec = new Point(p.x + position.x, p.y + position.y);
-                if (vec.x >= 0 && vec.x < 8 && vec.y >= 0 && vec.y < 8)
-                    seen[vec] = true;
+                Point absolutePosition = new Point(offset.x + position.x, offset.y + position.y);
+                if (absolutePosition.x >= 0 && absolutePosition.x < 8 && absolutePosition.y >= 0 && absolutePosition.y < 8)
+                    seen[absolutePosition] = true;
             }
             return seen;
         }
